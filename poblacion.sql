@@ -1,5 +1,3 @@
--- Nivel
-
 INSERT INTO Nivel (nivel, nombre, puntosTotalesNecesarios) 
 VALUES (1, 'Principiante', 0);
 
