@@ -1,0 +1,256 @@
+-- Procedimientos almacenados
+
+USE reciclaje;
+
+-- getDatosUsuario
+
+DELIMITER $$
+CREATE PROCEDURE sp_getDatosUsuario (
+	IN p_idUsuario INT
+)
+BEGIN
+	SELECT *
+	FROM Usuario 
+	WHERE idUsuario = p_idUsuario;
+END;
+$$
+DELIMITER ;
+
+
+-- CALL sp_getDatosUsuario(1, @nombre, @correo, @password, @puntos, @puntosTotal, @fechaRegistro, @idRol, @idNivel);
+-- SELECT @nombre, @correo, @password, @puntos, @puntosTotal, @fechaRegistro, @idRol, @idNivel;
+
+-- Impacto ambiental de usuario
+
+DELIMITER $$
+CREATE PROCEDURE sp_getImpactoUsuario (
+	IN p_idUsuario INT
+)
+BEGIN
+	SELECT
+		Material.nombre AS tipo_material,
+        SUM(Registro_Reciclaje.cantidad) AS total_reciclado_kg,
+        SUM(Registro_Reciclaje.impactoCO2) AS total_co2_reducido
+    FROM Registro_Reciclaje
+    JOIN Material ON Registro_Reciclaje.idMaterial = Material.idMaterial
+    JOIN Usuario ON Registro_Reciclaje.idUsuario = Usuario.idUsuario
+    WHERE Usuario.idUsuario = p_idUsuario AND Material.activo = 1 GROUP BY Material.nombre;
+END;
+$$
+DELIMITER ;
+
+-- Promociones disponibles para usuario
+
+DELIMITER $$
+CREATE PROCEDURE sp_getPromocionesUsuario (
+	IN p_idUsuario INT
+)
+BEGIN
+	DECLARE v_nivelUsuario INT;
+    
+	SELECT nivel INTO v_nivelUsuario
+    FROM Usuario JOIN Nivel ON Usuario.idNivel = Nivel.idNivel
+    WHERE idUsuario = p_idUsuario;
+
+	SELECT * 
+    FROM Promocion
+    WHERE v_nivelUsuario >= Promocion.nivelRequerido AND Promocion.activo = 1;
+    
+END;
+$$
+DELIMITER ;
+
+-- Listar todos los puntos de reciclaje
+
+DELIMITER $$
+CREATE PROCEDURE sp_getPuntosReciclaje ()
+BEGIN
+	SELECT * 
+    FROM Punto_Reciclaje
+    WHERE activo = 1;
+END;
+$$
+DELIMITER ;
+
+-- Ver puntos de reciclaje cercanos 
+
+DELIMITER $$
+CREATE PROCEDURE sp_getPuntosReciclajeCercanos (
+	IN p_latitud DOUBLE,
+    IN p_longitud DOUBLE
+)
+BEGIN
+    SELECT *,
+       (
+         6371 * ACOS(
+           COS(RADIANS(p_latitud)) * COS(RADIANS(ST_Y(coordenadas))) *
+           COS(RADIANS(ST_X(coordenadas)) - RADIANS(p_longitud)) +
+           SIN(RADIANS(p_latitud)) * SIN(RADIANS(ST_Y(coordenadas)))
+         )
+       ) AS distancia_km
+	FROM Punto_Reciclaje
+    WHERE activo = 1
+	HAVING distancia_km < 5
+	ORDER BY distancia_km;
+END;
+$$
+DELIMITER ;
+
+-- Ver materiales aceptados punto de reciclaje
+
+DELIMITER $$
+CREATE PROCEDURE sp_getMaterialesPuntoReciclaje (
+	IN p_idPunto INT
+)
+BEGIN
+	SELECT *
+    FROM Material
+    JOIN Punto_Reciclaje ON Material.idPunto = Punto_Reciclaje.idPunto
+    WHERE Punto_Reciclaje.idPunto = p_idPunto AND Material.activo = 1 AND Punto_Reciclaje.activo = 1;
+END;
+$$
+DELIMITER ;
+
+-- Registrar reciclaje 
+-- tambien revisa si es que hay alguna promocion vigente para multiplicar sus puntos
+
+DELIMITER $$
+CREATE PROCEDURE sp_registrarReciclaje (
+	IN p_usuario_id INT,
+    IN p_material_id INT,
+    IN p_punto_reciclaje_id INT,
+    IN p_cantidad_kg DECIMAL(10,2)
+)
+BEGIN
+	DECLARE v_coef_puntos DECIMAL(10,2);
+    DECLARE v_coef_co2 DECIMAL(10,2);
+    DECLARE v_puntos_ganados DECIMAL(10,2);
+    DECLARE v_impacto_co2 DECIMAL(10,2);
+    DECLARE v_fechaActual DATE;
+    DECLARE v_nivelUsuario INT;
+    DECLARE v_multiplicadorPromo DECIMAL(10,2) DEFAULT 0;
+    
+    SELECT coeficientePuntos, coeficienteCO2 
+    INTO v_coef_puntos, v_coef_co2 
+    FROM Material 
+    WHERE idMaterial = p_material_id;
+    
+    SET v_impacto_co2 = v_coef_co2 * p_cantidad_kg;
+
+    SELECT nivel INTO v_nivelUsuario
+    FROM Usuario JOIN Nivel ON Usuario.idNivel = Nivel.idNivel
+    WHERE idUsuario = p_idUsuario;
+    
+    SET v_fechaActual = CURDATE();
+    
+    SELECT IFNULL(SUM(Promocion.multiplicador), 1) INTO v_multiplicadorPromo
+    FROM Promocion
+    WHERE Promocion.activo = 1 
+    AND v_fechaActual BETWEEN Promocion.fechaInicio AND Promocion.fechaFin 
+    AND v_nivelUsuario >= Promocion.nivelRequerido;
+
+    SET v_puntos_ganados = v_multiplicadorPromo * v_coef_puntos *  p_cantidad_kg;
+	
+	INSERT INTO Registro_Reciclaje(idUsuario, idMaterial, idPunto, cantidad, fecha, puntosGanados, impactoCO2)
+    VALUES (p_usuario_id, p_material_id, p_punto_reciclaje_id, p_cantidad_kg, NOW(), v_puntos_ganados, v_impacto_co2); 
+    
+END;
+$$
+DELIMITER ;
+
+-- Registrar reciclaje (trigger)
+
+-- Trigger para entregar automaticamente sus puntos al usuario, luego de haber registrado un reciclaje.
+
+DELIMITER $$
+CREATE TRIGGER after_insert_registro_reciclaje
+AFTER INSERT ON Registro_Reciclaje
+FOR EACH ROW
+BEGIN
+	UPDATE Usuario
+    SET puntos = puntos + NEW.puntosGanados,
+    puntosTotal = puntosTotal + NEW.puntosGanados
+	WHERE idUsuario = NEW.idUsuario;
+END;
+$$
+DELIMITER ;
+
+-- Recompensas
+
+-- Listar catalogos
+
+DELIMITER $$
+CREATE PROCEDURE sp_getCatalogos ()
+BEGIN
+	SELECT *
+    FROM Catalogo
+    WHERE activo = 1;
+END;
+$$
+DELIMITER ;
+
+-- Listar recompensas de un catalogo
+
+DELIMITER $$
+CREATE PROCEDURE sp_getRecompensasCatalogo (
+	IN p_idCatalogo INT
+)
+BEGIN
+	SELECT *
+    FROM Recompensa
+    WHERE activo = 1 AND idCatalogo = p_idCatalogo;
+END;
+$$
+DELIMITER ;
+
+-- Verificar si usuario tiene nivel para cierta recompensa
+
+DELIMITER $$
+CREATE PROCEDURE sp_verificarNivelUsuarioRecompensa (
+	IN p_idRecompensa INT,
+    IN p_idUsuario INT
+)
+BEGIN
+	DECLARE v_nivelUsuario INT;
+    
+    SELECT nivel INTO v_nivelUsuario
+    FROM Usuario JOIN Nivel ON Usuario.idNivel = Nivel.idNivel
+    WHERE idUsuario = p_idUsuario;
+    
+	SELECT COUNT(*) > 0 AS respuesta
+    FROM Recompensa
+    WHERE activo = 1 AND idRecompensa = p_idRecompensa
+    AND nivelRequerido <= v_nivelUsuario;
+END;
+$$
+DELIMITER ;
+
+-- Verificar si usuario tiene puntos necesarios para cierta recompensa
+
+DELIMITER $$
+CREATE PROCEDURE sp_verificarPuntosUsuarioRecompensa (
+	IN p_idRecompensa INT,
+    IN p_idUsuario INT
+)
+BEGIN
+	DECLARE v_puntosUsuario DECIMAL(10,2);
+    
+    SELECT puntos INTO v_puntosUsuario
+    FROM Usuario 
+    WHERE idUsuario = p_idUsuario;
+    
+	SELECT COUNT(*) > 0 AS respuesta
+    FROM Recompensa
+    WHERE activo = 1 AND idRecompensa = p_idRecompensa
+    AND puntosNecesarios <= v_puntosUsuario;
+END;
+$$
+DELIMITER ;
+
+
+-- Trigger para que el usuario suba de nivel automaticamente
+
+-- Canje de recompensas del usuario
+
+-- Reportes de impacto ambiental
+
