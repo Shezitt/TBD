@@ -250,7 +250,82 @@ DELIMITER ;
 
 -- Trigger para que el usuario suba de nivel automaticamente
 
+DELIMITER $$
+CREATE TRIGGER after_update_puntos_usuario
+AFTER UPDATE ON Usuario
+FOR EACH ROW
+BEGIN
+	DECLARE idNuevoNivel INT;
+	IF !(NEW.puntosTotal <=> OLD.puntosTotal) THEN
+		SELECT idNivel INTO idNuevoNivel
+		FROM Nivel 
+        WHERE NEW.puntosTotal >= puntosNecesarios ORDER BY nivel DESC LIMIT 1;
+        
+        IF idNuevoNivel <=> NEW.idNivel THEN
+			UPDATE Usuario SET idNivel = idNuevoNivel;
+        END IF;
+    END IF;
+END;
+$$
+DELIMITER ;
+
 -- Canje de recompensas del usuario
 
+DELIMITER $$
+CREATE PROCEDURE CanjearRecompensa (
+    IN p_usuario_id INT,
+    IN p_recompensa_id INT
+)
+BEGIN
+    DECLARE v_puntos_usuario DECIMAL(10,2);
+    DECLARE v_puntos_requeridos DECIMAL(10,2);
+    DECLARE v_nivel_usuario INT;
+    DECLARE v_nivel_requerido INT;
+    SELECT puntosTotal INTO v_puntos_usuario FROM Usuario WHERE idUsuario = p_usuario_id;
+    SELECT puntosNecesarios INTO v_puntos_requeridos FROM Recompensa WHERE idRecompensa = p_recompensa_id;
+    SELECT nivel INTO v_nivel_usuario FROM Usuaio WHERE idUsuario = p_usuario_id;
+    SELECT nivelRequerido INTO v_nivel_requerido FROM Recompensa WHERE idRecompenas = p_recompensa_id;
+    -- Verificamos si hay puntitos sufis y que tenga nivel suficiente
+    IF v_puntos_usuario >= v_puntos_requeridos AND v_nivel_usuario >= v_nivel_requerido THEN
+        UPDATE Usuario SET puntos = puntos - v_puntos_requeridos WHERE idUsuario = p_usuario_id;
+        -- Registramos el canje 
+        INSERT INTO Canje(idUsuario, idRecompensa, fecha)
+        VALUES (p_usuario_id, p_recompensa_id, NOW());
+    END IF;
+END $$
+DELIMITER ;
+
 -- Reportes de impacto ambiental
+
+DELIMITER $$
+CREATE PROCEDURE GenerarReporteImpactoAmbientalHistorico()
+BEGIN
+    SELECT 
+        Material.nombre AS tipo_material,
+        SUM(Registro_Reciclaje.cantidad) AS total_reciclado_kg,
+        SUM(Registro_Reciclaje.impactoCO2) AS total_co2_reducido
+    FROM Registro_Reciclaje
+    JOIN Material ON Registro_Reciclaje.idMaterial = Material.idMaterial
+    GROUP BY Material.nombre;
+END $$
+DELIMITER ;
+
+DELIMITER $$
+CREATE PROCEDURE GenerarReporteImpactoAmbientalRango (
+	IN fechaInicio DATE,
+    IN fechaFin DATE
+)
+BEGIN
+    SELECT 
+        Material.nombre AS tipo_material,
+        SUM(Registro_Reciclaje.cantidad) AS total_reciclado_kg,
+        SUM(Registro_Reciclaje.impactoCO2) AS total_co2_reducido
+    FROM Registro_Reciclaje
+    JOIN Material ON Registro_Reciclaje.idMaterial = Material.idMaterial
+    WHERE Registro_Reciclaje.fecha BETWEEN fechaInicio AND fechaFin
+    GROUP BY Material.nombre;
+END $$
+DELIMITER ;
+
+
 
