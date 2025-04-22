@@ -141,7 +141,7 @@ BEGIN
 
     SELECT nivel INTO v_nivelUsuario
     FROM Usuario JOIN Nivel ON Usuario.idNivel = Nivel.idNivel
-    WHERE idUsuario = p_idUsuario;
+    WHERE idUsuario = p_usuario_id;
     
     SET v_fechaActual = CURDATE();
     
@@ -166,7 +166,7 @@ DELIMITER ;
 
 DELIMITER $$
 CREATE TRIGGER after_insert_registro_reciclaje
-AFTER INSERT ON Registro_Reciclaje
+BEFORE INSERT ON Registro_Reciclaje
 FOR EACH ROW
 BEGIN
 	UPDATE Usuario
@@ -252,24 +252,24 @@ DELIMITER ;
 
 -- Trigger para que el usuario suba de nivel automaticamente
 
-DELIMITER $$
-CREATE TRIGGER after_update_puntos_usuario
-AFTER UPDATE ON Usuario
-FOR EACH ROW
-BEGIN
-	DECLARE idNuevoNivel INT;
-	IF !(NEW.puntosTotal <=> OLD.puntosTotal) THEN
-		SELECT idNivel INTO idNuevoNivel
-		FROM Nivel 
-        WHERE NEW.puntosTotal >= puntosNecesarios ORDER BY nivel DESC LIMIT 1;
+-- DELIMITER $$
+-- CREATE TRIGGER after_update_puntos_usuario
+-- AFTER UPDATE ON Usuario
+-- FOR EACH ROW
+-- BEGIN
+-- 	DECLARE idNuevoNivel INT;
+-- 	IF !(NEW.puntosTotal <=> OLD.puntosTotal) THEN
+-- 		SELECT idNivel INTO idNuevoNivel
+-- 		FROM Nivel 
+--         WHERE NEW.puntosTotal >= puntosTotalesNecesarios ORDER BY nivel DESC LIMIT 1;
         
-        IF idNuevoNivel <=> NEW.idNivel THEN
-			UPDATE Usuario SET idNivel = idNuevoNivel;
-        END IF;
-    END IF;
-END;
-$$
-DELIMITER ;
+--         IF idNuevoNivel <=> NEW.idNivel THEN
+-- 			UPDATE Usuario SET idNivel = idNuevoNivel;
+--         END IF;
+--     END IF;
+-- END;
+-- $$
+-- DELIMITER ;
 
 -- Canje de recompensas del usuario
 
@@ -328,9 +328,4 @@ BEGIN
     GROUP BY Material.nombre;
 END $$
 DELIMITER ;
-
-
--- Triggers de auditoría
-
--- Tabla material
 
