@@ -1,6 +1,6 @@
 -- Procedimientos almacenados
 
-USE reciclaje;
+USE reciclaje
 
 -- getDatosUsuario
 
@@ -18,7 +18,20 @@ DELIMITER ;
 
 -- Registrar nuevo usuario
 
+-- Autenticar usuario
 
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS sp_verificarUsuario (
+	IN p_username VARCHAR(45),
+    IN p_password VARCHAR(45)
+)
+BEGIN 
+	SELECT *
+    FROM Usuario
+    WHERE username = p_username AND password = p_password;
+END;
+$$
+DELIMITER ;
 
 -- Impacto ambiental de usuario
 
@@ -52,7 +65,7 @@ BEGIN
     FROM Usuario JOIN Nivel ON Usuario.idNivel = Nivel.idNivel
     WHERE idUsuario = p_idUsuario;
 
-	SELECT * 
+	SELECT *    
     FROM Promocion
     WHERE v_nivelUsuario >= Promocion.nivelRequerido AND Promocion.activo = 1;
     
