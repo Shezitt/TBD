@@ -1,3 +1,21 @@
+<?php
+    require_once("conexion.php");
+
+    session_start();
+
+    if (!isset($_SESSION['username'])) {
+        header("Location: iniciarSesion.php");
+        exit();
+    }
+    $idUsuario = $_SESSION['idUsuario'];
+    $conn = Conexion::getConexion();
+    $stmt = $conn->prepare("CALL sp_getDatosUsuario(?);");
+    $stmt->bind_param("i", $idUsuario);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+    $resultado = $resultado->fetch_assoc();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,24 +42,51 @@
             <h2>Datos</h2>
             <ul>
                 <li>
-                    Nombre: 
+                    Nombre: <?php echo $resultado['nombre']; ?>
                 </li>
                 <li>
-                    Nombre de usuario:
+                    Nombre de usuario: <?php echo $resultado['username']; ?>
                 </li>
                 <li>
-                    Correo:
+                    Correo: <?php echo $resultado['correo']; ?>
                 </li>
                 <li>
-                    Puntos:
+                    Puntos: <?php echo $resultado['puntos']; ?>
                 </li>
                 <li>
-                    Puntos históricos:
+                    Puntos históricos: <?php echo $resultado['puntosTotal']; ?>
                 </li>
             </ul>
 
+            <p>
+                <a href="logout.php">Cerrar sesión</a>
+            </p>
+
             <h2>Promociones</h2>
-            <p>No hay promociones actualmente.</p>
+            <?php
+                
+                $conn = Conexion::getConexion();
+                $stmt = $conn->prepare('CALL sp_getPromocionesUsuario(?);');
+                $stmt->bind_param("i", $idUsuario);
+                $stmt->execute();
+                $resultado = $stmt->get_result();
+                
+                if($resultado->num_rows == 0) {
+                    echo "<p>No hay promociones actualmente.</p>";
+                } else {
+
+                    while ($fila = $resultado->fetch_assoc()) {
+                        echo "<h3>" . $fila['nombre'] . "</h3>";
+                        echo "<b>Multiplicador:</b> " . $fila['multiplicador'] . "<br>";
+                        echo "<b>Fecha inicio:</b> " . $fila['fechaInicio'] . "<br>";
+                        echo "<b>Fecha fin:</b> " . $fila['fechaFin'] . "<br>";
+                        echo "Nivel requerido: " . $fila['nivelRequerido']; 
+                    }
+
+                }
+
+            ?>
+            
 
             <h2>Botones</h2>
             <ul>

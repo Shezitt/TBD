@@ -1,12 +1,13 @@
 <?php
 
-$host = "localhost";
-$user = "shamir";
-$password = "";
-$database = "reciclaje";
+class Conexion {
+    private static $conn = null;
 
-$conn = new mysqli($host, $user, $password, $database);
-
-if ($conn->connect_error) {
-    die("Conexion fallida: " . $conn.connect->error);
+    public static function getConexion() {
+        self::$conn = new mysqli("localhost", "shamir", "", "reciclaje");
+        if (self::$conn->connect_error) {
+            die("Conexión fallida: " . self::$conn->connect_error);
+        }
+        return self::$conn;
+    }
 }

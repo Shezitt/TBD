@@ -1,3 +1,7 @@
+<?php
+    require_once "conexion.php";
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,12 +19,36 @@
 <body>
     <div class="container">
         <h1>INICIAR SESIÓN</h1>
-        <form action="">
-            <input type="text" placeholder="Nombre de usuario"> <br>
-            <input type="text" placeholder="Contraseña"> <br>
-            <input type="submit" value="Ingresar"> <br>
+        <form method="POST">
+            <input type="text" name="username" placeholder="Nombre de usuario"> <br>
+            <input type="password" name="password" placeholder="Contraseña"> <br>
+            <input type="submit" name="iniciarSesion" value="Ingresar"> <br>
             <a href="registrarse.php">¿No tienes cuenta?</a>
         </form>
     </div>
 </body>
 </html>
+
+<?php
+    
+    if ($_POST['iniciarSesion']) {
+        
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+
+        $stmt = $conn->prepare("CALL sp_verificarUsuario(?, ?);");
+        $stmt->bind_param("ss", $username, $password);
+        $stmt->execute();
+        $resultado = $stmt->get_result();    
+
+        if ($resultado->num_rows == 1) {
+            $_SESSION['username'] = $username;
+            $_SESSION['idUsuario'] = $resultado->fetch_assoc()['idUsuario'];
+            header("Location: index.php");
+        } else {
+            echo "Credenciales incorrectas.";
+        }
+
+    }
+
+?>
