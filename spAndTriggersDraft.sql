@@ -16,9 +16,9 @@ END;
 $$
 DELIMITER ;
 
+-- Registrar nuevo usuario
 
--- CALL sp_getDatosUsuario(1, @nombre, @correo, @password, @puntos, @puntosTotal, @fechaRegistro, @idRol, @idNivel);
--- SELECT @nombre, @correo, @password, @puntos, @puntosTotal, @fechaRegistro, @idRol, @idNivel;
+
 
 -- Impacto ambiental de usuario
 
@@ -75,25 +75,27 @@ DELIMITER ;
 -- Ver puntos de reciclaje cercanos 
 
 DELIMITER $$
+
 CREATE PROCEDURE sp_getPuntosReciclajeCercanos (
-	IN p_latitud DOUBLE,
+    IN p_latitud DOUBLE,
     IN p_longitud DOUBLE
 )
 BEGIN
     SELECT *,
        (
          6371 * ACOS(
-           COS(RADIANS(p_latitud)) * COS(RADIANS(ST_Y(coordenadas))) *
-           COS(RADIANS(ST_X(coordenadas)) - RADIANS(p_longitud)) +
-           SIN(RADIANS(p_latitud)) * SIN(RADIANS(ST_Y(coordenadas)))
+           COS(RADIANS(p_latitud)) * COS(RADIANS(latitud)) *
+           COS(RADIANS(longitud) - RADIANS(p_longitud)) +
+           SIN(RADIANS(p_latitud)) * SIN(RADIANS(latitud))
          )
        ) AS distancia_km
-	FROM Punto_Reciclaje
+    FROM Punto_Reciclaje
     WHERE activo = 1
-	HAVING distancia_km < 5
-	ORDER BY distancia_km;
+    HAVING distancia_km < 5
+    ORDER BY distancia_km;
 END;
 $$
+
 DELIMITER ;
 
 -- Ver materiales aceptados punto de reciclaje
@@ -328,4 +330,7 @@ END $$
 DELIMITER ;
 
 
+-- Triggers de auditoría
+
+-- Tabla material
 

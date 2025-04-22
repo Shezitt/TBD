@@ -37,11 +37,11 @@ VALUES ('Textiles', 1.0, 6.0);
 
 -- Punto reciclaje
 
-INSERT INTO Punto_Reciclaje (nombre, coordenadas, apertura, cierre) 
-VALUES ('Punto 1', POINT(10.1234, 20.5678), '08:00:00', '22:00:00');
+INSERT INTO Punto_Reciclaje (nombre, latitud, longitud, apertura, cierre) 
+VALUES ('Punto 1', 10.1234, 20.5678, '08:00:00', '22:00:00');
 
-INSERT INTO Punto_Reciclaje (nombre, coordenadas, apertura, cierre) 
-VALUES ('Punto 2', POINT(30.1234, 40.5678), '08:00:00', '22:00:00');
+INSERT INTO Punto_Reciclaje (nombre, latitud, longitud, apertura, cierre) 
+VALUES ('Punto 2', 30.1234, 40.5678, '08:00:00', '22:00:00');
 
 
 -- Punto_Reciclaje_Materiales

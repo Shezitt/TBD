@@ -74,7 +74,8 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `reciclaje`.`Punto_Reciclaje` (
   `idPunto` INT NOT NULL AUTO_INCREMENT,
   `nombre` VARCHAR(45) NOT NULL,
-  `coordenadas` POINT NOT NULL,
+  `latitud` DECIMAL(9,6) NOT NULL,
+  `longitud` DECIMAL(9,6) NOT NULL,
   `apertura` TIME NOT NULL,
   `cierre` TIME NOT NULL,
   `activo` TINYINT NOT NULL DEFAULT 1,
