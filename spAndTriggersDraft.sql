@@ -5,7 +5,7 @@ USE reciclaje;
 -- getDatosUsuario
 
 DELIMITER $$
-CREATE PROCEDURE sp_getDatosUsuario (
+CREATE PROCEDURE IF NOT EXISTS sp_getDatosUsuario (
 	IN p_idUsuario INT
 )
 BEGIN
@@ -23,7 +23,7 @@ DELIMITER ;
 -- Impacto ambiental de usuario
 
 DELIMITER $$
-CREATE PROCEDURE sp_getImpactoUsuario (
+CREATE PROCEDURE IF NOT EXISTS sp_getImpactoUsuario (
 	IN p_idUsuario INT
 )
 BEGIN
@@ -42,7 +42,7 @@ DELIMITER ;
 -- Promociones disponibles para usuario
 
 DELIMITER $$
-CREATE PROCEDURE sp_getPromocionesUsuario (
+CREATE PROCEDURE IF NOT EXISTS sp_getPromocionesUsuario (
 	IN p_idUsuario INT
 )
 BEGIN
@@ -63,7 +63,7 @@ DELIMITER ;
 -- Listar todos los puntos de reciclaje
 
 DELIMITER $$
-CREATE PROCEDURE sp_getPuntosReciclaje ()
+CREATE PROCEDURE IF NOT EXISTS sp_getPuntosReciclaje ()
 BEGIN
 	SELECT * 
     FROM Punto_Reciclaje
@@ -76,7 +76,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE PROCEDURE sp_getPuntosReciclajeCercanos (
+CREATE PROCEDURE IF NOT EXISTS sp_getPuntosReciclajeCercanos (
     IN p_latitud DOUBLE,
     IN p_longitud DOUBLE
 )
@@ -101,7 +101,7 @@ DELIMITER ;
 -- Ver materiales aceptados punto de reciclaje
 
 DELIMITER $$
-CREATE PROCEDURE sp_getMaterialesPuntoReciclaje (
+CREATE PROCEDURE IF NOT EXISTS sp_getMaterialesPuntoReciclaje (
 	IN p_idPunto INT
 )
 BEGIN
@@ -117,7 +117,7 @@ DELIMITER ;
 -- tambien revisa si es que hay alguna promocion vigente para multiplicar sus puntos
 
 DELIMITER $$
-CREATE PROCEDURE sp_registrarReciclaje (
+CREATE PROCEDURE IF NOT EXISTS sp_registrarReciclaje (
 	IN p_usuario_id INT,
     IN p_material_id INT,
     IN p_punto_reciclaje_id INT,
@@ -165,7 +165,7 @@ DELIMITER ;
 -- Trigger para entregar automaticamente sus puntos al usuario, luego de haber registrado un reciclaje.
 
 DELIMITER $$
-CREATE TRIGGER after_insert_registro_reciclaje
+CREATE TRIGGER IF NOT EXISTS after_insert_registro_reciclaje
 BEFORE INSERT ON Registro_Reciclaje
 FOR EACH ROW
 BEGIN
@@ -182,7 +182,7 @@ DELIMITER ;
 -- Listar catalogos
 
 DELIMITER $$
-CREATE PROCEDURE sp_getCatalogos ()
+CREATE PROCEDURE IF NOT EXISTS sp_getCatalogos ()
 BEGIN
 	SELECT *
     FROM Catalogo
@@ -194,7 +194,7 @@ DELIMITER ;
 -- Listar recompensas de un catalogo
 
 DELIMITER $$
-CREATE PROCEDURE sp_getRecompensasCatalogo (
+CREATE PROCEDURE IF NOT EXISTS sp_getRecompensasCatalogo (
 	IN p_idCatalogo INT
 )
 BEGIN
@@ -208,7 +208,7 @@ DELIMITER ;
 -- Verificar si usuario tiene nivel para cierta recompensa
 
 DELIMITER $$
-CREATE PROCEDURE sp_verificarNivelUsuarioRecompensa (
+CREATE PROCEDURE IF NOT EXISTS sp_verificarNivelUsuarioRecompensa (
 	IN p_idRecompensa INT,
     IN p_idUsuario INT
 )
@@ -230,7 +230,7 @@ DELIMITER ;
 -- Verificar si usuario tiene puntos necesarios para cierta recompensa
 
 DELIMITER $$
-CREATE PROCEDURE sp_verificarPuntosUsuarioRecompensa (
+CREATE PROCEDURE IF NOT EXISTS sp_verificarPuntosUsuarioRecompensa (
 	IN p_idRecompensa INT,
     IN p_idUsuario INT
 )
@@ -253,7 +253,7 @@ DELIMITER ;
 -- Trigger para que el usuario suba de nivel automaticamente
 
 -- DELIMITER $$
--- CREATE TRIGGER after_update_puntos_usuario
+-- CREATE TRIGGER IF NOT EXISTS after_update_puntos_usuario
 -- AFTER UPDATE ON Usuario
 -- FOR EACH ROW
 -- BEGIN
@@ -274,7 +274,7 @@ DELIMITER ;
 -- Canje de recompensas del usuario
 
 DELIMITER $$
-CREATE PROCEDURE CanjearRecompensa (
+CREATE PROCEDURE IF NOT EXISTS CanjearRecompensa (
     IN p_usuario_id INT,
     IN p_recompensa_id INT
 )
@@ -300,7 +300,7 @@ DELIMITER ;
 -- Reportes de impacto ambiental
 
 DELIMITER $$
-CREATE PROCEDURE GenerarReporteImpactoAmbientalHistorico()
+CREATE PROCEDURE IF NOT EXISTS GenerarReporteImpactoAmbientalHistorico()
 BEGIN
     SELECT 
         Material.nombre AS tipo_material,
@@ -313,7 +313,7 @@ END $$
 DELIMITER ;
 
 DELIMITER $$
-CREATE PROCEDURE GenerarReporteImpactoAmbientalRango (
+CREATE PROCEDURE IF NOT EXISTS GenerarReporteImpactoAmbientalRango (
 	IN fechaInicio DATE,
     IN fechaFin DATE
 )

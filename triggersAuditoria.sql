@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS Auditoria_Material (
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_insert_material
+CREATE TRIGGER IF NOT EXISTS auditoria_insert_material
 AFTER INSERT ON Material
 FOR EACH ROW
 BEGIN
@@ -27,7 +27,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_update_material
+CREATE TRIGGER IF NOT EXISTS auditoria_update_material
 AFTER UPDATE ON Material
 FOR EACH ROW
 BEGIN
@@ -45,7 +45,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_material_delete
+CREATE TRIGGER IF NOT EXISTS auditoria_material_delete
 AFTER DELETE ON Material
 FOR EACH ROW
 BEGIN
@@ -74,7 +74,7 @@ DELIMITER $$
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_punto_reciclaje_insert
+CREATE TRIGGER IF NOT EXISTS auditoria_punto_reciclaje_insert
 AFTER INSERT ON Punto_Reciclaje
 FOR EACH ROW
 BEGIN
@@ -90,7 +90,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_punto_reciclaje_update
+CREATE TRIGGER IF NOT EXISTS auditoria_punto_reciclaje_update
 AFTER UPDATE ON Punto_Reciclaje
 FOR EACH ROW
 BEGIN
@@ -107,7 +107,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_punto_reciclaje_delete
+CREATE TRIGGER IF NOT EXISTS auditoria_punto_reciclaje_delete
 AFTER DELETE ON Punto_Reciclaje
 FOR EACH ROW
 BEGIN
@@ -135,7 +135,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_punto_reciclaje_materiales_insert
+CREATE TRIGGER IF NOT EXISTS auditoria_punto_reciclaje_materiales_insert
 AFTER INSERT ON Punto_Reciclaje_Materiales
 FOR EACH ROW
 BEGIN
@@ -150,7 +150,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_punto_reciclaje_materiales_update
+CREATE TRIGGER IF NOT EXISTS auditoria_punto_reciclaje_materiales_update
 AFTER UPDATE ON Punto_Reciclaje_Materiales
 FOR EACH ROW
 BEGIN
@@ -168,7 +168,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_punto_reciclaje_materiales_delete
+CREATE TRIGGER IF NOT EXISTS auditoria_punto_reciclaje_materiales_delete
 AFTER DELETE ON Punto_Reciclaje_Materiales
 FOR EACH ROW
 BEGIN
@@ -198,7 +198,7 @@ DELIMITER $$
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_catalogo_insert
+CREATE TRIGGER IF NOT EXISTS auditoria_catalogo_insert
 AFTER INSERT ON Catalogo
 FOR EACH ROW
 BEGIN
@@ -214,7 +214,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_catalogo_update
+CREATE TRIGGER IF NOT EXISTS auditoria_catalogo_update
 AFTER UPDATE ON Catalogo
 FOR EACH ROW
 BEGIN
@@ -230,7 +230,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_catalogo_delete
+CREATE TRIGGER IF NOT EXISTS auditoria_catalogo_delete
 AFTER DELETE ON Catalogo
 FOR EACH ROW
 BEGIN
@@ -256,7 +256,7 @@ CREATE TABLE IF NOT EXISTS Auditoria_Recompensa (
 ) ENGINE = InnoDB;
 
 DELIMITER $$
-CREATE TRIGGER auditoria_recompensa_insert
+CREATE TRIGGER IF NOT EXISTS auditoria_recompensa_insert
 AFTER INSERT ON Recompensa
 FOR EACH ROW
 BEGIN
@@ -273,7 +273,7 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE TRIGGER auditoria_recompensa_update
+CREATE TRIGGER IF NOT EXISTS auditoria_recompensa_update
 AFTER UPDATE ON Recompensa
 FOR EACH ROW
 BEGIN
@@ -293,7 +293,7 @@ DELIMITER ;
 
 
 DELIMITER $$
-CREATE TRIGGER auditoria_recompensa_delete
+CREATE TRIGGER IF NOT EXISTS auditoria_recompensa_delete
 AFTER DELETE ON Recompensa
 FOR EACH ROW
 BEGIN
@@ -322,7 +322,7 @@ CREATE TABLE IF NOT EXISTS Auditoria_Nivel (
 
 -- Trigger AFTER INSERT para la tabla Nivel
 DELIMITER $$
-CREATE TRIGGER auditoria_nivel_insert
+CREATE TRIGGER IF NOT EXISTS auditoria_nivel_insert
 AFTER INSERT ON Nivel
 FOR EACH ROW
 BEGIN
@@ -336,7 +336,7 @@ DELIMITER ;
 
 -- Trigger AFTER UPDATE para la tabla Nivel
 DELIMITER $$
-CREATE TRIGGER auditoria_nivel_update
+CREATE TRIGGER IF NOT EXISTS auditoria_nivel_update
 AFTER UPDATE ON Nivel
 FOR EACH ROW
 BEGIN
@@ -350,7 +350,7 @@ DELIMITER ;
 
 -- Trigger AFTER DELETE para la tabla Nivel
 DELIMITER $$
-CREATE TRIGGER auditoria_nivel_delete
+CREATE TRIGGER IF NOT EXISTS auditoria_nivel_delete
 AFTER DELETE ON Nivel
 FOR EACH ROW
 BEGIN
@@ -376,7 +376,7 @@ CREATE TABLE IF NOT EXISTS Auditoria_Canje (
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_canje_delete
+CREATE TRIGGER IF NOT EXISTS auditoria_canje_delete
 AFTER DELETE ON Canje
 FOR EACH ROW
 BEGIN
@@ -393,7 +393,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_canje_update
+CREATE TRIGGER IF NOT EXISTS auditoria_canje_update
 AFTER UPDATE ON Canje
 FOR EACH ROW
 BEGIN
@@ -428,7 +428,7 @@ CREATE TABLE IF NOT EXISTS Auditoria_Promocion (
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_promocion_insert
+CREATE TRIGGER IF NOT EXISTS auditoria_promocion_insert
 AFTER INSERT ON Promocion
 FOR EACH ROW
 BEGIN
@@ -449,7 +449,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_promocion_update
+CREATE TRIGGER IF NOT EXISTS auditoria_promocion_update
 AFTER UPDATE ON Promocion
 FOR EACH ROW
 BEGIN
@@ -476,7 +476,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_promocion_delete
+CREATE TRIGGER IF NOT EXISTS auditoria_promocion_delete
 AFTER DELETE ON Promocion
 FOR EACH ROW
 BEGIN
@@ -513,7 +513,7 @@ CREATE TABLE IF NOT EXISTS Auditoria_Usuario (
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_usuario_insert
+CREATE TRIGGER IF NOT EXISTS auditoria_usuario_insert
 AFTER INSERT ON Usuario
 FOR EACH ROW
 BEGIN
@@ -537,7 +537,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_usuario_update
+CREATE TRIGGER IF NOT EXISTS auditoria_usuario_update
 AFTER UPDATE ON Usuario
 FOR EACH ROW
 BEGIN
@@ -570,7 +570,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_usuario_delete
+CREATE TRIGGER IF NOT EXISTS auditoria_usuario_delete
 AFTER DELETE ON Usuario
 FOR EACH ROW
 BEGIN
@@ -605,7 +605,7 @@ CREATE TABLE IF NOT EXISTS Auditoria_Registro_Reciclaje (
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_registro_reciclaje_update
+CREATE TRIGGER IF NOT EXISTS auditoria_registro_reciclaje_update
 AFTER UPDATE ON Registro_Reciclaje
 FOR EACH ROW
 BEGIN
@@ -634,7 +634,7 @@ DELIMITER ;
 
 DELIMITER $$
 
-CREATE TRIGGER auditoria_registro_reciclaje_delete
+CREATE TRIGGER IF NOT EXISTS auditoria_registro_reciclaje_delete
 AFTER DELETE ON Registro_Reciclaje
 FOR EACH ROW
 BEGIN
