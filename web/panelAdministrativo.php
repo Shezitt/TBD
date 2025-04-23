@@ -12,6 +12,9 @@
         .container .header {
             text-align: center;
         }
+        .container ul li {
+            margin: 15px;
+        }
     </style>
 </head>
 <body>
@@ -24,43 +27,28 @@
         
             <ul>
                 <li>
-                    <a href="">Gestionar Materiales</a>
+                    <a href="admin/materiales.php">Gestionar Materiales</a>
                 </li>
-            </ul>
 
-            <ul>
                 <li>
-                    <a href="">Gestionar Puntos de Reciclaje</a>
+                    <a href="admin/puntos.php">Gestionar Puntos de Reciclaje</a>
                 </li>
-            </ul>
 
-            <ul>
                 <li>
-                    <a href="">Gestionar Canjes</a>
+                    <a href="admin/canjes.php">Gestionar Canjes</a>
                 </li>
-            </ul>
 
-            <ul>
+
                 <li>
-                    <a href="">Gestionar Promociones</a>
+                    <a href="admin/promociones.php">Gestionar Promociones</a>
                 </li>
-            </ul>
 
-            <ul>
                 <li>
-                    <a href="">Gestionar Catálogos</a>
+                    <a href="admin/catalogos.php">Gestionar Catálogos</a>
                 </li>
-            </ul>
 
-            <ul>
                 <li>
-                    <a href="">Gestionar Recompensas</a>
-                </li>
-            </ul>
-
-            <ul>
-                <li>
-                    <a href="">Gestionar Roles</a>
+                    <a href="admin/roles.php">Gestionar Roles</a>
                 </li>
             </ul>
 
