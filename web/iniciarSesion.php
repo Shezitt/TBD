@@ -36,6 +36,7 @@
         $username = $_POST['username'];
         $password = $_POST['password'];
 
+        $conn = Conexion::getConexion();
         $stmt = $conn->prepare("CALL sp_verificarUsuario(?, ?);");
         $stmt->bind_param("ss", $username, $password);
         $stmt->execute();
@@ -43,7 +44,9 @@
 
         if ($resultado->num_rows == 1) {
             $_SESSION['username'] = $username;
-            $_SESSION['idUsuario'] = $resultado->fetch_assoc()['idUsuario'];
+            $fila = $resultado->fetch_assoc();
+            $_SESSION['idUsuario'] = $fila['idUsuario'];
+            $_SESSION['rol'] = $fila['idRol'];
             header("Location: index.php");
         } else {
             echo "Credenciales incorrectas.";
