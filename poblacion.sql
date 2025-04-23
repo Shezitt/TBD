@@ -15,6 +15,9 @@ VALUES ('administrador');
 INSERT INTO Usuario (username, nombre, correo, password, puntos, puntosTotal, fechaRegistro, idRol, idNivel)
 VALUES ('shezitt', 'Shamir Terán', 'shamirteranmustafa@gmail.com', 'contra', 0.00, 0.00, '2025-04-20', '2','1');
 
+INSERT INTO Usuario (username, nombre, correo, password, puntos, puntosTotal, fechaRegistro, idRol, idNivel)
+VALUES ("carlos", "Carlos La Fuente", "carloslafuente12@gmail.com", "contra", 0.0, 0.0, "2025-04-20", 1, 1);
+
 
 -- Material
 
