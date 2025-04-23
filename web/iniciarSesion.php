@@ -35,12 +35,11 @@
         
         $username = $_POST['username'];
         $password = $_POST['password'];
-
-        $conn = Conexion::getConexion();
         $stmt = $conn->prepare("CALL sp_verificarUsuario(?, ?);");
         $stmt->bind_param("ss", $username, $password);
         $stmt->execute();
         $resultado = $stmt->get_result();    
+        $stmt->close();
 
         if ($resultado->num_rows == 1) {
             $_SESSION['username'] = $username;

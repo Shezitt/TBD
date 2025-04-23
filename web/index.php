@@ -8,11 +8,11 @@
         exit();
     }
     $idUsuario = $_SESSION['idUsuario'];
-    $conn = Conexion::getConexion();
     $stmt = $conn->prepare("CALL sp_getDatosUsuario(?);");
     $stmt->bind_param("i", $idUsuario);
     $stmt->execute();
     $datosUsuario = $stmt->get_result();
+    $stmt->close();
     $datosUsuario = $datosUsuario->fetch_assoc();
 
 ?>
@@ -65,11 +65,11 @@
             <h2>Promociones</h2>
             <?php
                 
-                $conn = Conexion::getConexion();
                 $stmt = $conn->prepare('CALL sp_getPromocionesUsuario(?);');
                 $stmt->bind_param("i", $idUsuario);
                 $stmt->execute();
                 $resultado = $stmt->get_result();
+                $stmt->close();
                 
                 if($resultado->num_rows == 0) {
                     echo "<p>No hay promociones actualmente.</p>";
