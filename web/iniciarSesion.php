@@ -32,7 +32,7 @@
 
 <?php
     
-    if ($_POST['iniciarSesion']) {
+    if ($_POST['iniciarSesion'] && isset($_POST['iniciarSesion'])) {
         
         $username = $_POST['username'];
         $password = $_POST['password'];
