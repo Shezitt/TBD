@@ -19,7 +19,7 @@
 <body>
     <div class="container">
         <h1>INICIAR SESIÓN</h1>
-        <form method="POST">
+        <form method="POST" action="iniciarSesion.php">
             <input type="text" name="username" placeholder="Nombre de usuario"> <br>
             <input type="password" name="password" placeholder="Contraseña"> <br>
             <input type="submit" name="iniciarSesion" value="Ingresar"> <br>
@@ -31,7 +31,7 @@
 
 <?php
     
-    if ($_POST['iniciarSesion']) {
+    if ($_POST['iniciarSesion'] && isset($_POST['iniciarSesion'])) {
         
         $username = $_POST['username'];
         $password = $_POST['password'];
