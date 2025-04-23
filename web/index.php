@@ -8,12 +8,12 @@
         exit();
     }
     $idUsuario = $_SESSION['idUsuario'];
-    $conn = Conexion::getConexion();
     $stmt = $conn->prepare("CALL sp_getDatosUsuario(?);");
     $stmt->bind_param("i", $idUsuario);
     $stmt->execute();
-    $resultado = $stmt->get_result();
-    $resultado = $resultado->fetch_assoc();
+    $datosUsuario = $stmt->get_result();
+    $stmt->close();
+    $datosUsuario = $datosUsuario->fetch_assoc();
 
 ?>
 <!DOCTYPE html>
@@ -42,19 +42,19 @@
             <h2>Datos</h2>
             <ul>
                 <li>
-                    Nombre: <?php echo $resultado['nombre']; ?>
+                    Nombre: <?php echo $datosUsuario['nombre']; ?>
                 </li>
                 <li>
-                    Nombre de usuario: <?php echo $resultado['username']; ?>
+                    Nombre de usuario: <?php echo $datosUsuario['username']; ?>
                 </li>
                 <li>
-                    Correo: <?php echo $resultado['correo']; ?>
+                    Correo: <?php echo $datosUsuario['correo']; ?>
                 </li>
                 <li>
-                    Puntos: <?php echo $resultado['puntos']; ?>
+                    Puntos: <?php echo $datosUsuario['puntos']; ?>
                 </li>
                 <li>
-                    Puntos históricos: <?php echo $resultado['puntosTotal']; ?>
+                    Puntos históricos: <?php echo $datosUsuario['puntosTotal']; ?>
                 </li>
             </ul>
 
@@ -65,11 +65,11 @@
             <h2>Promociones</h2>
             <?php
                 
-                $conn = Conexion::getConexion();
                 $stmt = $conn->prepare('CALL sp_getPromocionesUsuario(?);');
                 $stmt->bind_param("i", $idUsuario);
                 $stmt->execute();
                 $resultado = $stmt->get_result();
+                $stmt->close();
                 
                 if($resultado->num_rows == 0) {
                     echo "<p>No hay promociones actualmente.</p>";
@@ -86,24 +86,28 @@
                 }
 
             ?>
-            
 
             <h2>Botones</h2>
             <ul>
+                <?php
+                    if ($_SESSION['rol'] == 2) {
+                        echo '<li>
+                            <a href="panelAdministrativo.php">Ingresar a panel administrativo</a>
+                        </li>';
+                    }
+                ?>
+                
                 <li>
-                    <a href="panelAdministrativo.php">Ingresar a panel administrativo</a>
+                    <a href="verPuntosReciclaje.php">Ver puntos de reciclaje</a>
                 </li>
                 <li>
-                    <a href="">Ver puntos de reciclaje</a>
+                    <a href="catalogo.php">Ver recompensas</a>
                 </li>
                 <li>
-                    <a href="">Ver recompensas</a>
+                    <a href="reporteImpacto.php">Ver impacto ambiental</a>
                 </li>
                 <li>
-                    <a href="">Ver impacto ambiental</a>
-                </li>
-                <li>
-                    <a href="">Ver ránking</a>
+                    <a href="ranking.php">Ver ránking</a>
                 </li>
             </ul>
         </div>

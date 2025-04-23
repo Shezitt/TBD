@@ -59,3 +59,31 @@
 </body>
 </html>
 
+<<<<<<< HEAD
+=======
+<?php
+    
+    if ($_POST['iniciarSesion']) {
+        
+        $username = $_POST['username'];
+        $password = $_POST['password'];
+        $stmt = $conn->prepare("CALL sp_verificarUsuario(?, ?);");
+        $stmt->bind_param("ss", $username, $password);
+        $stmt->execute();
+        $resultado = $stmt->get_result();    
+        $stmt->close();
+
+        if ($resultado->num_rows == 1) {
+            $_SESSION['username'] = $username;
+            $fila = $resultado->fetch_assoc();
+            $_SESSION['idUsuario'] = $fila['idUsuario'];
+            $_SESSION['rol'] = $fila['idRol'];
+            header("Location: index.php");
+        } else {
+            echo "Credenciales incorrectas.";
+        }
+
+    }
+
+?>
+>>>>>>> a5ade2f81f96e279b19bb7e665e2a34e40504549

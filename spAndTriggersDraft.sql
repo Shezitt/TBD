@@ -16,9 +16,23 @@ END;
 $$
 DELIMITER ;
 
--- Registrar nuevo usuario
+-- Registrar nuevo usuario 
 
--- Autenticar usuario
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS sp_registrarUsuario (
+    IN p_nombre VARCHAR(45),
+    IN p_username VARCHAR(45),
+    IN p_email VARCHAR(45), 
+    IN p_password VARCHAR(45)
+)
+BEGIN 
+    INSERT INTO Usuario (username, nombre, correo, password, puntos, puntosTotal, fechaRegistro, idRol, idNivel)
+    VALUES (p_username, p_nombre, p_email, p_password, 0.0, 0.0, now(), 2, 1);
+END;
+$$
+DELIMITER ;
+
+-- Autenticar usuario (iniciar sesión)
 
 DELIMITER $$
 CREATE PROCEDURE IF NOT EXISTS sp_verificarUsuario (
@@ -308,6 +322,26 @@ BEGIN
         VALUES (p_usuario_id, p_recompensa_id, NOW());
     END IF;
 END $$
+DELIMITER ;
+
+-- Listar canjes pendientes
+
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS sp_getCanjesPendientes()
+BEGIN
+    SELECT 
+        Usuario.nombre AS nombreUsuario,
+        Nivel.nivel AS nivelUsuario,
+        Recompensa.nombre AS nombreRecompensa, 
+        fecha 
+    FROM 
+        Canje JOIN Usuario ON Canje.idUsuario = Usuario.idUsuario
+        JOIN Nivel ON Nivel.idNivel = Usuario.idNivel
+        JOIN Recompensa ON Recompensa.idRecompensa = Canje.idRecompensa
+    WHERE Canje.completado = 0;
+
+END; 
+$$
 DELIMITER ;
 
 -- Reportes de impacto ambiental
