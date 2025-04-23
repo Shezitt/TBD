@@ -324,6 +324,26 @@ BEGIN
 END $$
 DELIMITER ;
 
+-- Listar canjes pendientes
+
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS sp_getCanjesPendientes()
+BEGIN
+    SELECT 
+        Usuario.nombre AS nombreUsuario,
+        Nivel.nivel AS nivelUsuario,
+        Recompensa.nombre AS nombreRecompensa, 
+        fecha 
+    FROM 
+        Canje JOIN Usuario ON Canje.idUsuario = Usuario.idUsuario
+        JOIN Nivel ON Nivel.idNivel = Usuario.idNivel
+        JOIN Recompensa ON Recompensa.idRecompensa = Canje.idRecompensa
+    WHERE Canje.completado = 0;
+
+END; 
+$$
+DELIMITER ;
+
 -- Reportes de impacto ambiental
 
 DELIMITER $$
