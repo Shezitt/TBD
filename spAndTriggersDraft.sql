@@ -18,6 +18,20 @@ DELIMITER ;
 
 -- Registrar nuevo usuario 
 
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS sp_registrarUsuario (
+    IN p_nombre VARCHAR(45),
+    IN p_username VARCHAR(45),
+    IN p_email VARCHAR(45), 
+    IN p_password VARCHAR(45)
+)
+BEGIN 
+    INSERT INTO Usuario (username, nombre, correo, password, puntos, puntosTotal, fechaRegistro, idRol, idNivel)
+    VALUES (p_username, p_nombre, p_email, p_password, 0.0, 0.0, now(), 2, 1);
+END;
+$$
+DELIMITER ;
+
 -- Autenticar usuario (iniciar sesión)
 
 DELIMITER $$
