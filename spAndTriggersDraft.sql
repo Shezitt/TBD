@@ -16,9 +16,9 @@ END;
 $$
 DELIMITER ;
 
--- Registrar nuevo usuario
+-- Registrar nuevo usuario 
 
--- Autenticar usuario
+-- Autenticar usuario (iniciar sesión)
 
 DELIMITER $$
 CREATE PROCEDURE IF NOT EXISTS sp_verificarUsuario (
