@@ -22,7 +22,9 @@
 
         <div class="cuerpo">
 
-            
+            <a href="todosPuntosReciclaje.php">Ver todos los puntos de reciclaje</a>
+            <br>
+            <a href="puntosReciclajeCercanos.php">Ver puntos de reciclaje cercanos</a>
 
         </div>
 
