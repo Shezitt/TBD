@@ -1,0 +1,16 @@
+{
+  "name": "tbd-app",
+  "version": "1.0.0",
+  "description": "En este repositorio se trabajará el proyecto \"Plataforma de reciclaje y recompensas\" de la materia Taller de Base de Datos de la Universidad Mayor de San Simón (UMSS) impartida por el Ing. Gustavo Veizaga.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"No tests yet\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}
+
