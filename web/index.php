@@ -90,7 +90,7 @@
             <h2>Botones</h2>
             <ul>
                 <?php
-                    if ($_SESSION['rol'] == 1) {
+                    if ($_SESSION['rol'] == 2) {
                         echo '<li>
                             <a href="panelAdministrativo.php">Ingresar a panel administrativo</a>
                         </li>';
