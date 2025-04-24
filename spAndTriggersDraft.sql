@@ -42,7 +42,7 @@ CREATE PROCEDURE IF NOT EXISTS sp_registrarUsuario (
 )
 BEGIN 
     INSERT INTO Usuario (username, nombre, correo, password, puntos, puntosTotal, fechaRegistro, idRol, idNivel)
-    VALUES (p_username, p_nombre, p_email, p_password, 0.0, 0.0, now(), 2, 1);
+    VALUES (p_username, p_nombre, p_email, p_password, 0.0, 0.0, now(), 1, 1);
 END;
 $$
 DELIMITER ;
