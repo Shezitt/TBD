@@ -16,6 +16,21 @@ END;
 $$
 DELIMITER ;
 
+-- Verificar que nombre de usuario y email son unicos (registrar usuario)
+
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS sp_verificarUsernameEmailUnico (
+    IN p_username VARCHAR(45),
+    IN p_email VARCHAR(45)
+)
+BEGIN
+    SELECT COUNT(*) = 0 AS respuesta
+    FROM Usuario
+    WHERE p_username = username AND p_email = correo;
+END;
+$$
+DELIMITER ;
+
 -- Registrar nuevo usuario 
 
 DELIMITER $$
@@ -27,7 +42,7 @@ CREATE PROCEDURE IF NOT EXISTS sp_registrarUsuario (
 )
 BEGIN 
     INSERT INTO Usuario (username, nombre, correo, password, puntos, puntosTotal, fechaRegistro, idRol, idNivel)
-    VALUES (p_username, p_nombre, p_email, p_password, 0.0, 0.0, now(), 2, 1);
+    VALUES (p_username, p_nombre, p_email, p_password, 0.0, 0.0, now(), 1, 1);
 END;
 $$
 DELIMITER ;
