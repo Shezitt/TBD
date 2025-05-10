@@ -18,7 +18,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>INICIAR SESIÓN</h1>
+        <h1>INICIAR SESIÓN PRUEBAAA SDFLAKJFASDL J;ASDFKJ</h1>
         <form method="POST" action="iniciarSesion.php">
             <input type="text" name="username" placeholder="Nombre de usuario"> <br>
             <input type="password" name="password" placeholder="Contraseña"> <br>
