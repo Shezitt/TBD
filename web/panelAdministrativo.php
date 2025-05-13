@@ -21,6 +21,8 @@
     <div class="container">
         <div class="header">
             <h1>PANEL ADMINISTRATIVO</h1>
+            <h1>PANELadmi</h1>
+
         </div>
 
         <div class="cuerpo">
