@@ -1,6 +1,7 @@
 <?php
 
-$conn = new mysqli("localhost", "root", "password", "reciclaje");
+$conn = new mysqli("localhost", "root", "", "reciclaje");
+
 if ($conn->connect_error) {
     die("Conexión fallida: " . $conn->connect_error);
 } 

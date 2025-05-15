@@ -292,31 +292,10 @@ $$
 DELIMITER ;
 
 
--- Trigger para que el usuario suba de nivel automaticamente
-
--- DELIMITER $$
--- CREATE TRIGGER IF NOT EXISTS after_update_puntos_usuario
--- AFTER UPDATE ON Usuario
--- FOR EACH ROW
--- BEGIN
--- 	DECLARE idNuevoNivel INT;
--- 	IF !(NEW.puntosTotal <=> OLD.puntosTotal) THEN
--- 		SELECT idNivel INTO idNuevoNivel
--- 		FROM Nivel 
---         WHERE NEW.puntosTotal >= puntosTotalesNecesarios ORDER BY nivel DESC LIMIT 1;
-        
---         IF idNuevoNivel <=> NEW.idNivel THEN
--- 			UPDATE Usuario SET idNivel = idNuevoNivel;
---         END IF;
---     END IF;
--- END;
--- $$
--- DELIMITER ;
-
 -- Canje de recompensas del usuario
 
 DELIMITER $$
-CREATE PROCEDURE IF NOT EXISTS CanjearRecompensa (
+CREATE PROCEDURE IF NOT EXISTS sp_canjearRecompensa (
     IN p_usuario_id INT,
     IN p_recompensa_id INT
 )
