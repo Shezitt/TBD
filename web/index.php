@@ -40,7 +40,7 @@
             align-items: center;
             justify-content: flex-end;
             padding: 0 20px;
-            bckground-color: white;
+            bakground-color: white;
             box-sizing: border-box;
         }
 
@@ -52,6 +52,9 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
         }
+
+       
+
 
         .header h1 {
             color: #012030;
@@ -78,18 +81,43 @@
 
         }
 
-        .bienvenida{
-            margin: auto 150px;
+        .bienvenida {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 60px;
+        }
+
+        .logo {
+            height: 50px;
+        }
+
+        .texto-bienvenida h1 {
+            color: #012030;
+            font-size: 2em;
+            margin: 0;
+        }
+
+        .nombre-usuario {
+            color: #012030;
+            font-size: 1em;
+            font-weight: bold;
+            margin-top: 4px;
         }
 
         .flexcontainer{
-            margin: auto 100px;
+            margin: auto 150px;
         }
+        
+         .text-wrapper {
+          font-weight: bold;
+        }
+
 
         .titulo-botones {
             text-align: left;
             margin-right: 10px;
-            margin: auto 150px;
+            margin-left: 120px;
         }
 
 
@@ -120,6 +148,7 @@
             display: inline-block;
             background-color: #9AEBA3;
             color: #012030;
+            text-align: center;
             padding: 10px 15px;
             margin: 1px 0;
             border: none;
@@ -166,6 +195,50 @@
 
 
 
+
+        .columna-derecha {
+            background-color: #012030;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+            overflow-y: auto;
+            box-sizing: border-box;
+            max-height: 650px; 
+            margin-top: -80px; 
+            border-radius: 8px;
+        }
+
+
+        .columna-derecha h2 {
+        text-align: center;
+        font-size: 2em;
+        margin-bottom: 20px;
+        }
+
+        .promocion {
+        display: flex;
+        align-items: center;
+        background-color: rgba(255, 255, 255, 0.05);
+        border: 1px solid #ffffff22;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 10px;
+        }
+
+        .promocion img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        margin-right: 15px;
+        border-radius: 6px;
+        }
+
+        .promocion-detalle {
+        flex: 1;
+        }
+
+
+
                 
     </style>
     
@@ -177,15 +250,15 @@
     </div>
 
     <div class="container">
-        
-            
+                
         <div class="bienvenida">
-            <h1>BIENVENIDO</h1>
-            <div class="label">
-                <div class="text-wrapper"><?php echo $datosUsuario['nombre']; ?></div>
+            <img class="logo" src="logo.png" alt="Logo del sitio">
+            <div class="texto-bienvenida">
+                <h1>BIENVENIDO</h1>
+                <div class="nombre-usuario"><?php echo $datosUsuario['nombre']; ?></div>
             </div>
         </div>
-        
+
         <div class="contenido">
 
              <div class="columna-izquierda">
@@ -265,13 +338,22 @@
                         if($resultado->num_rows == 0) {
                             echo "<p>No hay promociones actualmente.</p>";
                         } else {
+                            $contador = 1;
 
                             while ($fila = $resultado->fetch_assoc()) {
-                                echo "<h3>" . $fila['nombre'] . "</h3>";
-                                echo "<b>Multiplicador:</b> " . $fila['multiplicador'] . "<br>";
-                                echo "<b>Fecha inicio:</b> " . $fila['fechaInicio'] . "<br>";
-                                echo "<b>Fecha fin:</b> " . $fila['fechaFin'] . "<br>";
-                                echo "Nivel requerido: " . $fila['nivelRequerido']; 
+                                $nombreImagen = "promo-" . $contador . ".jpg"; // promo-1.jpg, promo-2.jpg, etc.
+
+                                echo '<div class="promocion" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">';
+                                echo '<img src="' . $nombreImagen . '" alt="Imagen promoción" style="width: 100px; height: auto; border-radius: 8px;">';
+                                echo '<div class="promocion-detalle">';
+                                echo '<h3>' . $fila['nombre'] . '</h3>';
+                                echo '<b>Multiplicador:</b> ' . $fila['multiplicador'] . '<br>';
+                                echo '<b>Fecha inicio:</b> ' . $fila['fechaInicio'] . '<br>';
+                                echo '<b>Fecha fin:</b> ' . $fila['fechaFin'] . '<br>';
+                                echo 'Nivel requerido: ' . $fila['nivelRequerido'];
+                                echo '</div></div>';
+
+                                $contador++;
                             }
 
                         }
