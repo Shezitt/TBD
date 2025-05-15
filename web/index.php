@@ -30,8 +30,6 @@
             font-family: 'Trebuchet MS', sans-serif;
         }
 
-       
-
         .barra-superior {
             width: 100%;
             height: 30px;
@@ -52,9 +50,6 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
         }
-
-       
-
 
         .header h1 {
             color: #012030;
@@ -108,7 +103,7 @@
         .flexcontainer{
             margin: auto 150px;
         }
-        
+
          .text-wrapper {
           font-weight: bold;
         }
@@ -120,11 +115,9 @@
             margin-left: 120px;
         }
 
-
         .datos-usuario li {
             color: #012030;
             margin-bottom: 6px;
-
         }
 
         .botones li {
@@ -184,7 +177,6 @@
             background-color: #B2B2B2; /* igual que los demás, plomo al hacer clic */
         }
 
-
         .promo {
             background-color: #f0f8ff;
             padding: 10px;
@@ -192,9 +184,6 @@
             margin-bottom: 15px;
             border-radius: 6px;
         }
-
-
-
 
         .columna-derecha {
             background-color: #012030;
@@ -236,9 +225,6 @@
         .promocion-detalle {
         flex: 1;
         }
-
-
-
                 
     </style>
     
