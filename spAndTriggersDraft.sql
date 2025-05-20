@@ -165,12 +165,12 @@ CREATE PROCEDURE IF NOT EXISTS sp_registrarReciclaje (
 	IN p_usuario_id INT,
     IN p_material_id INT,
     IN p_punto_reciclaje_id INT,
-    IN p_cantidad_kg DECIMAL(10,2)
+    IN p_cantidad_kg DECIMAL(10,2),
+    OUT p_puntos_ganados DECIMAL(10,2)
 )
 BEGIN
 	DECLARE v_coef_puntos DECIMAL(10,2);
     DECLARE v_coef_co2 DECIMAL(10,2);
-    DECLARE v_puntos_ganados DECIMAL(10,2);
     DECLARE v_impacto_co2 DECIMAL(10,2);
     DECLARE v_fechaActual DATE;
     DECLARE v_nivelUsuario INT;
@@ -195,10 +195,10 @@ BEGIN
     AND v_fechaActual BETWEEN Promocion.fechaInicio AND Promocion.fechaFin 
     AND v_nivelUsuario >= Promocion.nivelRequerido;
 
-    SET v_puntos_ganados = v_multiplicadorPromo * v_coef_puntos *  p_cantidad_kg;
+    SET p_puntos_ganados = v_multiplicadorPromo * v_coef_puntos *  p_cantidad_kg;
 	
 	INSERT INTO Registro_Reciclaje(idUsuario, idMaterial, idPunto, cantidad, fecha, puntosGanados, impactoCO2)
-    VALUES (p_usuario_id, p_material_id, p_punto_reciclaje_id, p_cantidad_kg, NOW(), v_puntos_ganados, v_impacto_co2); 
+    VALUES (p_usuario_id, p_material_id, p_punto_reciclaje_id, p_cantidad_kg, NOW(), p_puntos_ganados, v_impacto_co2); 
     
 END;
 $$
