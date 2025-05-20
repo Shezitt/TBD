@@ -150,9 +150,9 @@ CREATE PROCEDURE IF NOT EXISTS sp_getMaterialesPuntoReciclaje (
 )
 BEGIN
 	SELECT *
-    FROM Material
-    JOIN Punto_Reciclaje ON Material.idPunto = Punto_Reciclaje.idPunto
-    WHERE Punto_Reciclaje.idPunto = p_idPunto AND Material.activo = 1 AND Punto_Reciclaje.activo = 1;
+    FROM Punto_Reciclaje_Materiales
+    JOIN Material ON Material.idMaterial = Punto_Reciclaje_Materiales.idMaterial
+    WHERE Punto_Reciclaje_Materiales.idPunto = p_idPunto AND Material.activo = 1;
 END;
 $$
 DELIMITER ;
