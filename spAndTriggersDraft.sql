@@ -124,13 +124,15 @@ CREATE PROCEDURE IF NOT EXISTS sp_getPuntosReciclajeCercanos (
 )
 BEGIN
     SELECT *,
-       (
-         6371 * ACOS(
-           COS(RADIANS(p_latitud)) * COS(RADIANS(latitud)) *
-           COS(RADIANS(longitud) - RADIANS(p_longitud)) +
-           SIN(RADIANS(p_latitud)) * SIN(RADIANS(latitud))
-         )
-       ) AS distancia_km
+       *,
+        6371 * 2 * ASIN(
+            SQRT(
+                POW(SIN(RADIANS(pr.latitud - p_latitud) / 2), 2) +
+                COS(RADIANS(p_latitud)) * 
+                COS(RADIANS(pr.latitud)) * 
+                POW(SIN(RADIANS(pr.longitud - p_longitud) / 2), 2)
+            )
+        ) AS distancia_km
     FROM Punto_Reciclaje
     WHERE activo = 1
     HAVING distancia_km < 5
