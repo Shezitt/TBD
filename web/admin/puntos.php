@@ -272,7 +272,7 @@
         </div>
 
         <div class="back-button-container">
-            <a href="../panel_administrativo.php" class="back-button">Anterior</a>
+            <a href="../panelAdministrativo.php" class="back-button">Anterior</a>
         </div>
     </div>  
 </body>
