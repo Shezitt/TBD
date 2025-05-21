@@ -85,6 +85,9 @@ INSERT INTO Recompensa (nombre, puntosNecesarios, nivelRequerido, idCatalogo)
 VALUES ('Tarjeta Spotify', 200.0, 2, 1);
 
 INSERT INTO Recompensa (nombre, puntosNecesarios, nivelRequerido, idCatalogo)
+VALUES ('Tarjeta Epic', 100.0, 2, 1);
+
+INSERT INTO Recompensa (nombre, puntosNecesarios, nivelRequerido, idCatalogo)
 VALUES ('Power Bank', 100.0, 1, 2);
 
 INSERT INTO Recompensa (nombre, puntosNecesarios, nivelRequerido, idCatalogo)

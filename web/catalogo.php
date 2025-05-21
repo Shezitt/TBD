@@ -1,3 +1,12 @@
+<?php
+  require_once("conexion.php");
+
+  $stmt = $conn->prepare("CALL sp_getCatalogos()");
+  $stmt->execute();
+  $catalogos = $stmt->get_result();
+  $stmt->close();
+
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -26,9 +35,30 @@
       <h1>CATÁLOGO DE RECOMPENSAS</h1>
     </div>
 
-    <button class="btn-verde">Seleccionar Catálogo</button>
+    <form method="POST">
+      <select name="catalogo">
+        <?php
+          while ($fila = $catalogos->fetch_assoc()) {
+            $idCatalogo = $fila['idCatalogo'];
+            echo "<option value='$idCatalogo'>" . $fila['nombreCatalogo'] . "</option>";
+          }
+        ?>
+      </select>
+      <input type="submit" value="Seleccionar catálogo">
+    </form>
 
     <div class="cuerpo">
+      <?php
+        if (isset($_POST['catalogo'])) {
+          echo "<table>";
+          echo "<thead>";
+          echo "<tr>";
+          
+          echo "</tr>";
+          echo "</thead>";
+        }
+
+      ?>
       <table>
         <thead>
           <tr>
