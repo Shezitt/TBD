@@ -306,10 +306,12 @@ BEGIN
     DECLARE v_puntos_requeridos DECIMAL(10,2);
     DECLARE v_nivel_usuario INT;
     DECLARE v_nivel_requerido INT;
+
     SELECT puntosTotal INTO v_puntos_usuario FROM Usuario WHERE idUsuario = p_usuario_id;
     SELECT puntosNecesarios INTO v_puntos_requeridos FROM Recompensa WHERE idRecompensa = p_recompensa_id;
-    SELECT nivel INTO v_nivel_usuario FROM Usuaio WHERE idUsuario = p_usuario_id;
-    SELECT nivelRequerido INTO v_nivel_requerido FROM Recompensa WHERE idRecompenas = p_recompensa_id;
+    SELECT nivel INTO v_nivel_usuario FROM Usuario JOIN Nivel ON Usuario.idNivel = Nivel.idNivel WHERE idUsuario = p_usuario_id;
+    SELECT nivelRequerido INTO v_nivel_requerido FROM Recompensa WHERE idRecompensa = p_recompensa_id;
+
     -- Verificamos si hay puntitos sufis y que tenga nivel suficiente
     IF v_puntos_usuario >= v_puntos_requeridos AND v_nivel_usuario >= v_nivel_requerido THEN
         UPDATE Usuario SET puntos = puntos - v_puntos_requeridos WHERE idUsuario = p_usuario_id;
