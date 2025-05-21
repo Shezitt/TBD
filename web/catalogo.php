@@ -1,4 +1,5 @@
 <?php
+  session_start();
   require_once("conexion.php");
 
   $stmt = $conn->prepare("CALL sp_getCatalogos()");
@@ -48,62 +49,93 @@
     </form>
 
     <div class="cuerpo">
-      <?php
-        if (isset($_POST['catalogo'])) {
-          echo "<table>";
-          echo "<thead>";
-          echo "<tr>";
-          
-          echo "</tr>";
-          echo "</thead>";
-        }
+      <div class="tabla-contenedor">
+          <h2>
+            Catálogo:
+            <?php
+              $catalogoSel = (isset($_POST['catalogo']) ? $_POST['catalogo'] : 1);
+              $stmt = $conn->prepare("SELECT nombreCatalogo as nombre FROM Catalogo WHERE idCatalogo='$catalogoSel';");
+              $stmt->execute();
+              $resultado = $stmt->get_result()->fetch_assoc();
+              echo $resultado['nombre'];
+            ?>
+          </h2>
+          <?php
+            $catalogoSel = (isset($_POST['catalogo']) ? $_POST['catalogo'] : 1);
+            echo "<table>";
+            echo "<thead>";
+            echo "<tr>";
+            echo "<th>Nombre</th>";
+            echo "<th>Puntos necesarios</th>";
+            echo "<th>Nivel requerido</th>";
+            echo "<th>Canjear</th>";
+            echo "</tr>";
+            echo "</thead>";
+            echo "<tbody>";
 
-      ?>
-      <table>
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Puntos necesarios</th>
-            <th>Nivel Requerido</th>
-            <th>Canjear</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Recompensa 1</td>
-            <td>100</td>
-            <td>Nivel 1</td>
-            <td><button class="canjear-btn">Canjear</button></td>
-          </tr>
-          <tr>
-            <td>Recompensa 2</td>
-            <td>500</td>
-            <td>Nivel 3</td>
-            <td class="texto-no">No tienes puntos suficientes</td>
-          </tr>
-          <tr>
-            <td>Recompensa 3</td>
-            <td>500</td>
-            <td>Nivel 3</td>
-            <td class="texto-no">No tienes puntos suficientes</td>
-          </tr>
-        </tbody>
-      </table>
+            $stmt = $conn->prepare("CALL sp_getRecompensasCatalogo(?);");
+            $stmt->bind_param("i", $catalogoSel);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
+            $stmt->close();
+
+            while ($fila = $resultado->fetch_assoc()) {
+              echo "<tr>";
+              echo "<td>" . $fila['nombre'] . "</td>";
+              echo "<td>" . $fila['puntosNecesarios'] . "</td>";
+              echo "<td>" . $fila['nivelRequerido'] . "</td>";
+              
+              $idRecompensa = $fila['idRecompensa'];
+
+              // Verificar si tiene nivel suficiente
+              $stmt = $conn->prepare("CALL sp_verificarNivelUsuarioRecompensa(?, ?);");
+              $stmt->bind_param("ii", $idRecompensa, $_SESSION['idUsuario']);
+              $stmt->execute();
+              $res = $stmt->get_result()->fetch_assoc();
+              $stmt->close();
+
+              $nivelSuficiente = $res['respuesta'] == 1;
+
+              // Verificar si tiene puntos suficientes
+              $stmt = $conn->prepare("CALL sp_verificarPuntosUsuarioRecompensa(?, ?);");
+              $stmt->bind_param("ii", $idRecompensa, $_SESSION['idUsuario']);
+              $stmt->execute();
+              $res = $stmt->get_result()->fetch_assoc();
+              $stmt->close();
+
+              $puntosSuficientes = $res['respuesta'] == 1;
+
+              echo "<td>";
+              if ($nivelSuficiente && $puntosSuficientes) {
+                echo "<a href='canjear.php?idRecompensa=$idRecompensa'>Canjear</a>";
+              } else {
+                if ($nivelSuficiente) {
+                  echo "No tienes puntos suficientes";
+                } else if ($puntosSuficientes){
+                  echo "No tienes nivel suficiente";
+                } else {
+                  echo "No tienes puntos suficientes";
+                  echo "<br>No tienes nivel suficiente";
+                }
+              }
+              echo "</td>";
+
+              echo "</tr>";
+            }
+
+            echo "</tbody>";
+            echo "</table>";
+
+        ?>
+      </div>
+      
+      <a class="btn-anterior" href="index.php">Volver</a>
+      
     </div>
-
-    <a class="btn-anterior" href="javascript:history.back()">Anterior</a>
   </div>
 
-  <script>
-    // Tomamos todos los botones "Canjear"
-    const botones = document.querySelectorAll('.canjear-btn');
+  
+  
 
-    botones.forEach(btn => {
-      btn.addEventListener('click', () => {
-        alert('¡Canjeo exitoso!'); // Mensaje simple
-        // Aquí puedes agregar lógica adicional, enviar datos al servidor, etc.
-      });
-    });
-  </script>
 </body>
 </html>
