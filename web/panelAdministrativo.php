@@ -130,7 +130,7 @@
             <a href="admin/roles.php">Gestionar Roles</a>
         </div>
 
-        <a href="logout.php" class="logout-button">Cerrar sesión</a>
+        <a href="../" class="logout-button">Volver al panel principal</a>
     </div>  
 </body>
 </html>
