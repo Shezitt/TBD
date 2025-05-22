@@ -46,6 +46,16 @@
             $fila = $resultado->fetch_assoc();
             $_SESSION['idUsuario'] = $fila['idUsuario'];
             $_SESSION['rol'] = $fila['idRol'];
+
+            $stmt = $conn->prepare("SELECT nivel FROM Nivel WHERE idNivel=?;");
+            $stmt->bind_param("i", $fila['idNivel']);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
+            $stmt->close();
+            $fila = $resultado->fetch_assoc();
+            
+            $_SESSION['nivel'] = $fila['nivel'];
+
             header("Location: index.php");
         } else {
             echo "Credenciales incorrectas.";
