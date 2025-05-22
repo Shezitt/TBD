@@ -26,7 +26,7 @@ CREATE PROCEDURE IF NOT EXISTS sp_verificarUsernameEmailUnico (
 BEGIN
     SELECT COUNT(*) = 0 AS respuesta
     FROM Usuario
-    WHERE p_username = username AND p_email = correo;
+    WHERE username = p_username OR correo = p_email;
 END;
 $$
 DELIMITER ;
