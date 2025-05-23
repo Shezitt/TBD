@@ -387,3 +387,22 @@ BEGIN
     ORDER BY puntosTotal DESC;
 END $$
 DELIMITER ;
+
+
+
+-- PROCEDIMIENTOS ALMACENADOS PARA ADMINISTRADOR
+
+-- Agregar nuevo material de reciclaje
+
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS sp_nuevoMaterial (
+    IN p_nombre VARCHAR(45),
+    IN p_coefpuntos DECIMAL(10,2),
+    IN p_coefco2 DECIMAL(10,2)
+)
+BEGIN
+    INSERT INTO Material (nombre, coeficientePuntos, coeficienteCO2)
+    VALUES (p_nombre, p_coefpuntos, p_coefco2);
+END $$
+
+DELIMITER ;
