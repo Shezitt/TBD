@@ -353,7 +353,7 @@ BEGIN
         SUM(Registro_Reciclaje.impactoCO2) AS total_co2_reducido
     FROM Registro_Reciclaje
     JOIN Material ON Registro_Reciclaje.idMaterial = Material.idMaterial
-    GROUP BY Material.nombre;
+    GROUP BY Material.nombre ORDER BY total_reciclado_kg DESC;
 END $$
 DELIMITER ;
 
