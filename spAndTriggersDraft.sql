@@ -370,7 +370,7 @@ BEGIN
     FROM Registro_Reciclaje
     JOIN Material ON Registro_Reciclaje.idMaterial = Material.idMaterial
     WHERE Registro_Reciclaje.fecha BETWEEN fechaInicio AND fechaFin
-    GROUP BY Material.nombre;
+    GROUP BY Material.nombre ORDER BY total_reciclado_kg DESC;
 END $$
 DELIMITER ;
 
