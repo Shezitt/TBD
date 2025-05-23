@@ -406,3 +406,20 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+-- Agregar nueva promocion
+
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS sp_nuevaPromocion (
+    IN p_nombre VARCHAR(45),
+    IN p_multiplicador DECIMAL(10,2),
+    IN p_nivel_requerido INT,
+    IN p_fecha_inicio DATE,
+    IN p_fecha_fin DATE
+)
+BEGIN
+    INSERT INTO Promocion (nombre, multiplicador, nivelRequerido,  fechaInicio, fechaFin)
+    VALUES (p_nombre, p_multiplicador, p_nivel_requerido, p_fecha_inicio, p_fecha_fin);
+END $$
+
+DELIMITER ;
