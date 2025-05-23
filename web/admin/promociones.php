@@ -277,8 +277,8 @@ if ($stmt) {
                             echo '<td>' . htmlspecialchars($fila['nivelRequerido']) . '</td>';
                             echo '<td>' . htmlspecialchars($fila['fechaInicio']) . '</td>';
                             echo '<td>' . htmlspecialchars($fila['fechaFin']) . '</td>';
-                            echo '<td><a href="modificar_promocion.php?id=' . htmlspecialchars($fila['id']) . '" class="action-button modify-button">Modificar</a></td>';
-                            echo '<td><a href="eliminar_promocion.php?id=' . htmlspecialchars($fila['id']) . '" class="action-button delete-button">Eliminar</a></td>';
+                            echo '<td><a href="modificar_promocion.php?id=' . $fila['idPromocion'] . '" class="action-button modify-button">Modificar</a></td>';
+                            echo '<td><a href="eliminar_promocion.php?id=' . $fila['idPromocion'] . '" class="action-button delete-button">Eliminar</a></td>';
                             echo '</tr>';
                         }
                     } else {
