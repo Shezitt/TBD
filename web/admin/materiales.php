@@ -1,4 +1,9 @@
 <?php
+session_start();
+
+if (!(isset($_SESSION['rol']) && $_SESSION['rol'] == 2)) {
+    header("Location: ../index.php");
+}
 
 require_once("../conexion.php");
 $stmt = $conn->prepare("SELECT * FROM Material WHERE activo = 1;");
@@ -217,7 +222,7 @@ if ($stmt) {
             <input type="number" name="coeficiente_puntos" placeholder="Coeficiente Puntos" step="0.01" required>
             <input type="number" name="coeficiente_impacto_co2" placeholder="Coeficiente Impacto CO2" step="0.01"
                 required>
-            <input type="submit" value="Enviar">
+            <input type="submit" name="agregar_material" value="Enviar">
         </form>
 
         <div class="table-container">
@@ -238,8 +243,8 @@ if ($stmt) {
                             echo '<td>' . htmlspecialchars($fila['nombre']) . '</td>';
                             echo '<td>' . htmlspecialchars($fila['coeficientePuntos']) . '</td>';
                             echo '<td>' . htmlspecialchars($fila['coeficienteCO2']) . '</td>';
-                            echo '<td><a href="modificar_material.php?id=' . htmlspecialchars($fila['id'] ?? '') . '" class="action-button modify-button">Modificar</a></td>';
-                            echo '<td><a href="eliminar_material.php?id=' . htmlspecialchars($fila['id'] ?? '') . '" class="action-button delete-button">Eliminar</a></td>';
+                            echo '<td><a href="modificar_material.php?id=' . $fila['idMaterial'] . '" class="action-button modify-button">Modificar</a></td>';
+                            echo '<td><a href="eliminar_material.php?id=' . $fila['idMaterial'] . '" class="action-button delete-button">Eliminar</a></td>';
                             echo '</tr>';
                         }
                     } else {
@@ -253,14 +258,25 @@ if ($stmt) {
         <div class="back-button-container">
             <a href="../panelAdministrativo.php" class="back-button">Anterior</a>
         </div>
-    </div>  
+    </div>
 </body>
 
 </html>
 
 <?php
 
-if (isset($conn)) {
-    $conn->close();
-}
+    if (isset($_POST['agregar_material'])) {
+        $nombre = $_POST['nombre'];
+        $coeficiente_puntos = $_POST['coeficiente_puntos'];
+        $coeficiente_co2 = $_POST['coeficiente_impacto_co2'];
+
+        $stmt = $conn->prepare("CALL sp_nuevoMaterial(?, ?, ?);");
+        $stmt->bind_param("sdd", $nombre, $coeficiente_puntos, $coeficiente_co2);
+        $stmt->execute();
+        $stmt->close();
+        
+        echo "<script>window.location.href = window.location.pathname;</script>";
+
+    }
+
 ?>
