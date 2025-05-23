@@ -1,3 +1,7 @@
+<?php
+  session_start();
+  require_once("conexion.php");
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -77,40 +81,74 @@
     </div>
 
     <div class="cuerpo">
+      <h2>REPORTE GENERAL</h2>
       <table>
         <thead>
           <tr>
+            <th>Nº</th>
             <th>Material</th>
             <th>Total reciclado (kg)</th>
             <th>Total CO2 reducido(kg)</th>
           </tr>
         </thead>
         <tbody>
+        
+          <?php
+          
+            $stmt = $conn->prepare("CALL GenerarReporteImpactoAmbientalHistorico();");
+            $stmt->execute();
+            $resultado = $stmt->get_result();
+            $stmt->close();
+
+            $cnt = 1;
+
+            while ($fila = $resultado->fetch_assoc()) {
+              echo "<tr>";
+              echo "<td>" . $cnt++ . "</td>";
+              echo "<td>" . $fila['tipo_material'] . "</td>";
+              echo "<td>" . $fila['total_reciclado_kg'] . "</td>";
+              echo "<td>" . $fila['total_co2_reducido'] . "</td>";
+              echo "</tr>";
+            }
+
+          ?>
+
+        </tbody>
+      </table>
+
+      <h2>TU IMPACTO</h2>
+      <table>
+        <thead>
           <tr>
-            <td>Papel y Carton</td>
-            <td>20.00</td>
-            <td>50.00</td>
+            <th>Nº</th>
+            <th>Material</th>
+            <th>Total reciclado (kg)</th>
+            <th>Total CO2 reducido(kg)</th>
           </tr>
-          <tr>
-            <td>Plasticos</td>
-            <td>0</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Vidrio</td>
-            <td>0</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Metales</td>
-            <td>0</td>
-            <td>0</td>
-          </tr>
-          <tr>
-            <td>Textiles</td>
-            <td>0</td>
-            <td>0</td>
-          </tr>
+        </thead>
+        <tbody>
+        
+          <?php
+          
+            $stmt = $conn->prepare("CALL sp_getImpactoUsuario(?);");
+            $stmt->bind_param("i", $_SESSION['idUsuario']);
+            $stmt->execute();
+            $resultado = $stmt->get_result();
+            $stmt->close();
+
+            $cnt = 1;
+
+            while ($fila = $resultado->fetch_assoc()) {
+              echo "<tr>";
+              echo "<td>" . $cnt++ . "</td>";
+              echo "<td>" . $fila['tipo_material'] . "</td>";
+              echo "<td>" . $fila['total_reciclado_kg'] . "</td>";
+              echo "<td>" . $fila['total_co2_reducido'] . "</td>";
+              echo "</tr>";
+            }
+
+          ?>
+
         </tbody>
       </table>
     </div>
