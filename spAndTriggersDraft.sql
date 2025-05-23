@@ -375,3 +375,15 @@ BEGIN
 END $$
 DELIMITER ;
 
+-- Ranking top 10 usuarios con mas puntos
+
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS getRankingPuntos()
+BEGIN
+    SELECT
+        username, Usuario.nombre, puntosTotal, nivel
+    FROM Usuario 
+    JOIN Nivel ON Usuario.idNivel = Nivel.idNivel
+    ORDER BY puntosTotal DESC;
+END $$
+DELIMITER ;
