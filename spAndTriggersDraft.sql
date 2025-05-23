@@ -76,7 +76,8 @@ BEGIN
     FROM Registro_Reciclaje
     JOIN Material ON Registro_Reciclaje.idMaterial = Material.idMaterial
     JOIN Usuario ON Registro_Reciclaje.idUsuario = Usuario.idUsuario
-    WHERE Usuario.idUsuario = p_idUsuario AND Material.activo = 1 GROUP BY Material.nombre;
+    WHERE Usuario.idUsuario = p_idUsuario AND Material.activo = 1 
+    GROUP BY Material.nombre ORDER BY total_reciclado_kg DESC;
 END;
 $$
 DELIMITER ;
