@@ -1,22 +1,24 @@
 <?php
-    require_once("../conexion.php");
-    $stmt = $conn->prepare("SELECT * FROM Punto_Reciclaje WHERE activo = 1;");
-    if ($stmt) {
-        $stmt->execute();
-        $resultado = $stmt->get_result();
-        $stmt->close();
-    } else {
-        echo "Error al preparar la consulta: " . $conn->error;
-        $resultado = false; 
-    }
+require_once("../conexion.php");
+$stmt = $conn->prepare("SELECT * FROM Punto_Reciclaje WHERE activo = 1;");
+if ($stmt) {
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+    $stmt->close();
+} else {
+    echo "Error al preparar la consulta: " . $conn->error;
+    $resultado = false;
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestionar Puntos de Reciclaje</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f2f5;
@@ -30,13 +32,13 @@
 
         .container {
             width: 90%;
-            max-width: 1000px; 
+            max-width: 1000px;
             background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             padding: 25px 35px;
             margin-top: 30px;
-            margin-bottom: 30px; 
+            margin-bottom: 30px;
         }
 
         .header {
@@ -49,7 +51,7 @@
 
         .header .icon {
             font-size: 30px;
-            color: #4CAF50; 
+            color: #4CAF50;
             margin-right: 15px;
         }
 
@@ -61,29 +63,30 @@
 
         h2 {
             font-size: 20px;
-            color: #007bff; 
+            color: #007bff;
             margin-top: 0;
             margin-bottom: 20px;
         }
+
         .add-point-form {
             display: flex;
-            flex-wrap: wrap; 
-            gap: 15px; 
+            flex-wrap: wrap;
+            gap: 15px;
             margin-bottom: 30px;
-            align-items: flex-end; 
+            align-items: flex-end;
         }
 
         .add-point-form input[type="text"],
         .add-point-form input[type="number"] {
-            flex: 1; 
-            min-width: 150px; 
+            flex: 1;
+            min-width: 150px;
             padding: 10px 15px;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
-            background-color: #e0f2f7; 
+            background-color: #e0f2f7;
             color: #333;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .add-point-form .time-input-group {
@@ -91,11 +94,11 @@
             align-items: center;
             gap: 5px;
         }
-        
+
         .add-point-form label {
             font-size: 14px;
             color: #555;
-            white-space: nowrap; 
+            white-space: nowrap;
         }
 
         .add-point-form input[type="time"] {
@@ -103,13 +106,13 @@
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 16px;
-            background-color: #e0f2f7; 
+            background-color: #e0f2f7;
             color: #333;
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
         .add-point-form input[type="submit"] {
-            background-color: #007bff; 
+            background-color: #007bff;
             color: white;
             padding: 10px 25px;
             border: none;
@@ -125,39 +128,38 @@
         }
 
         .table-container {
-            border: 2px solid #007bff; 
+            border: 2px solid #007bff;
             border-radius: 8px;
-            overflow: hidden; 
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .points-table {
             width: 100%;
-            border-collapse: collapse; 
-            margin: 0; 
+            border-collapse: collapse;
+            margin: 0;
         }
 
         .points-table thead th {
-            background-color: #007bff; 
+            background-color: #007bff;
             color: white;
             padding: 12px 15px;
-            text-align: left;
             font-size: 16px;
         }
 
         .points-table tbody td {
             padding: 10px 15px;
-            border-bottom: 1px solid #ddd; 
+            border-bottom: 1px solid #ddd;
             color: #333;
             font-size: 15px;
         }
-        
+
         .points-table tbody tr:last-child td {
-            border-bottom: none; 
+            border-bottom: none;
         }
 
         .points-table tbody tr:nth-child(even) {
-            background-color: #f2f2f2; 
+            background-color: #f2f2f2;
         }
 
         .points-table .action-button {
@@ -169,11 +171,11 @@
             font-weight: bold;
             color: white;
             transition: background-color 0.3s ease;
-            margin-right: 5px; 
+            margin-right: 5px;
         }
 
         .points-table .modify-button {
-            background-color: #007bff; 
+            background-color: #007bff;
         }
 
         .points-table .modify-button:hover {
@@ -181,7 +183,7 @@
         }
 
         .points-table .delete-button {
-            background-color: #dc3545; 
+            background-color: #dc3545;
         }
 
         .points-table .delete-button:hover {
@@ -190,12 +192,12 @@
 
         .back-button-container {
             margin-top: 30px;
-            text-align: left; 
+            text-align: left;
         }
 
         .back-button {
             display: inline-block;
-            background-color: #34495e; 
+            background-color: #34495e;
             color: white;
             padding: 12px 25px;
             border-radius: 5px;
@@ -211,10 +213,12 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
-            <i class="fas fa-recycle icon"></i> <h1>GESTIONAR PUNTOS DE RECICLAJE</h1>
+            <i class="fas fa-recycle icon"></i>
+            <h1>GESTIONAR PUNTOS DE RECICLAJE</h1>
         </div>
 
         <h2>AGREGAR NUEVO PUNTO DE RECICLAJE</h2>
@@ -223,17 +227,17 @@
             <input type="text" name="nombre" placeholder="Nombre" required>
             <input type="number" name="latitud" placeholder="Latitud" step="0.000001" required>
             <input type="number" name="longitud" placeholder="Longitud" step="0.000001" required>
-            
+
             <div class="time-input-group">
                 <label for="apertura">Apertura:</label>
                 <input type="time" id="apertura" name="apertura" required>
             </div>
-            
+
             <div class="time-input-group">
                 <label for="cierre">Cierre:</label>
                 <input type="time" id="cierre" name="cierre" required>
             </div>
-            
+
             <input type="submit" value="Enviar">
         </form>
 
@@ -251,21 +255,21 @@
                 </thead>
                 <tbody>
                     <?php
-                        if ($resultado && $resultado->num_rows > 0) {
-                            while ($fila = $resultado->fetch_assoc()) {
-                                echo '<tr>';
-                                echo '<td>' . htmlspecialchars($fila['nombre'] ?? '') . '</td>';
-                                echo '<td>' . htmlspecialchars($fila['latitud'] ?? '') . '</td>';
-                                echo '<td>' . htmlspecialchars($fila['longitud'] ?? '') . '</td>';
-                                echo '<td>' . htmlspecialchars($fila['apertura'] ?? '') . '</td>';
-                                echo '<td>' . htmlspecialchars($fila['cierre'] ?? '') . '</td>';
-                                echo '<td><a href="modificar_punto.php?id=' . htmlspecialchars($fila['id'] ?? '') . '" class="action-button modify-button">Modificar</a></td>';
-                                echo '<td><a href="eliminar_punto.php?id=' . htmlspecialchars($fila['id'] ?? '') . '" class="action-button delete-button">Eliminar</a></td>';
-                                echo '</tr>';
-                            }
-                        } else {
-                            echo '<tr><td colspan="7">No hay puntos de reciclaje activos.</td></tr>';
+                    if ($resultado && $resultado->num_rows > 0) {
+                        while ($fila = $resultado->fetch_assoc()) {
+                            echo '<tr>';
+                            echo '<td>' . htmlspecialchars($fila['nombre'] ?? '') . '</td>';
+                            echo '<td>' . htmlspecialchars($fila['latitud'] ?? '') . '</td>';
+                            echo '<td>' . htmlspecialchars($fila['longitud'] ?? '') . '</td>';
+                            echo '<td>' . htmlspecialchars($fila['apertura'] ?? '') . '</td>';
+                            echo '<td>' . htmlspecialchars($fila['cierre'] ?? '') . '</td>';
+                            echo '<td><a href="modificar_punto.php?id=' . htmlspecialchars($fila['idPunto'] ?? '') . '" class="action-button modify-button">Modificar</a></td>';
+                            echo '<td><a href="eliminar_punto.php?id=' . htmlspecialchars($fila['idPunto'] ?? '') . '" class="action-button delete-button">Eliminar</a></td>';
+                            echo '</tr>';
                         }
+                    } else {
+                        echo '<tr><td colspan="7">No hay puntos de reciclaje activos.</td></tr>';
+                    }
                     ?>
                 </tbody>
             </table>
@@ -276,11 +280,12 @@
         </div>
     </div>  
 </body>
+
 </html>
 
 <?php
-    
-    if (isset($conn)) {
-        $conn->close();
-    }
+
+if (isset($conn)) {
+    $conn->close();
+}
 ?>
