@@ -463,3 +463,18 @@ BEGIN
     WHERE idCanje = p_idCanje;
 END $$
 DELIMITER ;
+
+-- Agregar punto de reciclaje
+
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS sp_nuevoPuntoReciclaje (
+    IN p_nombre VARCHAR(45),
+    IN p_latitud DOUBLE,
+    IN p_longitud DOUBLE,
+    IN p_apertura TIME,
+    IN p_cierre TIME
+)
+BEGIN
+    INSERT INTO Punto_Reciclaje (nombre, latitud, longitud, apertura, cierre)
+    VALUES (p_nombre, p_latitud, p_longitud, p_apertura, p_cierre);
+END $$

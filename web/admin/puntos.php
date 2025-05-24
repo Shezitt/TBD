@@ -1,6 +1,6 @@
 <?php
 require_once("../conexion.php");
-$stmt = $conn->prepare("SELECT * FROM Punto_Reciclaje WHERE activo = 1;");
+$stmt = $conn->prepare("CALL sp_getPuntosReciclaje();");
 if ($stmt) {
     $stmt->execute();
     $resultado = $stmt->get_result();
@@ -223,7 +223,7 @@ if ($stmt) {
 
         <h2>AGREGAR NUEVO PUNTO DE RECICLAJE</h2>
 
-        <form action="" method="POST" class="add-point-form">
+        <form method="POST" class="add-point-form">
             <input type="text" name="nombre" placeholder="Nombre" required>
             <input type="number" name="latitud" placeholder="Latitud" step="0.000001" required>
             <input type="number" name="longitud" placeholder="Longitud" step="0.000001" required>
@@ -238,7 +238,7 @@ if ($stmt) {
                 <input type="time" id="cierre" name="cierre" required>
             </div>
 
-            <input type="submit" value="Enviar">
+            <input name="agregar_punto" type="submit" value="Enviar">
         </form>
 
         <div class="table-container">
@@ -284,8 +284,20 @@ if ($stmt) {
 </html>
 
 <?php
+    if (isset($_POST['agregar_punto'])) {
+        $nombre = $_POST['nombre'];
+        $latitud = $_POST['latitud'];
+        $longitud = $_POST['longitud'];
+        $apertura = $_POST['apertura'];
+        $cierre = $_POST['cierre'];
 
-if (isset($conn)) {
-    $conn->close();
-}
-?>
+        $stmt = $conn->prepare("CALL sp_nuevoPuntoReciclaje(?, ?, ?, ?, ?);");
+        $stmt->bind_param("sddss", $nombre, $latitud, $longitud, $apertura, $cierre);
+        if ($stmt->execute()) {
+            echo "<script>window.location.href = window.location.pathname;</script>";
+        } else {
+            echo "<script>alert('Error al agregar el punto de reciclaje: " . $stmt->error . "');</script>";
+        }
+        $stmt->close();
+    }
+?>  
