@@ -329,18 +329,18 @@ DELIMITER $$
 CREATE PROCEDURE IF NOT EXISTS sp_getCanjesPendientes()
 BEGIN
     SELECT 
+        Canje.idCanje AS idCanje,
         Usuario.nombre AS nombreUsuario,
         Nivel.nivel AS nivelUsuario,
         Recompensa.nombre AS nombreRecompensa, 
-        fecha 
+        Canje.fecha AS fecha
     FROM 
         Canje JOIN Usuario ON Canje.idUsuario = Usuario.idUsuario
         JOIN Nivel ON Nivel.idNivel = Usuario.idNivel
         JOIN Recompensa ON Recompensa.idRecompensa = Canje.idRecompensa
     WHERE Canje.completado = 0;
 
-END; 
-$$
+END $$
 DELIMITER ;
 
 -- Reportes de impacto ambiental
@@ -451,4 +451,15 @@ BEGIN
 END $$
 DELIMITER ;
 
+-- Completar canje
 
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS sp_completarCanje (
+    IN p_idCanje INT
+)
+BEGIN
+    UPDATE Canje
+    SET completado = 1
+    WHERE idCanje = p_idCanje;
+END $$
+DELIMITER ;
