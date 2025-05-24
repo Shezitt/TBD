@@ -183,11 +183,7 @@
                                     echo "</tr>";
 
                                     // Almacenar puntos para el mapa
-                                    $puntos[] = [
-                                        'nombre' => $fila['nombre'],
-                                        'lat' => $fila['latitud'],
-                                        'lng' => $fila['longitud']
-                                    ];
+                                    $puntos[] = $fila;
                                 }
                             } else {
                                 echo "<tr><td colspan='6'>Ingresa tu ubicación para buscar puntos cercanos.</td></tr>";
@@ -225,10 +221,10 @@
 
             // Puntos de reciclaje
             var puntos = <?php echo json_encode($puntos); ?>;
-            puntos.forEach(function(p) {
-                L.marker([p.lat, p.lng]).addTo(map)
-                    .bindPopup(p.nombre);
-            });
+            puntos.forEach(function(punto) {
+            L.marker([punto.latitud, punto.longitud]).addTo(map)
+                .bindPopup("<b>" + punto.nombre + "</b><br>Apertura: " + punto.apertura + "<br>Cierre: " + punto.cierre);
+        });
         <?php endif; ?>
     </script>
 </body>
