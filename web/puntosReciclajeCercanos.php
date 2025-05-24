@@ -113,14 +113,17 @@
         }
         a.volver {
             display: inline-block;
-            margin-top: 20px;
+            margin-top: 30px;
+            padding: 12px 24px;
+            background-color: #27ae60;
+            color: #fff;
             text-decoration: none;
-            color: #3498db;
-            font-weight: bold;
-            transition: 0.3s;
+            border-radius: 8px;
+            transition: background-color 0.3s;
         }
+
         a.volver:hover {
-            color: #21618c;
+            background-color: #219150;
         }
     </style>
 </head>
@@ -195,7 +198,7 @@
             </div>
         </div>
 
-        <a class="volver" href="index.php">← Volver</a>
+        <a class="volver" href="index.php">Volver</a>
     </div>  
 
     <!-- Leaflet JS -->
@@ -203,7 +206,7 @@
 
     <script>
         // Crear mapa con posición por defecto
-        var map = L.map('map').setView([-17.78629, -63.18117], 13); // Por defecto Santa Cruz, Bolivia
+        var map = L.map('map').setView([-17.3820, -66.1596], 13);
 
         // Cargar tiles desde OpenStreetMap
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
