@@ -132,7 +132,7 @@
             <a href="admin/promociones.php">Gestionar Promociones</a>
             <a href="admin/puntos.php">Gestionar Puntos de Reciclaje</a>
             <a href="admin/catalogos.php">Gestionar Catálogos</a>
-            <a href="admin/canjes.php">Gestionar Recompensas</a>
+            <a href="admin/canjes.php">Gestionar Canjes</a>
             <a href="admin/roles.php">Gestionar Roles</a>
         </div>
 
