@@ -284,7 +284,7 @@ if ($stmt = $conn->prepare("SELECT * FROM Recompensa WHERE activo='1' ORDER BY i
                 }
                 ?>
             </select>
-            <input type="submit" value="Enviar">
+            <input name="agregar_recompensa" type="submit" value="Enviar">
         </form>
 
         <div class="table-container">
@@ -320,8 +320,8 @@ if ($stmt = $conn->prepare("SELECT * FROM Recompensa WHERE activo='1' ORDER BY i
                                 $stmt->close();
                             }
                             echo '<td>' . $nombreCatalogo . '</td>';
-                            echo '<td><a href="modificar_recompensa.php?id=' . htmlspecialchars($fila['id'] ?? '') . '" class="action-button modify-button">Modificar</a></td>';
-                            echo '<td><a href="eliminar_recompensa.php?id=' . htmlspecialchars($fila['id'] ?? '') . '" class="action-button delete-button">Eliminar</a></td>';
+                            echo '<td><a href="modificar_recompensa.php?id=' . htmlspecialchars($fila['idRecompensa'] ?? '') . '" class="action-button modify-button">Modificar</a></td>';
+                            echo '<td><a href="eliminar_recompensa.php?id=' . htmlspecialchars($fila['idRecompensa'] ?? '') . '" class="action-button delete-button">Eliminar</a></td>';
                             echo '</tr>';
                         }
                     } else {
@@ -351,4 +351,18 @@ if ($stmt = $conn->prepare("SELECT * FROM Recompensa WHERE activo='1' ORDER BY i
         echo "<script>window.location.href = window.location.pathname;</script>";
 
     }
+
+    if (isset($_POST['agregar_recompensa'])) {
+        $nombre_recompensa = $_POST['nombre_recompensa'];
+        $puntos_necesarios = $_POST['puntos_necesarios'];
+        $nivel_requerido = $_POST['nivel_requerido'];
+        $id_catalogo = $_POST['id_catalogo'];
+
+        $stmt = $conn->prepare("CALL sp_nuevaRecompensa(?, ?, ?, ?);");
+        $stmt->bind_param("sdii", $nombre_recompensa, $puntos_necesarios, $nivel_requerido, $id_catalogo);
+        $stmt->execute();
+        $stmt->close();
+        echo "<script>window.location.href = window.location.pathname;</script>";
+    }
+
 ?>
