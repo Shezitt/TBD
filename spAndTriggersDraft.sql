@@ -423,3 +423,18 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+-- Agregar nuevo catalogo
+
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS sp_nuevoCatalogo (
+    IN p_nombre VARCHAR(45)
+)
+BEGIN
+    INSERT INTO Catalogo (nombreCatalogo)
+    VALUES (p_nombre);
+END $$
+DELIMITER ;
+
+
+
