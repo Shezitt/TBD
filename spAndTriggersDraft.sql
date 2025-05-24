@@ -436,5 +436,19 @@ BEGIN
 END $$
 DELIMITER ;
 
+-- Agregar nueva recompensa
+
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS sp_nuevaRecompensa (
+    IN p_nombre VARCHAR(45),
+    IN p_puntos_necesarios DECIMAL(10,2),
+    IN p_nivel_requerido INT,
+    IN p_idCatalogo INT
+)
+BEGIN
+    INSERT INTO Recompensa (nombre, puntosNecesarios, nivelRequerido, idCatalogo)
+    VALUES (p_nombre, p_puntos_necesarios, p_nivel_requerido, p_idCatalogo);
+END $$
+DELIMITER ;
 
 
