@@ -23,179 +23,142 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenido</title>
     
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-color: #f5f7fa;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1100px;
+        background-color: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+        padding: 30px 40px;
+        margin-top: 10px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Rayita decorativa arriba */
+    .container::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 6px;
+        width: 100%;
+        background: linear-gradient(to right, #4CAF50, #81C784);
+    }
+
+    .barra-superior {
+        display: none;
+    }
+
+    .bienvenida {
+        display: flex;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+
+    .logo {
+        height: 60px;
+        margin-right: 20px;
+    }
+
+    .texto-bienvenida h1 {
+        font-size: 28px;
+        color: #333;
+        margin: 0;
+    }
+
+    .nombre-usuario {
+        font-weight: bold;
+        color: #388e3c;
+        font-size: 16px;
+    }
+
+    .contenido {
+        display: flex;
+        gap: 40px;
+        flex-wrap: wrap;
+    }
+
+    .columna-izquierda,
+    .columna-derecha {
+        flex: 1 1 45%;
+    }
+
+    .columna-derecha {
+        background-color: #012030;
+        color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        max-height: 640px;
+        overflow-y: auto;
+        margin-top: -98px;
+
+    }
     
-    <style>
 
-         * {
-            font-family: 'Trebuchet MS', sans-serif;
-        }
+    .columna-derecha h2 {
+        text-align: center;
+        font-size: 24px;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #ffffff33;
+        padding-bottom: 10px;
+    }
 
-        .barra-superior {
-            width: 100%;
-            height: 30px;
-            border-bottom: 2px solid #B2B2B2;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding: 0 20px;
-            bakground-color: white;
-            box-sizing: border-box;
-        }
+    .datos-usuario {
+        margin-bottom: 30px;
+    }
 
-        .container {
-            maax-width: 1200px;
-            margin: auto auto;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
+    .datos-usuario p {
+        font-size: 15px;
+        color: #333;
+        margin-bottom: 8px;
+    }
 
-        .header h1 {
-            color: #012030;
-            font-size: 2.8em;
-            margin-bottom: 10px;
-            text-align: left;
-        }
+    .text-wrapper {
+        font-weight: bold;
+        color: #555;
+    }
+    
+.boton-link {
+        display: block;
+        background-color: #90EE90;
+        color: #012030;
+        padding: 14px 20px;
+        margin: 6px 0;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: bold;
+        text-align: center;
+        font-size: 16px;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
 
-        .contenido {
-            display: flex;
-            gap: 40px;
-        }
-
-        .columna-izquierda {
-            width: 50%;
-            
-        }
-
-        .datos-usuario ul,
-        .botones ul {
-            list-style-type: none;
-            padding-left: 0;
-            margin: auto 100px;
-
-        }
-
-        .bienvenida {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin: 10px 60px;
-        }
-
-        .logo {
-            height: 50px;
-        }
-
-        .texto-bienvenida h1 {
-            color: #012030;
-            font-size: 2em;
-            margin: 0;
-        }
-
-        .nombre-usuario {
-            color: #012030;
-            font-size: 1em;
-            font-weight: bold;
-            margin-top: 4px;
-        }
-
-        .flexcontainer{
-            margin: auto 150px;
-        }
-
-         .text-wrapper {
-          font-weight: bold;
-        }
+    .boton-link:hover {
+        background-color: #7CFC00;
+        transform: translateY(-2px);
+    }
 
 
-        .titulo-botones {
-            text-align: left;
-            margin-right: 10px;
-            margin-left: 120px;
-        }
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
 
-        .datos-usuario li {
-            color: #012030;
-            margin-bottom: 6px;
-        }
-
-        .botones li {
-            margin-bottom: 10px;
-        }
-
-        .botones a {
-            text-decoration: none;
-            color: #1e90ff;
-        }
-
-        .botones a:hover {
-            text-decoration: underline;
-        }
-
-        .columna-derecha {
-            width: 60%;
-        }
-
-        .boton-link {
-            display: inline-block;
-            background-color: #9AEBA3;
-            color: #012030;
-            text-align: center;
-            padding: 10px 15px;
-            margin: 1px 0;
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
-            font-family: "Trebuchet MS", sans-serif;
-            transition: background-color 0.2s ease;
-            width: 500px; height: 25px;
-        }
-
-        .boton-link:hover {
-            background-color: #86d890;
-        }
-
-        .boton-link:active {
-            background-color: #B2B2B2;
-        }
-
-
-        .boton-cerrar {
-            background-color: #012030; /* azul medio */
-            color: white;
-            width: 100px; height: 25px;
-            margin: auto 100px;
-        }
-
-        .boton-cerrar:hover {
-            background-color: #012030; /* azul más oscuro en hover */
-        }
-
-        .boton-cerrar:active {
-            background-color: #B2B2B2; /* igual que los demás, plomo al hacer clic */
-        }
-
-        .promo {
-            background-color: #f0f8ff;
-            padding: 10px;
-            border-left: 4px solid #012030;
-            margin-bottom: 15px;
-            border-radius: 6px;
-        }
-
-        .columna-derecha {
-            background-color: #012030;
-            color: white;
-            padding: 20px;
-            height: 100vh;
-            overflow-y: auto;
-            box-sizing: border-box;
-            max-height: 650px; 
-            margin-top: -80px; 
-            border-radius: 8px;
-        }
+   
 
 
         .columna-derecha h2 {
@@ -204,30 +167,55 @@
         margin-bottom: 20px;
         }
 
-        .promocion {
+
+    .boton-cerrar {
+        background-color: #2c3e50;
+        color: #ffffff;
+        margin-top: 20px;
+    }
+
+    .boton-cerrar:hover {
+        background-color: #1a252f;
+    }
+
+    .titulo-botones {
+        font-size: 20px;
+        margin-top: 10px;
+        color: #333;
+        border-left: 4px solid #4CAF50;
+        padding-left: 10px;
+    }
+
+    .promocion {
         display: flex;
         align-items: center;
         background-color: rgba(255, 255, 255, 0.05);
         border: 1px solid #ffffff22;
         border-radius: 8px;
         padding: 10px;
-        margin-bottom: 10px;
-        }
+        margin-bottom: 15px;
+    }
 
-        .promocion img {
-        width: 60px;
-        height: 60px;
-        object-fit: cover;
-        margin-right: 15px;
+    .promocion img {
+        width: 80px;
+        height: auto;
         border-radius: 6px;
-        }
+        margin-right: 15px;
+    }
 
-        .promocion-detalle {
-        flex: 1;
-        }
-                
-    </style>
-    
+    .promocion-detalle h3 {
+        margin: 0;
+        font-size: 18px;
+        color: #ffffff;
+    }
+
+    .promocion-detalle b {
+        color: #cfd8dc;
+    }
+</style>
+
+
+
 </head>
 <body>
 
@@ -271,7 +259,7 @@
                             </p>
                             <p class="text">
                                 <span class="text-wrapper">Nivel:</span>
-                                <span class="span"> <?php echo $_SESSION['nivel']; ?> </span> 
+                                <span class="span"> Plata</span> <!-- Puedes reemplazar con un campo real -->
                             </p>
                         </div>
                     </div>
@@ -284,7 +272,7 @@
 
                     
 
-                    <h2 class="titulo-botones">Menu ;)</h2>
+                    <h2 class="titulo-botones">MENU</h2>
                     <ul>
 
                         <?php 
