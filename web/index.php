@@ -259,7 +259,7 @@ ul {
                             </p>
                             <p class="text">
                                 <span class="text-wrapper">Nivel:</span>
-                                <span class="span"> Plata</span> <!-- Puedes reemplazar con un campo real -->
+                                <span class="span"> <?php echo $_SESSION['nivel']; ?> </span>
                             </p>
                         </div>
                     </div>
