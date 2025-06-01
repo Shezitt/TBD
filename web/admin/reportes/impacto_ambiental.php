@@ -2,10 +2,11 @@
 session_start();
 
 if (!(isset($_SESSION['rol']) && $_SESSION['rol'] == 2)) {
-    header("Location: ../index.php");
+    header("Location: ../../index.php");
+    exit;
 }
 
-require_once("../conexion.php");
+require_once("../../conexion.php");
 
 $reporte_resultado = false;
 $error = "";
@@ -15,7 +16,7 @@ if (isset($_POST['generar_reporte'])) {
     $fecha_fin = $_POST['fecha_fin'];
 
     if ($fecha_inicio && $fecha_fin) {
-        $stmt = $conn->prepare("CALL sp_reporteUsuariosImpacto(?, ?)");
+        $stmt = $conn->prepare("CALL sp_reporteMaterialesImpacto(?, ?)");
         if ($stmt) {
             $stmt->bind_param("ss", $fecha_inicio, $fecha_fin);
             $stmt->execute();
@@ -34,10 +35,10 @@ if (isset($_POST['generar_reporte'])) {
 
 <head>
     <meta charset="UTF-8">
-    <title>Reporte de Usuarios</title>
+    <title>Reporte Impacto Ambiental</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        /* estilos base (mismos que tu plantilla anterior) */
+        /* mismos estilos que la plantilla anterior */
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f2f5;
@@ -170,8 +171,8 @@ if (isset($_POST['generar_reporte'])) {
 <body>
     <div class="container">
         <div class="header">
-            <i class="fas fa-users icon"></i>
-            <h1>REPORTE DE USUARIOS</h1>
+            <i class="fas fa-leaf icon"></i>
+            <h1>REPORTE IMPACTO AMBIENTAL</h1>
         </div>
 
         <form method="POST">
@@ -182,7 +183,7 @@ if (isset($_POST['generar_reporte'])) {
 
             <div>
                 <label for="fecha_fin">Hasta:</label>
-                <input type="date" name="fecha_fin" value="<?php echo date('Y-m-d'); ?>"required>
+                <input type="date" name="fecha_fin" value="<?php echo date('Y-m-d'); ?>" required>
             </div>
 
             <input type="submit" name="generar_reporte" value="Generar Reporte">
@@ -196,25 +197,41 @@ if (isset($_POST['generar_reporte'])) {
                     <thead>
                         <tr>
                             <th>Nº</th>
-                            <th>Nombre</th>
-                            <th>Nivel</th>
-                            <th>Puntos Totales</th>
+                            <th>Material</th>
                             <th>Total Reciclado (kg)</th>
+                            <th>Total Puntos Generados</th>
                             <th>CO₂ Reducido (kg)</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php $contador = 1; ?>
+                        <?php 
+                        $contador = 1; 
+                        // Variables para sumar totales
+                        $suma_kg = 0;
+                        $suma_puntos = 0;
+                        $suma_co2 = 0;
+                        ?>
                         <?php while ($fila = $reporte_resultado->fetch_assoc()): ?>
+                            <?php 
+                            $suma_kg += $fila['total_reciclado_kg'];
+                            $suma_puntos += $fila['total_puntos'];
+                            $suma_co2 += $fila['total_co2_reducido'];
+                            ?>
                             <tr>
                                 <td><?php echo $contador++; ?></td>
-                                <td><?php echo htmlspecialchars($fila['nombre']); ?></td>
-                                <td><?php echo htmlspecialchars($fila['nivel']); ?></td>
-                                <td><?php echo htmlspecialchars($fila['puntosTotal']); ?></td>
-                                <td><?php echo htmlspecialchars($fila['total_reciclado_kg']); ?></td>
-                                <td><?php echo htmlspecialchars($fila['total_co2_reducido']); ?></td>
+                                <td><?php echo htmlspecialchars($fila['material']); ?></td>
+                                <td><?php echo number_format($fila['total_reciclado_kg'], 2); ?></td>
+                                <td><?php echo number_format($fila['total_puntos'], 2); ?></td>
+                                <td><?php echo number_format($fila['total_co2_reducido'], 2); ?></td>
                             </tr>
                         <?php endwhile; ?>
+                        <!-- Fila de totales -->
+                        <tr style="font-weight: bold; background-color: #d9edf7;">
+                            <td colspan="2">Totales</td>
+                            <td><?php echo number_format($suma_kg, 2); ?></td>
+                            <td><?php echo number_format($suma_puntos, 2); ?></td>
+                            <td><?php echo number_format($suma_co2, 2); ?></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -223,7 +240,7 @@ if (isset($_POST['generar_reporte'])) {
         <?php endif; ?>
 
         <div class="back-button-container">
-            <a href="../panelAdministrativo.php" class="back-button">Anterior</a>
+            <a href="../../panelAdministrativo.php" class="back-button">Anterior</a>
         </div>
     </div>
 </body>

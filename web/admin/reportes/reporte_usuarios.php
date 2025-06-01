@@ -2,11 +2,10 @@
 session_start();
 
 if (!(isset($_SESSION['rol']) && $_SESSION['rol'] == 2)) {
-    header("Location: ../index.php");
-    exit;
+    header("Location: ../../index.php");
 }
 
-require_once("../conexion.php");
+require_once("../../conexion.php");
 
 $reporte_resultado = false;
 $error = "";
@@ -16,7 +15,7 @@ if (isset($_POST['generar_reporte'])) {
     $fecha_fin = $_POST['fecha_fin'];
 
     if ($fecha_inicio && $fecha_fin) {
-        $stmt = $conn->prepare("CALL sp_reporteCanjes(?, ?)");
+        $stmt = $conn->prepare("CALL sp_reporteUsuariosImpacto(?, ?)");
         if ($stmt) {
             $stmt->bind_param("ss", $fecha_inicio, $fecha_fin);
             $stmt->execute();
@@ -35,9 +34,10 @@ if (isset($_POST['generar_reporte'])) {
 
 <head>
     <meta charset="UTF-8">
-    <title>Reporte de Canjes</title>
+    <title>Reporte de Usuarios</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        /* estilos base (mismos que tu plantilla anterior) */
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f2f5;
@@ -170,8 +170,8 @@ if (isset($_POST['generar_reporte'])) {
 <body>
     <div class="container">
         <div class="header">
-            <i class="fas fa-gift icon"></i>
-            <h1>REPORTE DE CANJES</h1>
+            <i class="fas fa-users icon"></i>
+            <h1>REPORTE DE USUARIOS</h1>
         </div>
 
         <form method="POST">
@@ -182,7 +182,7 @@ if (isset($_POST['generar_reporte'])) {
 
             <div>
                 <label for="fecha_fin">Hasta:</label>
-                <input type="date" name="fecha_fin" value="<?php echo date('Y-m-d'); ?>" required>
+                <input type="date" name="fecha_fin" value="<?php echo date('Y-m-d'); ?>"required>
             </div>
 
             <input type="submit" name="generar_reporte" value="Generar Reporte">
@@ -196,34 +196,25 @@ if (isset($_POST['generar_reporte'])) {
                     <thead>
                         <tr>
                             <th>Nº</th>
-                            <th>Recompensa</th>
-                            <th>Total Canjes</th>
-                            <th>Canjes Completados</th>
+                            <th>Nombre</th>
+                            <th>Nivel</th>
+                            <th>Puntos Totales</th>
+                            <th>Total Reciclado (kg)</th>
+                            <th>CO₂ Reducido (kg)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php $contador = 1; ?>
-                        <?php 
-                            $total_canjes = 0; 
-                            $total_completados = 0; 
-                        ?>
                         <?php while ($fila = $reporte_resultado->fetch_assoc()): ?>
-                            <?php
-                                $total_canjes += $fila['total_canjes'];
-                                $total_completados += $fila['canjes_completados'];
-                            ?>
                             <tr>
                                 <td><?php echo $contador++; ?></td>
-                                <td><?php echo htmlspecialchars($fila['recompensa']); ?></td>
-                                <td><?php echo $fila['total_canjes']; ?></td>
-                                <td><?php echo $fila['canjes_completados']; ?></td>
+                                <td><?php echo htmlspecialchars($fila['nombre']); ?></td>
+                                <td><?php echo htmlspecialchars($fila['nivel']); ?></td>
+                                <td><?php echo htmlspecialchars($fila['puntosTotal']); ?></td>
+                                <td><?php echo htmlspecialchars($fila['total_reciclado_kg']); ?></td>
+                                <td><?php echo htmlspecialchars($fila['total_co2_reducido']); ?></td>
                             </tr>
                         <?php endwhile; ?>
-                        <tr style="font-weight: bold; background-color: #d9edf7;">
-                            <td colspan="2">Totales</td>
-                            <td><?php echo $total_canjes; ?></td>
-                            <td><?php echo $total_completados; ?></td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -232,7 +223,7 @@ if (isset($_POST['generar_reporte'])) {
         <?php endif; ?>
 
         <div class="back-button-container">
-            <a href="../panelAdministrativo.php" class="back-button">Anterior</a>
+            <a href="../../panelAdministrativo.php" class="back-button">Anterior</a>
         </div>
     </div>
 </body>

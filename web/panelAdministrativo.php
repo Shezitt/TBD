@@ -150,16 +150,23 @@
 
         <h2>Reportes e Impacto Ambiental</h2>
         <div class="button-grid">
-            <a href="admin/reporte_usuarios.php">Reporte Usuarios</a>
-            <a href="admin/impacto_ambiental.php">Impacto Ambiental</a>
-            <a href="admin/reporte_canjes.php">Reporte de Canjes</a>
+            <a href="admin/reportes/reporte_usuarios.php">Reporte Usuarios</a>
+            <a href="admin/reportes/impacto_ambiental.php">Impacto Ambiental</a>
+            <a href="admin/reportes/reporte_canjes.php">Reporte de Canjes</a>
         </div>
 
-        <h2>Auditoría</h2>
+        <h2>Historial y Auditoría</h2>
         <div class="button-grid">
-            <a href="admin/reporte_usuarios.php">Reporte Usuarios</a>
-            <a href="admin/impacto_ambiental.php">Impacto Ambiental</a>
-            <a href="admin/reporte_canjes.php">Reporte de Canjes</a>
+            <a href="admin/auditoria/historial_reciclaje.php">Historial Reciclaje</a>
+            <a href="admin/auditoria/auditoria_canje.php">Canje</a>
+            <a href="admin/auditoria/auditoria_catalogo.php">Catálogo</a>
+            <a href="admin/auditoria/auditoria_material.php">Material</a>
+            <a href="admin/auditoria/auditoria_nivel.php">Nivel</a>
+            <a href="admin/auditoria/auditoria_promocion.php">Promoción</a>
+            <a href="admin/auditoria/auditoria_punto_reciclaje.php">Punto de Reciclaje</a>
+            <a href="admin/auditoria/auditoria_recompensa.php">Recompensas</a>
+            <a href="admin/auditoria/auditoria_registro_reciclaje.php">Registro Reciclaje</a>
+            <a href="admin/auditoria/auditoria_usuario.php">Usuario</a>
         </div>
 
         <a href="../" class="logout-button">Volver al panel principal</a>
