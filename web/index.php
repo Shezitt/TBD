@@ -1,222 +1,224 @@
 <?php
-    require_once("conexion.php");
+require_once("conexion.php");
 
-    session_start();
+session_start();
 
-    if (!isset($_SESSION['username'])) {
-        header("Location: iniciarSesion.php");
-        exit();
-    }
-    $idUsuario = $_SESSION['idUsuario'];
-    $stmt = $conn->prepare("CALL sp_getDatosUsuario(?);");
-    $stmt->bind_param("i", $idUsuario);
-    $stmt->execute();
-    $datosUsuario = $stmt->get_result();
-    $stmt->close();
-    $datosUsuario = $datosUsuario->fetch_assoc();
+if (!isset($_SESSION['username'])) {
+    header("Location: iniciarSesion.php");
+    exit();
+}
+$idUsuario = $_SESSION['idUsuario'];
+$stmt = $conn->prepare("CALL sp_getDatosUsuario(?);");
+$stmt->bind_param("i", $idUsuario);
+$stmt->execute();
+$datosUsuario = $stmt->get_result();
+$stmt->close();
+$datosUsuario = $datosUsuario->fetch_assoc();
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenido</title>
-    
-<style>
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #f5f7fa;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        min-height: 100vh;
-    }
 
-    .container {
-        width: 90%;
-        max-width: 1100px;
-        background-color: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
-        padding: 30px 40px;
-        margin-top: 10px;
-        position: relative;
-        overflow: hidden;
-    }
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
 
-    /* Rayita decorativa arriba */
-    .container::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 6px;
-        width: 100%;
-        background: linear-gradient(to right, #4CAF50, #81C784);
-    }
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+            padding: 30px 40px;
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
 
-    .barra-superior {
-        display: none;
-    }
+        /* Rayita decorativa arriba */
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 6px;
+            width: 100%;
+            background: linear-gradient(to right, #4CAF50, #81C784);
+        }
 
-    .bienvenida {
-        display: flex;
-        align-items: center;
-        margin-bottom: 30px;
-    }
+        .barra-superior {
+            display: none;
+        }
 
-    .logo {
-        height: 60px;
-        margin-right: 20px;
-    }
+        .bienvenida {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
 
-    .texto-bienvenida h1 {
-        font-size: 28px;
-        color: #333;
-        margin: 0;
-    }
+        .logo {
+            height: 60px;
+            margin-right: 20px;
+        }
 
-    .nombre-usuario {
-        font-weight: bold;
-        color: #388e3c;
-        font-size: 16px;
-    }
+        .texto-bienvenida h1 {
+            font-size: 28px;
+            color: #333;
+            margin: 0;
+        }
 
-    .contenido {
-        display: flex;
-        gap: 40px;
-        flex-wrap: wrap;
-    }
+        .nombre-usuario {
+            font-weight: bold;
+            color: #388e3c;
+            font-size: 16px;
+        }
 
-    .columna-izquierda,
-    .columna-derecha {
-        flex: 1 1 45%;
-    }
+        .contenido {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
 
-    .columna-derecha {
-        background-color: #012030;
-        color: #ffffff;
-        padding: 20px;
-        border-radius: 10px;
-        max-height: 640px;
-        overflow-y: auto;
-        margin-top: -98px;
+        .columna-izquierda,
+        .columna-derecha {
+            flex: 1 1 45%;
+        }
 
-    }
-    
+        .columna-derecha {
+            background-color: #012030;
+            color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 640px;
+            overflow-y: auto;
+            margin-top: -98px;
 
-    .columna-derecha h2 {
-        text-align: center;
-        font-size: 24px;
-        margin-bottom: 20px;
-        border-bottom: 2px solid #ffffff33;
-        padding-bottom: 10px;
-    }
-
-    .datos-usuario {
-        margin-bottom: 30px;
-    }
-
-    .datos-usuario p {
-        font-size: 15px;
-        color: #333;
-        margin-bottom: 8px;
-    }
-
-    .text-wrapper {
-        font-weight: bold;
-        color: #555;
-    }
-    
-.boton-link {
-        display: block;
-        background-color: #90EE90;
-        color: #012030;
-        padding: 14px 20px;
-        margin: 6px 0;
-        border-radius: 6px;
-        text-decoration: none;
-        font-weight: bold;
-        text-align: center;
-        font-size: 16px;
-        transition: background-color 0.3s ease, transform 0.2s ease;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    .boton-link:hover {
-        background-color: #7CFC00;
-        transform: translateY(-2px);
-    }
-
-
-ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-   
-
-
-        .columna-derecha h2 {
-        text-align: center;
-        font-size: 2em;
-        margin-bottom: 20px;
         }
 
 
-    .boton-cerrar {
-        background-color: #2c3e50;
-        color: #ffffff;
-        margin-top: 20px;
-    }
+        .columna-derecha h2 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ffffff33;
+            padding-bottom: 10px;
+        }
 
-    .boton-cerrar:hover {
-        background-color: #1a252f;
-    }
+        .datos-usuario {
+            margin-bottom: 30px;
+        }
 
-    .titulo-botones {
-        font-size: 20px;
-        margin-top: 10px;
-        color: #333;
-        border-left: 4px solid #4CAF50;
-        padding-left: 10px;
-    }
+        .datos-usuario p {
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 8px;
+        }
 
-    .promocion {
-        display: flex;
-        align-items: center;
-        background-color: rgba(255, 255, 255, 0.05);
-        border: 1px solid #ffffff22;
-        border-radius: 8px;
-        padding: 10px;
-        margin-bottom: 15px;
-    }
+        .text-wrapper {
+            font-weight: bold;
+            color: #555;
+        }
 
-    .promocion img {
-        width: 80px;
-        height: auto;
-        border-radius: 6px;
-        margin-right: 15px;
-    }
+        .boton-link {
+            display: block;
+            background-color: #90EE90;
+            color: #012030;
+            padding: 14px 20px;
+            margin: 6px 0;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: center;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
 
-    .promocion-detalle h3 {
-        margin: 0;
-        font-size: 18px;
-        color: #ffffff;
-    }
+        .boton-link:hover {
+            background-color: #7CFC00;
+            transform: translateY(-2px);
+        }
 
-    .promocion-detalle b {
-        color: #cfd8dc;
-    }
-</style>
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+
+
+
+        .columna-derecha h2 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+
+        .boton-cerrar {
+            background-color: #2c3e50;
+            color: #ffffff;
+            margin-top: 20px;
+        }
+
+        .boton-cerrar:hover {
+            background-color: #1a252f;
+        }
+
+        .titulo-botones {
+            font-size: 20px;
+            margin-top: 10px;
+            color: #333;
+            border-left: 4px solid #4CAF50;
+            padding-left: 10px;
+        }
+
+        .promocion {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid #ffffff22;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        .promocion img {
+            width: 80px;
+            height: auto;
+            border-radius: 6px;
+            margin-right: 15px;
+        }
+
+        .promocion-detalle h3 {
+            margin: 0;
+            font-size: 18px;
+            color: #ffffff;
+        }
+
+        .promocion-detalle b {
+            color: #cfd8dc;
+        }
+    </style>
 
 
 
 </head>
+
 <body>
 
     <div class="barra-superior">
@@ -224,7 +226,7 @@ ul {
     </div>
 
     <div class="container">
-                
+
         <div class="bienvenida">
             <img class="logo" src="logo.png" alt="Logo del sitio">
             <div class="texto-bienvenida">
@@ -235,10 +237,10 @@ ul {
 
         <div class="contenido">
 
-             <div class="columna-izquierda">
+            <div class="columna-izquierda">
 
                 <div class="datos-usuario">
-                    
+
                     <div class="label">
                         <div class="flexcontainer">
                             <p class="text">
@@ -270,15 +272,15 @@ ul {
 
                     </p>
 
-                    
+
 
                     <h2 class="titulo-botones">MENU</h2>
                     <ul>
 
-                        <?php 
-                            if ($_SESSION['rol'] == 2) {
-                                echo '<li><a class="boton-link" href="panelAdministrativo.php">Ingresar a panel administrativo</a></li>';
-                            }
+                        <?php
+                        if ($_SESSION['rol'] == 2) {
+                            echo '<li><a class="boton-link" href="panelAdministrativo.php">Ingresar a panel administrativo</a></li>';
+                        }
                         ?>
 
                         <li>
@@ -301,40 +303,41 @@ ul {
 
             <div class="columna-derecha">
                 <h2>Promociones</h2>
-                    <?php
-                        
-                        $stmt = $conn->prepare('CALL sp_getPromocionesUsuario(?);');
-                        $stmt->bind_param("i", $idUsuario);
-                        $stmt->execute();
-                        $resultado = $stmt->get_result();
-                        $stmt->close();
-                        
-                        if($resultado->num_rows == 0) {
-                            echo "<p>No hay promociones actualmente.</p>";
-                        } else {
-                            $contador = 1;
+                <?php
 
-                            while ($fila = $resultado->fetch_assoc()) {
-                                $nombreImagen = "promo-" . $contador . ".jpg"; // promo-1.jpg, promo-2.jpg, etc.
+                $stmt = $conn->prepare('CALL sp_getPromocionesUsuario(?);');
+                $stmt->bind_param("i", $idUsuario);
+                $stmt->execute();
+                $resultado = $stmt->get_result();
+                $stmt->close();
 
-                                echo '<div class="promocion" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">';
-                                echo '<img src="' . $nombreImagen . '" alt="Imagen promoción" style="width: 100px; height: auto; border-radius: 8px;">';
-                                echo '<div class="promocion-detalle">';
-                                echo '<h3>' . $fila['nombre'] . '</h3>';
-                                echo '<b>Multiplicador:</b> ' . $fila['multiplicador'] . '<br>';
-                                echo '<b>Fecha inicio:</b> ' . $fila['fechaInicio'] . '<br>';
-                                echo '<b>Fecha fin:</b> ' . $fila['fechaFin'] . '<br>';
-                                echo 'Nivel requerido: ' . $fila['nivelRequerido'];
-                                echo '</div></div>';
+                if ($resultado->num_rows == 0) {
+                    echo "<p>No hay promociones actualmente.</p>";
+                } else {
+                    $contador = 1;
 
-                                $contador++;
-                            }
+                    while ($fila = $resultado->fetch_assoc()) {
+                        $nombreImagen = "images/promos/promo-" . $contador . ".jpg"; // promo-1.jpg, promo-2.jpg, etc.
+                
+                        echo '<div class="promocion" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">';
+                        echo '<img src="' . $nombreImagen . '" alt="Imagen promoción" style="width: 100px; height: auto; border-radius: 8px;">';
+                        echo '<div class="promocion-detalle">';
+                        echo '<h3>' . $fila['nombre'] . '</h3>';
+                        echo '<b>Multiplicador:</b> ' . $fila['multiplicador'] . '<br>';
+                        echo '<b>Fecha inicio:</b> ' . $fila['fechaInicio'] . '<br>';
+                        echo '<b>Fecha fin:</b> ' . $fila['fechaFin'] . '<br>';
+                        echo 'Nivel requerido: ' . $fila['nivelRequerido'];
+                        echo '</div></div>';
 
-                        }
+                        $contador++;
+                    }
 
-                    ?>
+                }
+
+                ?>
             </div>
-        </div>    
-    </div>  
+        </div>
+    </div>
 </body>
+
 </html>
