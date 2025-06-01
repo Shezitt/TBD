@@ -541,3 +541,22 @@ END $$
 
 DELIMITER ;
 
+-- REPORTE CANJES
+
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS sp_reporteCanjes()
+BEGIN
+    SELECT 
+        Recompensa.nombre AS recompensa,
+        COUNT(Canje.idCanje) AS total_canjes,
+        SUM(CASE WHEN Canje.completado = 1 THEN 1 ELSE 0 END) AS canjes_completados
+    FROM 
+        Canje
+    JOIN 
+        Recompensa ON Canje.idRecompensa = Recompensa.idRecompensa
+    GROUP BY 
+        Recompensa.idRecompensa
+    ORDER BY 
+        total_canjes DESC;
+END $$
+DELIMITER ;
