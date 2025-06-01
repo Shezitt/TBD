@@ -492,6 +492,21 @@ BEGIN
 END $$
 DELIMITER ;
 
+-- Agregar nuevo nivel
+
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS sp_nuevoNivel (
+    IN p_nivel INT,
+    IN p_nombre VARCHAR(45),
+    IN p_puntos DECIMAL(10,2)
+)
+BEGIN
+    INSERT INTO Nivel (nivel, nombre, puntosTotalesNecesarios)
+    VALUES (p_nivel, p_nombre, p_puntos);
+END $$
+
+DELIMITER ;
+
 -- ADMINISTRADOR - SECCION REPORTES E IMPACTO
 
 DELIMITER $$ 
