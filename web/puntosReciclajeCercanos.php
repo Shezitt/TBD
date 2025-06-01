@@ -133,11 +133,11 @@
             <h1>PUNTOS DE RECICLAJE CERCANOS</h1>
         </div>
 
-        <h2>Ingresa tu ubicación</h2>
+            <h2>Ingresa tu ubicación</h2>
 
         <form method="POST">
-            <input name="latitud" type="text" placeholder="Latitud" required>
-            <input name="longitud" type="text" placeholder="Longitud" required>
+            <input name="latitud" type="text" placeholder="Latitud" value="-17.365" required>
+            <input name="longitud" type="text" placeholder="Longitud" value="-66.13" required>
             <input name="ubicacion" type="submit" value="Buscar">
         </form>
 
@@ -201,31 +201,47 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <script>
-        // Crear mapa con posición por defecto
-        var map = L.map('map').setView([-17.3820, -66.1596], 13);
+    // Crear mapa con posición por defecto
+    var map = L.map('map').setView([-17.3820, -66.1596], 13);
 
-        // Cargar tiles desde OpenStreetMap
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
+    // Cargar tiles desde OpenStreetMap
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
 
-        <?php if (isset($_POST['ubicacion'])): ?>
-            // Posición del usuario
-            var userLat = <?php echo $latitud; ?>;
-            var userLng = <?php echo $longitud; ?>;
-            L.marker([userLat, userLng]).addTo(map)
-                .bindPopup("Tu ubicación").openPopup();
+    // Crear íconos personalizados
+    var userIcon = L.icon({
+        iconUrl: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+    });
 
-            // Centrar mapa en el usuario
-            map.setView([userLat, userLng], 14);
+    var puntoIcon = L.icon({
+        iconUrl: 'https://maps.google.com/mapfiles/ms/icons/green-dot.png',
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+    });
 
-            // Puntos de reciclaje
-            var puntos = <?php echo json_encode($puntos); ?>;
-            puntos.forEach(function(punto) {
-            L.marker([punto.latitud, punto.longitud]).addTo(map)
+    <?php if (isset($_POST['ubicacion'])): ?>
+        // Posición del usuario
+        var userLat = <?php echo $latitud; ?>;
+        var userLng = <?php echo $longitud; ?>;
+        L.marker([userLat, userLng], {icon: userIcon}).addTo(map)
+            .bindPopup("Tu ubicación").openPopup();
+
+        // Centrar mapa en el usuario
+        map.setView([userLat, userLng], 14);
+
+        // Puntos de reciclaje
+        var puntos = <?php echo json_encode($puntos); ?>;
+        puntos.forEach(function(punto) {
+            L.marker([punto.latitud, punto.longitud], {icon: puntoIcon}).addTo(map)
                 .bindPopup("<b>" + punto.nombre + "</b><br>Apertura: " + punto.apertura + "<br>Cierre: " + punto.cierre);
         });
-        <?php endif; ?>
+    <?php endif; ?>
     </script>
+
 </body>
 </html>
