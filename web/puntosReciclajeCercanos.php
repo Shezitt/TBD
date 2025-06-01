@@ -194,7 +194,7 @@
             </div>
         </div>
 
-        <a class="volver" href="index.php">Volver</a>
+        <a class="volver" href="verPuntosReciclaje.php">Volver</a>
     </div>  
 
     <!-- Leaflet JS -->

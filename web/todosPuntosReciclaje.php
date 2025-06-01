@@ -174,7 +174,7 @@
         </div>
 
         <div style="text-align: center;">
-            <a class="boton-link" href="index.php">Volver</a>
+            <a class="boton-link" href="verPuntosReciclaje.php">Volver</a>
         </div>
     </div>
 
