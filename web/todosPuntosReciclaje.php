@@ -1,8 +1,9 @@
 <?php
-    require_once("conexion.php");
+require_once("conexion.php");
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -51,7 +52,7 @@
         }
 
         .mapa-contenedor {
-            flex: 1 1 400px;
+            flex: 1 1 300px;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -76,7 +77,7 @@
             background-color: #fff;
             border-radius: 10px;
             overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         table thead {
@@ -84,8 +85,9 @@
             color: #fff;
         }
 
-        table th, table td {
-            padding: 14px 18px;
+        table th,
+        table td {
+            padding: 10px 12px;
             text-align: center;
         }
 
@@ -112,6 +114,18 @@
             background-color: #219150;
         }
 
+        .boton-ver {
+            background-color: #27ae60;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 5px 15px;
+        }
+
+        .boton-ver:hover {
+            background-color: #219150;
+        }
+
         @media(max-width: 768px) {
             .cuerpo {
                 flex-direction: column;
@@ -124,6 +138,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -144,29 +159,32 @@
                             <th>Longitud</th>
                             <th>Apertura</th>
                             <th>Cierre</th>
+                            <th>Materiales</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                            $stmt = $conn->prepare("CALL sp_getPuntosReciclaje();");
-                            $stmt->execute();
-                            $resultado = $stmt->get_result();
-                            $puntos = [];
+                        $stmt = $conn->prepare("CALL sp_getPuntosReciclaje();");
+                        $stmt->execute();
+                        $resultado = $stmt->get_result();
+                        $puntos = [];
 
-                            while ($fila = $resultado->fetch_assoc()) {
-                                echo "<tr>";
-                                echo "<td>" . htmlspecialchars($fila['nombre']) . "</td>";
-                                echo "<td>" . htmlspecialchars($fila['latitud']) . "</td>";
-                                echo "<td>" . htmlspecialchars($fila['longitud']) . "</td>";
-                                echo "<td>" . htmlspecialchars($fila['apertura']) . "</td>";
-                                echo "<td>" . htmlspecialchars($fila['cierre']) . "</td>";
-                                echo "</tr>";
+                        while ($fila = $resultado->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . htmlspecialchars($fila['nombre']) . "</td>";
+                            echo "<td>" . htmlspecialchars($fila['latitud']) . "</td>";
+                            echo "<td>" . htmlspecialchars($fila['longitud']) . "</td>";
+                            echo "<td>" . htmlspecialchars($fila['apertura']) . "</td>";
+                            echo "<td>" . htmlspecialchars($fila['cierre']) . "</td>";
+                            // Botón para ver materiales
+                            echo "<td><button class='boton-ver' onclick='verMateriales(" . $fila['idPunto'] . ")'>Ver</button></td>";
+                            echo "</tr>";
 
-                                // Guardamos los datos para pasarlos al JS
-                                $puntos[] = $fila;
-                            }
+                            // Guardamos los datos para pasarlos al JS
+                            $puntos[] = $fila;
+                        }
 
-                            $stmt->close();
+                        $stmt->close();
                         ?>
                     </tbody>
                 </table>
@@ -181,6 +199,19 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
+
+    <!-- Modal -->
+    <div id="modalMateriales" style="display:none; position:fixed; top:0; left:0; 
+        width:100%; height:100%; background:rgba(0,0,0,0.6); 
+        justify-content:center; align-items:center; z-index: 9999;">
+        <div
+            style="background:#fff; padding:20px; border-radius:10px; max-width:400px; text-align:center; position:relative;">
+            <h3>Materiales aceptados</h3>
+            <ul id="listaMateriales" style="list-style:none; padding:0; margin:20px 0;"></ul>
+            <button onclick="cerrarModal()" style="margin-top:10px; padding:8px 16px;">Cerrar</button>
+        </div>
+    </div>
+
     <script>
         var mapa = L.map('mapa').setView([-17.3820, -66.1596], 13);
 
@@ -190,11 +221,42 @@
         // Pasamos los puntos desde PHP a JS
         var puntos = <?php echo json_encode($puntos); ?>;
 
-        puntos.forEach(function(punto) {
+        puntos.forEach(function (punto) {
             L.marker([punto.latitud, punto.longitud]).addTo(mapa)
                 .bindPopup("<b>" + punto.nombre + "</b><br>Apertura: " + punto.apertura + "<br>Cierre: " + punto.cierre);
         });
+
+        // Para el modal
+        function verMateriales(idPunto) {
+            fetch('getMateriales.php?idPunto=' + idPunto)
+                .then(response => response.json())
+                .then(data => {
+                    const lista = document.getElementById('listaMateriales');
+                    lista.innerHTML = '';
+
+                    if (data.length === 0) {
+                        lista.innerHTML = '<li>No hay materiales registrados</li>';
+                    } else {
+                        data.forEach(item => {
+                            const li = document.createElement('li');
+                            li.textContent = item.nombre;
+                            lista.appendChild(li);
+                        });
+                    }
+
+                    document.getElementById('modalMateriales').style.display = 'flex';
+                })
+                .catch(error => {
+                    console.error('Error al obtener materiales:', error);
+                });
+        }
+
+        function cerrarModal() {
+            document.getElementById('modalMateriales').style.display = 'none';
+        }
+
     </script>
 
 </body>
+
 </html>
