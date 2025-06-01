@@ -560,3 +560,33 @@ BEGIN
         total_canjes DESC;
 END $$
 DELIMITER ;
+
+-- ADMINISTRADOR SECCION AUDITORIA
+
+
+-- historial reciclaje
+
+DELIMITER $$
+CREATE PROCEDURE sp_historialReciclaje(
+    IN fecha_inicio DATE,
+    IN fecha_fin DATE
+)
+BEGIN
+    SELECT 
+        Usuario.username, 
+        Usuario.nombre AS nombre_usuario,
+        Punto_Reciclaje.nombre AS nombre_punto,
+        Material.nombre AS nombre_material,
+        Registro_Reciclaje.cantidad,
+        Registro_Reciclaje.puntosGanados,
+        Registro_Reciclaje.impactoCO2,
+        Registro_Reciclaje.fecha
+    FROM Registro_Reciclaje
+    JOIN Usuario ON Usuario.idUsuario = Registro_Reciclaje.idUsuario
+    JOIN Material ON Material.idMaterial = Registro_Reciclaje.idMaterial
+    JOIN Punto_Reciclaje ON Punto_Reciclaje.idPunto = Registro_Reciclaje.idPunto
+    WHERE Registro_Reciclaje.fecha BETWEEN fecha_inicio AND fecha_fin
+    ORDER BY Registro_Reciclaje.fecha DESC;
+END $$
+
+DELIMITER ;
