@@ -396,7 +396,7 @@ BEGIN
         username, Usuario.nombre, puntosTotal, nivel
     FROM Usuario 
     JOIN Nivel ON Usuario.idNivel = Nivel.idNivel
-    ORDER BY puntosTotal DESC;
+    ORDER BY puntosTotal DESC LIMIT 10;
 END $$
 DELIMITER ;
 
