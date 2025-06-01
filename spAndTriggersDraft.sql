@@ -513,3 +513,31 @@ BEGIN
     ORDER BY puntosTotal DESC;
     END $$
 DELIMITER ;
+
+-- IMPACTO AMBIENTAL MATERIALES IMPACTO
+
+DELIMITER $$
+CREATE PROCEDURE IF NOT EXISTS sp_reporteMaterialesImpacto(
+    IN p_fecha_inicio DATE,
+    IN p_fecha_fin DATE
+)
+BEGIN
+    SELECT 
+        Material.nombre AS material,
+        SUM(Registro_Reciclaje.cantidad) AS total_reciclado_kg,
+        SUM(Registro_Reciclaje.puntosGanados) AS total_puntos,
+        SUM(Registro_Reciclaje.impactoCO2) AS total_co2_reducido
+    FROM 
+        Registro_Reciclaje
+    JOIN 
+        Material ON Registro_Reciclaje.idMaterial = Material.idMaterial
+    WHERE 
+        Registro_Reciclaje.fecha BETWEEN p_fecha_inicio AND p_fecha_fin
+    GROUP BY 
+        Material.idMaterial
+    ORDER BY 
+        total_reciclado_kg DESC;
+END $$
+
+DELIMITER ;
+
