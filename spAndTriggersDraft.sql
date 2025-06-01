@@ -65,6 +65,7 @@ DELIMITER ;
 -- Impacto ambiental de usuario
 
 DELIMITER $$
+
 CREATE PROCEDURE IF NOT EXISTS sp_getImpactoUsuario (
 	IN p_idUsuario INT
 )
@@ -72,14 +73,23 @@ BEGIN
 	SELECT
 		Material.nombre AS tipo_material,
         SUM(Registro_Reciclaje.cantidad) AS total_reciclado_kg,
-        SUM(Registro_Reciclaje.impactoCO2) AS total_co2_reducido
-    FROM Registro_Reciclaje
-    JOIN Material ON Registro_Reciclaje.idMaterial = Material.idMaterial
-    JOIN Usuario ON Registro_Reciclaje.idUsuario = Usuario.idUsuario
-    WHERE Usuario.idUsuario = p_idUsuario AND Material.activo = 1 
-    GROUP BY Material.nombre ORDER BY total_reciclado_kg DESC;
+        SUM(Registro_Reciclaje.impactoCO2) AS total_co2_reducido,
+        ROUND(
+            (SUM(Registro_Reciclaje.cantidad) /
+             (SELECT SUM(RR2.cantidad)
+              FROM Registro_Reciclaje RR2
+              WHERE RR2.idMaterial = Material.idMaterial)
+            ) * 100, 2
+        ) AS porcentaje_usuario
+	FROM Registro_Reciclaje
+	JOIN Material ON Registro_Reciclaje.idMaterial = Material.idMaterial
+	JOIN Usuario ON Registro_Reciclaje.idUsuario = Usuario.idUsuario
+	WHERE Usuario.idUsuario = p_idUsuario AND Material.activo = 1 
+	GROUP BY Material.nombre
+	ORDER BY total_reciclado_kg DESC;
 END;
 $$
+
 DELIMITER ;
 
 -- Promociones disponibles para usuario

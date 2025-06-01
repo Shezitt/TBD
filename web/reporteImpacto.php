@@ -137,6 +137,7 @@
             <th>Material</th>
             <th>Total reciclado (kg)</th>
             <th>Total CO2 reducido (kg)</th>
+            <th>Tu impacto respecto al total</th>
           </tr>
         </thead>
         <tbody>
@@ -154,6 +155,7 @@
               echo "<td>" . $fila['tipo_material'] . "</td>";
               echo "<td>" . $fila['total_reciclado_kg'] . "</td>";
               echo "<td>" . $fila['total_co2_reducido'] . "</td>";
+              echo "<td>" . $fila['porcentaje_usuario'] . " %</td>";
               echo "</tr>";
             }
           ?>
