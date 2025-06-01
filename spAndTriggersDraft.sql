@@ -490,3 +490,26 @@ BEGIN
     INSERT INTO Punto_Reciclaje (nombre, latitud, longitud, apertura, cierre)
     VALUES (p_nombre, p_latitud, p_longitud, p_apertura, p_cierre);
 END $$
+DELIMITER ;
+
+-- ADMINISTRADOR - SECCION REPORTES E IMPACTO
+
+DELIMITER $$ 
+CREATE PROCEDURE IF NOT EXISTS sp_reporteUsuariosImpacto (
+    IN p_fecha_inicio DATE,
+    IN p_fecha_fin DATE
+)
+BEGIN
+    SELECT Usuario.nombre,
+			nivel,
+			puntosTotal, 
+            SUM(cantidad) AS total_reciclado_kg,
+            SUM(impactoCO2) AS total_co2_reducido
+    FROM Usuario JOIN Registro_Reciclaje 
+    ON Usuario.idUsuario = Registro_Reciclaje.idUsuario
+    JOIN Nivel ON Nivel.idNivel = Usuario.idNivel
+    WHERE fecha BETWEEN p_fecha_inicio AND p_fecha_fin
+    GROUP BY Usuario.idUsuario 
+    ORDER BY puntosTotal DESC;
+    END $$
+DELIMITER ;
