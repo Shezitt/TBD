@@ -172,15 +172,15 @@
                 $idMaterial = $_POST['material'];
                 $cantidad = (double) $_POST['cantidad'];
 
-                $stmt = $conn->prepare("CALL sp_registrarReciclaje(?, ?, ?, ?, @p_puntos_ganados);");
+                $stmt = $conn->prepare("CALL sp_registrarReciclaje(?, ?, ?, ?, @p_puntos_ganados, @p_impacto_co2);");
                 $stmt->bind_param("iiid", $idUsuario, $idMaterial, $idPunto, $cantidad);
                 $estado = $stmt->execute();
                 $stmt->close();
 
                 if ($estado) {
-                    $resultado = $conn->query("SELECT @p_puntos_ganados AS puntosGanados");
+                    $resultado = $conn->query("SELECT @p_puntos_ganados AS puntosGanados, @p_impacto_co2 AS impactoCO2");
                     $fila = $resultado->fetch_assoc();
-                    echo "<div class='message success'><h3>¡Gracias por reciclar!</h3>Recibiste <strong>" . $fila['puntosGanados'] . "</strong> puntos</div>";
+                    echo "<div class='message success'><h3>¡Gracias por reciclar!</h3>Recibiste <strong>" . $fila['puntosGanados'] . "</strong> puntos<br>Redujiste <strong>" . $fila['impactoCO2'] . " kg</strong> de CO2</div>";
                 } else {
                     echo "<div class='message error'><h3>Algo salió mal</h3></div>";
                 }
