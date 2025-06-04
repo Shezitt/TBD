@@ -98,3 +98,8 @@ VALUES ('Mouse gamer', 500.0, 3, 2);
 
 INSERT INTO Recompensa (nombre, puntosNecesarios, nivelRequerido, idCatalogo)
 VALUES ('2x1 bebidas', 50.0, 1, 3);
+
+-- Promociones
+
+INSERT INTO Promocion (nombre, multiplicador, fechaInicio, fechaFin, nivelRequerido)
+VALUES ("Promo Corpus Christi", 1.5, "2025-06-01", "2026-06-30", 1);
