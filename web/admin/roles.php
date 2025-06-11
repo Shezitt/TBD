@@ -41,6 +41,67 @@ if (isset($_POST['cambiar_rol'])) {
 
     echo "<script>window.location.href = window.location.pathname;</script>";
 }
+
+// Crear nuevo rol (si se envió formulario)
+if (isset($_POST['crear_rol'])) {
+    $nuevoNombreRol = trim($_POST['nombreRol']);
+    if ($nuevoNombreRol !== '') {
+        $stmt = $conn->prepare("INSERT INTO Rol (nombreRol) VALUES (?);");
+        $stmt->bind_param("s", $nuevoNombreRol);
+        $stmt->execute();
+        $stmt->close();
+
+        echo "<script>window.location.href = window.location.pathname;</script>";
+    }
+}
+
+// Obtener todos los permisos
+$stmt_permisos = $conn->prepare("SELECT * FROM Permiso;");
+$stmt_permisos->execute();
+$resultado_permisos = $stmt_permisos->get_result();
+$permisos = [];
+while ($fila = $resultado_permisos->fetch_assoc()) {
+    $permisos[$fila['idPermiso']] = $fila['nombrePermiso'];
+}
+$stmt_permisos->close();
+
+// Actualizar permisos del rol seleccionado
+if (isset($_POST['actualizar_permisos'])) {
+    $idRolSeleccionado = $_POST['idRolSeleccionado'];
+    $permisosSeleccionados = isset($_POST['permisos']) ? $_POST['permisos'] : [];
+
+    // Eliminar permisos actuales
+    $stmt_delete = $conn->prepare("DELETE FROM rol_has_permiso WHERE Rol_idRol = ?;");
+    $stmt_delete->bind_param("i", $idRolSeleccionado);
+    $stmt_delete->execute();
+    $stmt_delete->close();
+
+    // Insertar permisos seleccionados
+    $stmt_insert = $conn->prepare("INSERT INTO rol_has_permiso (Rol_idRol, Permiso_idPermiso) VALUES (?, ?);");
+    foreach ($permisosSeleccionados as $idPermiso) {
+        $stmt_insert->bind_param("ii", $idRolSeleccionado, $idPermiso);
+        $stmt_insert->execute();
+    }
+    $stmt_insert->close();
+
+    echo "<script>window.location.href = window.location.pathname + '?idRolGestionado=" . $idRolSeleccionado . "';</script>";
+}
+
+// Obtener permisos actuales de un rol (si se seleccionó)
+$permisos_rol_actual = [];
+if (isset($_GET['idRolGestionado'])) {
+    $idRolGestionado = $_GET['idRolGestionado'];
+
+    $stmt_actuales = $conn->prepare("SELECT Permiso_idPermiso FROM rol_has_permiso WHERE Rol_idRol = ?;");
+    $stmt_actuales->bind_param("i", $idRolGestionado);
+    $stmt_actuales->execute();
+    $resultado_actuales = $stmt_actuales->get_result();
+    while ($fila = $resultado_actuales->fetch_assoc()) {
+        $permisos_rol_actual[] = $fila['Permiso_idPermiso'];
+    }
+    $stmt_actuales->close();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -216,9 +277,43 @@ if (isset($_POST['cambiar_rol'])) {
             <h1>GESTIONAR ROLES DE USUARIOS</h1>
         </div>
 
+        <h2>GESTIONAR PERMISOS DE ROLES</h2>
+
+        <form method="GET" class="search-form">
+            <select name="idRolGestionado">
+                <option value="">Seleccionar Rol...</option>
+                <?php
+                foreach ($roles as $id => $nombre) {
+                    $selected = (isset($_GET['idRolGestionado']) && $_GET['idRolGestionado'] == $id) ? 'selected' : '';
+                    echo "<option value='$id' $selected>$nombre</option>";
+                }
+                ?>
+            </select>
+            <input type="submit" value="Gestionar Permisos" />
+        </form>
+
+        <?php if (isset($_GET['idRolGestionado']) && $_GET['idRolGestionado'] !== ''): ?>
+            <form method="POST" style="margin-top: 20px;">
+                <input type="hidden" name="idRolSeleccionado" value="<?php echo $_GET['idRolGestionado']; ?>" />
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+                    <?php foreach ($permisos as $idPermiso => $nombrePermiso): ?>
+                        <label style="display: flex; align-items: center; gap: 6px; padding: 8px 12px; background: #f2f2f2; border-radius: 6px;">
+                            <input type="checkbox" name="permisos[]" value="<?php echo $idPermiso; ?>"
+                                <?php echo in_array($idPermiso, $permisos_rol_actual) ? 'checked' : ''; ?> />
+                            <?php echo htmlspecialchars($nombrePermiso); ?>
+                        </label>
+                    <?php endforeach; ?>
+                </div>
+                <input type="submit" name="actualizar_permisos" value="Guardar Cambios" style="background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold;" />
+            </form>
+        <?php endif; ?>
+
+        <hr style="margin: 40px 0; border: 0; border-top: 2px solid #007bff;" />
+
         <h2>BUSCAR USUARIO POR NOMBRE DE USUARIO</h2>
         <form method="GET" class="search-form">
-            <input type="text" name="username" placeholder="Nombre de usuario..." value="<?php echo htmlspecialchars($search_username); ?>" />
+            <input type="text" name="username" placeholder="Nombre de usuario..."
+                value="<?php echo htmlspecialchars($search_username); ?>" />
             <input type="submit" value="Buscar" />
         </form>
 
@@ -264,6 +359,45 @@ if (isset($_POST['cambiar_rol'])) {
                         }
                     } else {
                         echo '<tr><td colspan="8">No se encontraron usuarios.</td></tr>';
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </div>
+
+        <hr style="margin: 40px 0; border: 0; border-top: 2px solid #007bff;" />
+
+        <h2>GESTIONAR ROLES</h2>
+
+        <!-- Formulario para crear nuevo rol -->
+        <form method="POST" style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <input type="text" name="nombreRol" placeholder="Nombre del nuevo rol..."
+                style="flex:1; padding: 10px 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;"
+                required />
+            <input type="submit" name="crear_rol" value="Crear Rol"
+                style="background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold;" />
+        </form>
+
+        <!-- Tabla de roles -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID Rol</th>
+                        <th>Nombre Rol</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if (!empty($roles)) {
+                        foreach ($roles as $id => $nombreRol) {
+                            echo "<tr>";
+                            echo "<td>" . htmlspecialchars($id) . "</td>";
+                            echo "<td>" . htmlspecialchars($nombreRol) . "</td>";
+                            echo "</tr>";
+                        }
+                    } else {
+                        echo '<tr><td colspan="2">No hay roles registrados.</td></tr>';
                     }
                     ?>
                 </tbody>

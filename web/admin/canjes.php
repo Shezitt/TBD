@@ -1,4 +1,7 @@
 <?php
+
+session_start();
+
 require_once("../conexion.php");
 if (!in_array("dashboard", $_SESSION['permisos']) or !in_array("dashboard_gestion", $_SESSION['permisos'])) {
     header("Location: index.php");
