@@ -588,3 +588,37 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+
+-- Historial reciclaje usuario
+
+DELIMITER $$
+
+CREATE PROCEDURE listar_reciclaje_usuario (
+	IN p_idUsuario INT
+)
+BEGIN 
+	SELECT idRegistro, fecha, p.nombre AS nombrePunto, m.nombre AS material, cantidad, puntosGanados, impactoCO2
+	FROM Registro_Reciclaje 
+	JOIN Punto_Reciclaje p ON p.idPunto = Registro_Reciclaje.idPunto
+	JOIN Material m ON m.idMaterial = Registro_Reciclaje.idMaterial
+	WHERE idUsuario = p_idUsuario
+    ORDER BY fecha DESC;
+END $$
+
+DELIMITER ;
+
+-- Historial canjes usuario
+
+CREATE PROCEDURE listar_canje_usuario (
+	IN p_idUsuario INT
+)
+BEGIN 
+	SELECT idCanje, fecha, nombreCatalogo, r.nombre, completado
+    FROM Canje
+    JOIN Recompensa r ON r.idRecompensa = Canje.idRecompensa
+    JOIN Catalogo ON Catalogo.idCatalogo = r.idCatalogo
+    ORDER BY fecha DESC;
+END $$
+
+DELIMITER ;
