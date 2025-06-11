@@ -176,22 +176,30 @@ CREATE PROCEDURE IF NOT EXISTS sp_registrarReciclaje (
     IN p_punto_reciclaje_id INT,
     IN p_cantidad_kg DECIMAL(10,2),
     OUT p_puntos_ganados DECIMAL(10,2),
-    OUT p_impacto_co2 DECIMAL (10,2)
+    OUT p_impacto_co2 DECIMAL (10,2),
+    OUT p_impacto_agua DECIMAL (10,2),
+    OUT p_impacto_energia DECIMAL (10,2)
 )
 BEGIN
 	DECLARE v_coef_puntos DECIMAL(10,2);
     DECLARE v_coef_co2 DECIMAL(10,2);
+    DECLARE v_coef_agua DECIMAL(10,2);
+    DECLARE v_coef_energia DECIMAL(10,2);
     DECLARE v_impacto_co2 DECIMAL(10,2);
+    DECLARE v_impacto_agua DECIMAL(10,2);
+    DECLARE v_impacto_energia DECIMAL(10,2);
     DECLARE v_fechaActual DATE;
     DECLARE v_nivelUsuario INT;
     DECLARE v_multiplicadorPromo DECIMAL(10,2) DEFAULT 0;
     
-    SELECT coeficientePuntos, coeficienteCO2 
-    INTO v_coef_puntos, v_coef_co2 
+    SELECT coeficientePuntos, coeficienteCO2, coeficienteAgua, coeficienteEnergia
+    INTO v_coef_puntos, v_coef_co2, v_coef_agua, v_coef_energia
     FROM Material 
     WHERE idMaterial = p_material_id;
     
     SET v_impacto_co2 = v_coef_co2 * p_cantidad_kg;
+    SET v_impacto_agua = v_coef_agua * p_cantidad_kg;
+    SET v_impacto_energia = v_coef_energia * p_cantidad_kg;
 
     SELECT nivel INTO v_nivelUsuario
     FROM Usuario JOIN Nivel ON Usuario.idNivel = Nivel.idNivel
@@ -207,9 +215,11 @@ BEGIN
 
     SET p_puntos_ganados = v_multiplicadorPromo * v_coef_puntos *  p_cantidad_kg;
     SET p_impacto_co2 = v_impacto_co2;
+    SET p_impacto_agua = v_impacto_agua;
+    SET p_impacto_energia = v_impacto_energia;
 	
-	INSERT INTO Registro_Reciclaje(idUsuario, idMaterial, idPunto, cantidad, fecha, puntosGanados, impactoCO2)
-    VALUES (p_usuario_id, p_material_id, p_punto_reciclaje_id, p_cantidad_kg, NOW(), p_puntos_ganados, v_impacto_co2); 
+	INSERT INTO Registro_Reciclaje(idUsuario, idMaterial, idPunto, cantidad, fecha, puntosGanados, impactoCO2, impactoAgua, impactoEnergia)
+    VALUES (p_usuario_id, p_material_id, p_punto_reciclaje_id, p_cantidad_kg, NOW(), p_puntos_ganados, v_impacto_co2, v_impacto_agua, v_impacto_energia); 
     
 END;
 $$
@@ -391,11 +401,13 @@ DELIMITER $$
 CREATE PROCEDURE IF NOT EXISTS sp_nuevoMaterial (
     IN p_nombre VARCHAR(45),
     IN p_coefpuntos DECIMAL(10,2),
-    IN p_coefco2 DECIMAL(10,2)
+    IN p_coefco2 DECIMAL(10,2),
+    IN p_coefagua DECIMAL(10,2),
+    IN p_coefenergia DECIMAL(10,2)
 )
 BEGIN
-    INSERT INTO Material (nombre, coeficientePuntos, coeficienteCO2)
-    VALUES (p_nombre, p_coefpuntos, p_coefco2);
+    INSERT INTO Material (nombre, coeficientePuntos, coeficienteCO2, coeficienteAgua, coeficienteEnergia)
+    VALUES (p_nombre, p_coefpuntos, p_coefco2, p_coefagua, p_coefenergia);
 END $$
 
 DELIMITER ;
@@ -500,7 +512,9 @@ BEGIN
 			nivel,
 			puntosTotal, 
             SUM(cantidad) AS total_reciclado_kg,
-            SUM(impactoCO2) AS total_co2_reducido
+            SUM(impactoCO2) AS total_co2_reducido,
+            SUM(impactoAgua) AS total_agua_reducido,
+            SUM(impactoEnergia) AS total_energia_reducido
     FROM Usuario JOIN Registro_Reciclaje 
     ON Usuario.idUsuario = Registro_Reciclaje.idUsuario
     JOIN Nivel ON Nivel.idNivel = Usuario.idNivel
@@ -522,7 +536,9 @@ BEGIN
         Material.nombre AS material,
         SUM(Registro_Reciclaje.cantidad) AS total_reciclado_kg,
         SUM(Registro_Reciclaje.puntosGanados) AS total_puntos,
-        SUM(Registro_Reciclaje.impactoCO2) AS total_co2_reducido
+        SUM(Registro_Reciclaje.impactoCO2) AS total_co2_reducido,
+        SUM(Registro_Reciclaje.impactoAgua) AS total_agua_reducido,
+        SUM(Registro_Reciclaje.impactoEnergia) AS total_energia_reducido
     FROM 
         Registro_Reciclaje
     JOIN 
@@ -576,6 +592,8 @@ BEGIN
         Registro_Reciclaje.cantidad,
         Registro_Reciclaje.puntosGanados,
         Registro_Reciclaje.impactoCO2,
+        Registro_Reciclaje.impactoAgua,
+        Registro_Reciclaje.impactoEnergia,
         Registro_Reciclaje.fecha
     FROM Registro_Reciclaje
     JOIN Usuario ON Usuario.idUsuario = Registro_Reciclaje.idUsuario
@@ -596,7 +614,7 @@ CREATE PROCEDURE listar_reciclaje_usuario (
 	IN p_idUsuario INT
 )
 BEGIN 
-	SELECT idRegistro, fecha, p.nombre AS nombrePunto, m.nombre AS material, cantidad, puntosGanados, impactoCO2
+	SELECT idRegistro, fecha, p.nombre AS nombrePunto, m.nombre AS material, cantidad, puntosGanados, impactoCO2, impactoAgua, impactoEnergia
 	FROM Registro_Reciclaje 
 	JOIN Punto_Reciclaje p ON p.idPunto = Registro_Reciclaje.idPunto
 	JOIN Material m ON m.idMaterial = Registro_Reciclaje.idMaterial

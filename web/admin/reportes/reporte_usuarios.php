@@ -201,6 +201,8 @@ if (isset($_POST['generar_reporte'])) {
                             <th>Puntos Totales</th>
                             <th>Total Reciclado (kg)</th>
                             <th>CO₂ Reducido (kg)</th>
+                            <th>Agua Ahorrada (L)</th>
+                            <th>Energía ahorrada (kWh)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -213,6 +215,8 @@ if (isset($_POST['generar_reporte'])) {
                                 <td><?php echo htmlspecialchars($fila['puntosTotal']); ?></td>
                                 <td><?php echo htmlspecialchars($fila['total_reciclado_kg']); ?></td>
                                 <td><?php echo htmlspecialchars($fila['total_co2_reducido']); ?></td>
+                                <td><?php echo htmlspecialchars($fila['total_agua_reducido']); ?></td>
+                                <td><?php echo htmlspecialchars($fila['total_energia_reducido']); ?></td>
                             </tr>
                         <?php endwhile; ?>
                     </tbody>

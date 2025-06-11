@@ -110,6 +110,8 @@ require_once("conexion.php");
             <th>Cantidad (kg)</th>
             <th>Puntos ganados</th>
             <th>Impacto CO2 (kg)</th>
+            <th>Impacto Agua (L)</th>
+            <th>Impacto Energía (kWh)</th>
           </tr>
         </thead>
         <tbody>
@@ -129,6 +131,8 @@ require_once("conexion.php");
             echo "<td>" . $fila['cantidad'] . "</td>";
             echo "<td>" . $fila['puntosGanados'] . "</td>";
             echo "<td>" . $fila['impactoCO2'] . "</td>";
+            echo "<td>" . $fila['impactoAgua'] . "</td>";
+            echo "<td>" . $fila['impactoEnergia'] . "</td>";
             echo "</tr>";
           }
           ?>

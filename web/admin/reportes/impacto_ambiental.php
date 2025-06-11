@@ -201,6 +201,8 @@ if (isset($_POST['generar_reporte'])) {
                             <th>Total Reciclado (kg)</th>
                             <th>Total Puntos Generados</th>
                             <th>CO₂ Reducido (kg)</th>
+                            <th>Agua Ahorrada (L)</th>
+                            <th>Energía Ahorrada (kWh)</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -210,12 +212,16 @@ if (isset($_POST['generar_reporte'])) {
                         $suma_kg = 0;
                         $suma_puntos = 0;
                         $suma_co2 = 0;
+                        $suma_agua = 0;
+                        $suma_energia = 0;
                         ?>
                         <?php while ($fila = $reporte_resultado->fetch_assoc()): ?>
                             <?php 
                             $suma_kg += $fila['total_reciclado_kg'];
                             $suma_puntos += $fila['total_puntos'];
                             $suma_co2 += $fila['total_co2_reducido'];
+                            $suma_agua += $fila['total_agua_reducido'];
+                            $suma_energia += $fila['total_energia_reducido'];
                             ?>
                             <tr>
                                 <td><?php echo $contador++; ?></td>
@@ -223,6 +229,8 @@ if (isset($_POST['generar_reporte'])) {
                                 <td><?php echo number_format($fila['total_reciclado_kg'], 2); ?></td>
                                 <td><?php echo number_format($fila['total_puntos'], 2); ?></td>
                                 <td><?php echo number_format($fila['total_co2_reducido'], 2); ?></td>
+                                <td><?php echo number_format($fila['total_agua_reducido'], 2); ?></td>
+                                <td><?php echo number_format($fila['total_energia_reducido'], 2); ?></td>
                             </tr>
                         <?php endwhile; ?>
                         <!-- Fila de totales -->
@@ -231,6 +239,8 @@ if (isset($_POST['generar_reporte'])) {
                             <td><?php echo number_format($suma_kg, 2); ?></td>
                             <td><?php echo number_format($suma_puntos, 2); ?></td>
                             <td><?php echo number_format($suma_co2, 2); ?></td>
+                            <td><?php echo number_format($suma_agua, 2); ?></td>
+                            <td><?php echo number_format($suma_energia, 2); ?></td>
                         </tr>
                     </tbody>
                 </table>

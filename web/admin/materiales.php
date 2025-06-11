@@ -90,6 +90,7 @@ if ($stmt) {
         .add-material-form input[type="number"] {
             flex: 1;
             min-width: 180px;
+            max-width: 230px;
             padding: 10px 15px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -220,8 +221,9 @@ if ($stmt) {
         <form action="" method="POST" class="add-material-form">
             <input type="text" name="nombre" placeholder="Nombre" required>
             <input type="number" name="coeficiente_puntos" placeholder="Coeficiente Puntos" step="0.01" required>
-            <input type="number" name="coeficiente_impacto_co2" placeholder="Coeficiente Impacto CO2" step="0.01"
-                required>
+            <input type="number" name="coeficiente_impacto_co2" placeholder="Coeficiente Impacto CO2" step="0.01" required>
+            <input type="number" name="coeficiente_impacto_agua" placeholder="Coeficiente Impacto Agua" step="0.01" required>
+            <input type="number" name="coeficiente_impacto_energia" placeholder="Coeficiente Impacto Energía" step="0.01" required>
             <input type="submit" name="agregar_material" value="Enviar">
         </form>
 
@@ -232,6 +234,8 @@ if ($stmt) {
                         <th>Nombre</th>
                         <th>Coeficiente Puntos</th>
                         <th>Coeficiente Impacto CO2</th>
+                        <th>Coeficiente Impacto Agua</th>
+                        <th>Coeficiente Impacto Energía</th>
                         <th colspan="2">Opciones</th>
                     </tr>
                 </thead>
@@ -243,6 +247,8 @@ if ($stmt) {
                             echo '<td>' . htmlspecialchars($fila['nombre']) . '</td>';
                             echo '<td>' . htmlspecialchars($fila['coeficientePuntos']) . '</td>';
                             echo '<td>' . htmlspecialchars($fila['coeficienteCO2']) . '</td>';
+                            echo '<td>' . htmlspecialchars($fila['coeficienteAgua']) . '</td>';
+                            echo '<td>' . htmlspecialchars($fila['coeficienteEnergia']) . '</td>';
                             echo '<td><a href="modificar_material.php?id=' . $fila['idMaterial'] . '" class="action-button modify-button">Modificar</a></td>';
                             echo '<td><a href="eliminar_material.php?id=' . $fila['idMaterial'] . '" class="action-button delete-button">Eliminar</a></td>';
                             echo '</tr>';
@@ -269,9 +275,11 @@ if ($stmt) {
         $nombre = $_POST['nombre'];
         $coeficiente_puntos = $_POST['coeficiente_puntos'];
         $coeficiente_co2 = $_POST['coeficiente_impacto_co2'];
+        $coeficiente_agua = $_POST['coeficiente_impacto_agua'];
+        $coeficiente_energia = $_POST['coeficiente_impacto_energia'];
 
-        $stmt = $conn->prepare("CALL sp_nuevoMaterial(?, ?, ?);");
-        $stmt->bind_param("sdd", $nombre, $coeficiente_puntos, $coeficiente_co2);
+        $stmt = $conn->prepare("CALL sp_nuevoMaterial(?, ?, ?, ?, ?);");
+        $stmt->bind_param("sdddd", $nombre, $coeficiente_puntos, $coeficiente_co2, $coeficiente_agua, $coeficiente_energia);
         $stmt->execute();
         $stmt->close();
         

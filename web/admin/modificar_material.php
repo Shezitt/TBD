@@ -30,9 +30,11 @@ if (isset($_POST['modificar_material'])) {
     $nombre = $_POST['nombre'];
     $coeficiente_puntos = $_POST['coeficiente_puntos'];
     $coeficiente_co2 = $_POST['coeficiente_impacto_co2'];
+    $coeficiente_agua = $_POST['coeficiente_impacto_agua'];
+    $coeficiente_energia = $_POST['coeficiente_impacto_energia'];
 
-    $stmt = $conn->prepare("UPDATE Material SET nombre = ?, coeficientePuntos = ?, coeficienteCO2 = ? WHERE idMaterial = ?");
-    $stmt->bind_param("sddi", $nombre, $coeficiente_puntos, $coeficiente_co2, $idMaterial);
+    $stmt = $conn->prepare("UPDATE Material SET nombre = ?, coeficientePuntos = ?, coeficienteCO2 = ?, coeficienteAgua = ?, coeficienteEnergia = ? WHERE idMaterial = ?");
+    $stmt->bind_param("sddddi", $nombre, $coeficiente_puntos, $coeficiente_co2, $coeficiente_agua, $coeficiente_energia, $idMaterial);
     $stmt->execute();
     $stmt->close();
 
@@ -164,6 +166,8 @@ if (isset($_POST['modificar_material'])) {
             <input type="text" name="nombre" value="<?php echo htmlspecialchars($material['nombre']); ?>" required>
             <input type="number" name="coeficiente_puntos" step="0.01" value="<?php echo htmlspecialchars($material['coeficientePuntos']); ?>" required>
             <input type="number" name="coeficiente_impacto_co2" step="0.01" value="<?php echo htmlspecialchars($material['coeficienteCO2']); ?>" required>
+            <input type="number" name="coeficiente_impacto_agua" step="0.01" value="<?php echo htmlspecialchars($material['coeficienteAgua']); ?>" required>
+            <input type="number" name="coeficiente_impacto_energia" step="0.01" value="<?php echo htmlspecialchars($material['coeficienteEnergia']); ?>" required>
             <input type="submit" name="modificar_material" value="Guardar Cambios">
         </form>
 
