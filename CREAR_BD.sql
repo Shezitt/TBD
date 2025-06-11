@@ -20,6 +20,7 @@ USE `reciclaje` ;
 CREATE TABLE IF NOT EXISTS `reciclaje`.`Rol` (
   `idRol` INT NOT NULL AUTO_INCREMENT,
   `nombreRol` VARCHAR(45) NOT NULL,
+  `activo` TINYINT NOT NULL DEFAULT 1,
   PRIMARY KEY (`idRol`))
 ENGINE = InnoDB;
 
