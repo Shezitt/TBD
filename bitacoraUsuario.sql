@@ -88,3 +88,22 @@ BEGIN
 END $$
 
 DELIMITER ;
+
+
+-- Para cambiar los puntos del usuario luego de la modificacion
+
+DELIMITER $$
+
+CREATE TRIGGER IF NOT EXISTS after_update_registro_reciclaje
+AFTER UPDATE ON Registro_Reciclaje
+FOR EACH ROW
+BEGIN
+    DECLARE diferencia FLOAT;
+    SET diferencia = NEW.puntosGanados - OLD.puntosGanados;
+
+    UPDATE Usuario SET puntos = puntos + diferencia,
+    puntosTotal = puntosTotal + diferencia WHERE idUsuario = OLD.idUsuario;
+
+END$$
+
+DELIMITER ;
