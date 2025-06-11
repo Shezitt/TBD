@@ -1,10 +1,6 @@
 <?php
 session_start();
 
-if (!in_array("dashboard", $_SESSION['permisos']) or !in_array("dashboard_historial", $_SESSION['permisos'])) {
-    header("Location: index.php");
-    exit();
-}
 
 require_once("../../conexion.php");
 
@@ -322,7 +318,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <tbody>
                 <?php
                     $sql = $conn->prepare('CALL ObtenerModificacionReciclaje(?);');
-                    $sql->bind_param('i', $_SESSION['idUsuario']);
+                    $sql->bind_param('s', $usuarioBuscado);  
                     $sql->execute();
                     $result = $sql->get_result();
                     if ($result && $result->num_rows > 0) {

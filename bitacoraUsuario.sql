@@ -81,10 +81,13 @@ CREATE PROCEDURE ObtenerModificacionReciclaje (
 	IN p_username VARCHAR(255)
 )
 BEGIN
-	SELECT idReciclaje, Usuario.nombre AS nombreAdmin, modificacion, motivo, fechaHora
-	FROM Modificacion_Reciclaje
-    JOIN Usuario ON idUsuario = idAdmin
-    WHERE idUsuario = p_username;
+	SELECT mr.idReciclaje, uadmin.nombre AS nombreAdmin, mr.modificacion, mr.motivo, mr.fechaHora
+	FROM Modificacion_Reciclaje mr
+    JOIN Registro_Reciclaje rr ON rr.idRegistro = mr.idReciclaje
+    JOIN Usuario uadmin ON uadmin.idUsuario = idAdmin
+    JOIN Usuario u ON u.idUsuario = rr.idUsuario
+    WHERE u.username = p_username
+    ORDER BY mr.fechaHora;
 END $$
 
 DELIMITER ;
