@@ -295,6 +295,9 @@ $datosUsuario = $datosUsuario->fetch_assoc();
                         <li>
                             <a class="boton-link" href="ranking.php">Ver ránking</a>
                         </li>
+                        <li>
+                            <a class="boton-link" href="bitacora.php">Ver bitácora personal</a>
+                        </li>
 
                     </ul>
                 </div>
