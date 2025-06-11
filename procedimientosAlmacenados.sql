@@ -135,7 +135,6 @@ CREATE PROCEDURE IF NOT EXISTS sp_getPuntosReciclajeCercanos (
 )
 BEGIN
     SELECT *,
-       *,
         6371 * 2 * ASIN(
             SQRT(
                 POW(SIN(RADIANS(pr.latitud - p_latitud) / 2), 2) +
@@ -144,12 +143,11 @@ BEGIN
                 POW(SIN(RADIANS(pr.longitud - p_longitud) / 2), 2)
             )
         ) AS distancia_km
-    FROM Punto_Reciclaje
+    FROM Punto_Reciclaje pr
     WHERE activo = 1
     HAVING distancia_km < 5
     ORDER BY distancia_km;
-END;
-$$
+END $$
 
 DELIMITER ;
 
@@ -609,6 +607,8 @@ END $$
 DELIMITER ;
 
 -- Historial canjes usuario
+
+DELIMITER $$
 
 CREATE PROCEDURE listar_canje_usuario (
 	IN p_idUsuario INT

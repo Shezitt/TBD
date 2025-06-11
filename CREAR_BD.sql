@@ -190,9 +190,9 @@ ENGINE = InnoDB;
 -- Table `reciclaje`.`Permiso`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `reciclaje`.`Permiso` (
-  `idPemiso` INT NOT NULL AUTO_INCREMENT,
+  `idPermiso` INT NOT NULL AUTO_INCREMENT,
   `nombrePermiso` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idPemiso`))
+  PRIMARY KEY (`idPermiso`))
 ENGINE = InnoDB;
 
 
@@ -201,9 +201,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `reciclaje`.`rol_has_permiso` (
   `Rol_idRol` INT NOT NULL,
-  `Permiso_idPemiso` INT NOT NULL,
-  PRIMARY KEY (`Rol_idRol`, `Permiso_idPemiso`),
-  INDEX `fk_Rol_has_Permiso_Permiso1_idx` (`Permiso_idPemiso` ASC),
+  `Permiso_idPermiso` INT NOT NULL,
+  PRIMARY KEY (`Rol_idRol`, `Permiso_idPermiso`),
+  INDEX `fk_Rol_has_Permiso_Permiso1_idx` (`Permiso_idPermiso` ASC),
   INDEX `fk_Rol_has_Permiso_Rol1_idx` (`Rol_idRol` ASC),
   CONSTRAINT `fk_Rol_has_Permiso_Rol1`
     FOREIGN KEY (`Rol_idRol`)
@@ -211,8 +211,8 @@ CREATE TABLE IF NOT EXISTS `reciclaje`.`rol_has_permiso` (
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_Rol_has_Permiso_Permiso1`
-    FOREIGN KEY (`Permiso_idPemiso`)
-    REFERENCES `reciclaje`.`Permiso` (`idPemiso`)
+    FOREIGN KEY (`Permiso_idPermiso`)
+    REFERENCES `reciclaje`.`Permiso` (`idPermiso`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
