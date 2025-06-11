@@ -36,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Para modificar puntos ganados
     if (isset($_POST['modificar_puntos'])) {
         $idReciclaje = intval($_POST['idReciclaje']);
         $idAdmin = $_SESSION['idUsuario']; 
@@ -56,7 +55,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $stmt->close();
 
-            // para mantener la tabla actualizada
             if ($usuarioBuscado !== '') {
                 $stmt = $conn->prepare("
                     SELECT r.idRegistro, r.fecha, r.puntosGanados, u.username, m.nombre AS nombreMaterial, r.cantidad, p.nombre AS nombrePunto
@@ -217,9 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <script>
         function mostrarFormulario(id) {
-            // Ocultar todos los formularios abiertos
             document.querySelectorAll('.form-modificacion').forEach(form => form.style.display = 'none');
-            // Mostrar solo el formulario de la fila seleccionada
             const form = document.getElementById('form-modificar-' + id);
             if (form) {
                 form.style.display = 'block';
@@ -249,7 +245,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endif; ?>
 
-        <!-- Formulario para buscar usuario -->
         <form method="POST" action="">
             <label for="usuario">Buscar reciclajes por nombre de usuario:</label>
             <input type="text" id="usuario" name="usuario" value="<?= htmlspecialchars($usuarioBuscado) ?>" placeholder="Nombre de usuario" required />

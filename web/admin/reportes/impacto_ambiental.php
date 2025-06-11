@@ -208,7 +208,7 @@ if (isset($_POST['generar_reporte'])) {
                     <tbody>
                         <?php 
                         $contador = 1; 
-                        // Variables para sumar totales
+                        
                         $suma_kg = 0;
                         $suma_puntos = 0;
                         $suma_co2 = 0;
@@ -233,7 +233,7 @@ if (isset($_POST['generar_reporte'])) {
                                 <td><?php echo number_format($fila['total_energia_reducido'], 2); ?></td>
                             </tr>
                         <?php endwhile; ?>
-                        <!-- Fila de totales -->
+                        
                         <tr style="font-weight: bold; background-color: #d9edf7;">
                             <td colspan="2">Totales</td>
                             <td><?php echo number_format($suma_kg, 2); ?></td>

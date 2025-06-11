@@ -8,7 +8,6 @@ if (!in_array("dashboard", $_SESSION['permisos']) or !in_array("dashboard_gestio
 
 require_once("../conexion.php");
 
-// Validar que venga el ID
 if (!isset($_GET['id'])) {
     header("Location: catalogos.php");
     exit();
@@ -16,7 +15,6 @@ if (!isset($_GET['id'])) {
 
 $idCatalogo = $_GET['id'];
 
-// Obtener los datos actuales del catálogo
 $catalogo = null;
 if ($stmt = $conn->prepare("SELECT nombreCatalogo FROM Catalogo WHERE idCatalogo = ? AND activo = '1'")) {
     $stmt->bind_param("i", $idCatalogo);
@@ -33,7 +31,6 @@ if (!$catalogo) {
     exit();
 }
 
-// Si se envió el formulario para modificar
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre_catalogo'])) {
     $nuevoNombre = trim($_POST['nombre_catalogo']);
 

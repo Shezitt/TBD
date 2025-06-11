@@ -10,7 +10,6 @@ require_once("../../conexion.php");
 $error = "";
 $mensaje = "";
 
-// Ejecutar reverseSQL si se envió
 if (isset($_POST['aplicar_reverse']) && isset($_POST['reverse_sql'])) {
     $reverse_sql = $_POST['reverse_sql'];
 
@@ -21,7 +20,6 @@ if (isset($_POST['aplicar_reverse']) && isset($_POST['reverse_sql'])) {
     }
 }
 
-// Obtener registros de auditoría
 $resultado = $conn->query("SELECT fecha, executedSQL, reverseSQL FROM Auditoria_Nivel ORDER BY idAuditoria DESC");
 
 ?>

@@ -221,10 +221,6 @@ $datosUsuario = $datosUsuario->fetch_assoc();
 
 <body>
 
-    <div class="barra-superior">
-        <!-- Aquí puedes colocar un botón más adelante -->
-    </div>
-
     <div class="container">
 
         <div class="bienvenida">
@@ -318,7 +314,7 @@ $datosUsuario = $datosUsuario->fetch_assoc();
                     $contador = 1;
 
                     while ($fila = $resultado->fetch_assoc()) {
-                        $nombreImagen = "images/promos/promo-" . $contador . ".jpg"; // promo-1.jpg, promo-2.jpg, etc.
+                        $nombreImagen = "images/promos/promo-" . $contador . ".jpg"; 
                 
                         echo '<div class="promocion" style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">';
                         echo '<img src="' . $nombreImagen . '" alt="Imagen promoción" style="width: 100px; height: auto; border-radius: 8px;">';

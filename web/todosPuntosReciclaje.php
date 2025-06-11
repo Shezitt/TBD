@@ -176,11 +176,10 @@ require_once("conexion.php");
                             echo "<td>" . htmlspecialchars($fila['longitud']) . "</td>";
                             echo "<td>" . htmlspecialchars($fila['apertura']) . "</td>";
                             echo "<td>" . htmlspecialchars($fila['cierre']) . "</td>";
-                            // Botón para ver materiales
+                            
                             echo "<td><button class='boton-ver' onclick='verMateriales(" . $fila['idPunto'] . ")'>Ver</button></td>";
                             echo "</tr>";
 
-                            // Guardamos los datos para pasarlos al JS
                             $puntos[] = $fila;
                         }
 
@@ -218,7 +217,6 @@ require_once("conexion.php");
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         }).addTo(mapa);
 
-        // Pasamos los puntos desde PHP a JS
         var puntos = <?php echo json_encode($puntos); ?>;
 
         puntos.forEach(function (punto) {

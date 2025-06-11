@@ -147,7 +147,7 @@
             $fila = $resultado->fetch_assoc();
             $_SESSION['idUsuario'] = $fila['idUsuario'];
             $_SESSION['rol'] = $fila['idRol'];
-            // Para los permisos
+
             $_SESSION['permisos'] = obtenerPermisosPorRol($_SESSION['rol'], $conn);
 
             $stmt = $conn->prepare("SELECT nivel FROM Nivel WHERE idNivel=?;");

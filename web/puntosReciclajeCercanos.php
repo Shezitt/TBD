@@ -182,7 +182,6 @@
                                     echo "<td><a href='registrarReciclaje.php?id=$id'>Reciclar</a></td>";
                                     echo "</tr>";
 
-                                    // Almacenar puntos para el mapa
                                     $puntos[] = $fila;
                                 }
                             } else {
@@ -201,15 +200,13 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 
     <script>
-    // Crear mapa con posición por defecto
+
     var map = L.map('map').setView([-17.3820, -66.1596], 13);
 
-    // Cargar tiles desde OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors'
     }).addTo(map);
 
-    // Crear íconos personalizados
     var userIcon = L.icon({
         iconUrl: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
         iconSize: [32, 32],
@@ -225,16 +222,16 @@
     });
 
     <?php if (isset($_POST['ubicacion'])): ?>
-        // Posición del usuario
+        
         var userLat = <?php echo $latitud; ?>;
         var userLng = <?php echo $longitud; ?>;
         L.marker([userLat, userLng], {icon: userIcon}).addTo(map)
             .bindPopup("Tu ubicación").openPopup();
 
-        // Centrar mapa en el usuario
+        
         map.setView([userLat, userLng], 14);
 
-        // Puntos de reciclaje
+        
         var puntos = <?php echo json_encode($puntos); ?>;
         puntos.forEach(function(punto) {
             L.marker([punto.latitud, punto.longitud], {icon: puntoIcon}).addTo(map)

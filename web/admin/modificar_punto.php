@@ -10,7 +10,6 @@ if (!in_array("dashboard", $_SESSION['permisos']) or !in_array("dashboard_gestio
 
 $idPunto = $_GET['id'];
 
-// Obtener nombre y datos del punto
 $stmt = $conn->prepare("SELECT nombre, latitud, longitud, apertura, cierre FROM Punto_Reciclaje WHERE idPunto = ?");
 $stmt->bind_param("i", $idPunto);
 $stmt->execute();
@@ -18,7 +17,6 @@ $stmt->bind_result($nombrePunto, $latitud, $longitud, $horaApertura, $horaCierre
 $stmt->fetch();
 $stmt->close();
 
-// Obtener lista de materiales disponibles
 $materiales = [];
 $result = $conn->query("SELECT idMaterial, nombre FROM Material WHERE activo = 1");
 while ($row = $result->fetch_assoc()) {
@@ -26,7 +24,6 @@ while ($row = $result->fetch_assoc()) {
 }
 $result->close();
 
-// Obtener materiales que acepta el punto
 $materialesAceptados = [];
 $stmt = $conn->prepare("CALL sp_getMaterialesPuntoReciclaje(?)");
 $stmt->bind_param("i", $idPunto);
@@ -38,13 +35,11 @@ while ($row = $result->fetch_assoc()) {
 $stmt->close();
 
 if (isset($_POST['modificar_materiales'])) {
-    // Borrar materiales anteriores
     $stmt = $conn->prepare("DELETE FROM Punto_Reciclaje_Materiales WHERE idPunto = ?");
     $stmt->bind_param("i", $idPunto);
     $stmt->execute();
     $stmt->close();
 
-    // Insertar nuevos materiales seleccionados
     if (!empty($_POST['materiales'])) {
         $stmt = $conn->prepare("INSERT INTO Punto_Reciclaje_Materiales (idPunto, idMaterial) VALUES (?, ?)");
         foreach ($_POST['materiales'] as $idMaterial) {
@@ -57,7 +52,6 @@ if (isset($_POST['modificar_materiales'])) {
     echo "<script>alert('Materiales actualizados correctamente.'); window.location.href=window.location.href;</script>";
 }
 
-// Modificar datos del punto
 if (isset($_POST['modificar_datos'])) {
     $nuevoNombre = $_POST['nombre'];
     $nuevaLatitud = $_POST['latitud'];

@@ -12,7 +12,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Canjear recompensa</title>
   <style>
-    /* (el mismo estilo que antes) */
     body { font-family: Arial, sans-serif; background-color: #f4f8fa; margin: 0; padding: 20px; }
     .container { max-width: 900px; margin: auto; }
     .header { text-align: center; margin-bottom: 20px; }
@@ -38,7 +37,6 @@
         <p>
             <?php
             
-                // Verificar si tiene nivel suficiente
                 $stmt = $conn->prepare("CALL sp_verificarNivelUsuarioRecompensa(?, ?);");
                 $stmt->bind_param("ii", $idRecompensa, $_SESSION['idUsuario']);
                 $stmt->execute();
@@ -47,7 +45,6 @@
 
                 $nivelSuficiente = $res['respuesta'] == 1;
 
-                // Verificar si tiene puntos suficientes
                 $stmt = $conn->prepare("CALL sp_verificarPuntosUsuarioRecompensa(?, ?);");
                 $stmt->bind_param("ii", $idRecompensa, $_SESSION['idUsuario']);
                 $stmt->execute();
@@ -57,7 +54,6 @@
                 $puntosSuficientes = $res['respuesta'] == 1;
 
                 if ($nivelSuficiente && $puntosSuficientes) {
-                    // hacer el canje
 
                     $stmt = $conn->prepare("CALL sp_canjearRecompensa(?, ?);");
                     $stmt->bind_param("ii", $_SESSION['idUsuario'], $idRecompensa);

@@ -157,7 +157,6 @@
 
               $idRecompensa = $fila['idRecompensa'];
 
-              // Verificar nivel y puntos usuario
               $stmt = $conn->prepare("CALL sp_verificarNivelUsuarioRecompensa(?, ?);");
               $stmt->bind_param("ii", $idRecompensa, $_SESSION['idUsuario']);
               $stmt->execute();

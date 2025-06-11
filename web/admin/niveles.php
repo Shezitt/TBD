@@ -269,7 +269,6 @@ if (isset($_POST['agregar_nivel'])) {
     $stmt->execute();
     $stmt->close();
 
-    // Refrescar página para ver cambios
     echo "<script>window.location.href = window.location.pathname;</script>";
 }
 ?>

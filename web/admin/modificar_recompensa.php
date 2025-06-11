@@ -15,7 +15,6 @@ if (!isset($_GET['id'])) {
 $id = $_GET['id'];
 $recompensa = false;
 
-// Obtener datos de la recompensa
 if ($stmt = $conn->prepare("SELECT * FROM Recompensa WHERE idRecompensa = ? AND activo='1'")) {
     $stmt->bind_param("i", $id);
     $stmt->execute();
@@ -26,7 +25,6 @@ if ($stmt = $conn->prepare("SELECT * FROM Recompensa WHERE idRecompensa = ? AND 
     error_log("Error al preparar SELECT recompensa: " . $conn->error);
 }
 
-// Obtener catálogos disponibles
 $catalogos = false;
 if ($stmt = $conn->prepare("SELECT idCatalogo, nombreCatalogo FROM Catalogo WHERE activo='1'")) {
     $stmt->execute();
@@ -36,7 +34,6 @@ if ($stmt = $conn->prepare("SELECT idCatalogo, nombreCatalogo FROM Catalogo WHER
     error_log("Error al preparar SELECT catalogos: " . $conn->error);
 }
 
-// Procesar formulario
 if (isset($_POST['modificar_recompensa'])) {
     $nombre = $_POST['nombre'];
     $puntos = $_POST['puntos_necesarios'];

@@ -29,7 +29,6 @@ $stmt->execute();
 $resultado = $stmt->get_result();
 $stmt->close();
 
-// Cambiar rol (si se envió formulario)
 if (isset($_POST['cambiar_rol'])) {
     $idUsuario = $_POST['idUsuario'];
     $nuevoRol = $_POST['nuevoRol'];
@@ -42,7 +41,6 @@ if (isset($_POST['cambiar_rol'])) {
     echo "<script>window.location.href = window.location.pathname;</script>";
 }
 
-// Crear nuevo rol (si se envió formulario)
 if (isset($_POST['crear_rol'])) {
     $nuevoNombreRol = trim($_POST['nombreRol']);
     if ($nuevoNombreRol !== '') {
@@ -55,7 +53,6 @@ if (isset($_POST['crear_rol'])) {
     }
 }
 
-// Obtener todos los permisos
 $stmt_permisos = $conn->prepare("SELECT * FROM Permiso;");
 $stmt_permisos->execute();
 $resultado_permisos = $stmt_permisos->get_result();
@@ -65,18 +62,15 @@ while ($fila = $resultado_permisos->fetch_assoc()) {
 }
 $stmt_permisos->close();
 
-// Actualizar permisos del rol seleccionado
 if (isset($_POST['actualizar_permisos'])) {
     $idRolSeleccionado = $_POST['idRolSeleccionado'];
     $permisosSeleccionados = isset($_POST['permisos']) ? $_POST['permisos'] : [];
 
-    // Eliminar permisos actuales
     $stmt_delete = $conn->prepare("DELETE FROM rol_has_permiso WHERE Rol_idRol = ?;");
     $stmt_delete->bind_param("i", $idRolSeleccionado);
     $stmt_delete->execute();
     $stmt_delete->close();
 
-    // Insertar permisos seleccionados
     $stmt_insert = $conn->prepare("INSERT INTO rol_has_permiso (Rol_idRol, Permiso_idPermiso) VALUES (?, ?);");
     foreach ($permisosSeleccionados as $idPermiso) {
         $stmt_insert->bind_param("ii", $idRolSeleccionado, $idPermiso);
@@ -87,7 +81,6 @@ if (isset($_POST['actualizar_permisos'])) {
     echo "<script>window.location.href = window.location.pathname + '?idRolGestionado=" . $idRolSeleccionado . "';</script>";
 }
 
-// Obtener permisos actuales de un rol (si se seleccionó)
 $permisos_rol_actual = [];
 if (isset($_GET['idRolGestionado'])) {
     $idRolGestionado = $_GET['idRolGestionado'];
@@ -102,7 +95,6 @@ if (isset($_GET['idRolGestionado'])) {
     $stmt_actuales->close();
 }
 
-// Eliminar rol
 if (isset($_POST['eliminar_rol'])) {
     $idRolEliminar = $_POST['idRolEliminar'];
 
@@ -381,7 +373,6 @@ if (isset($_POST['eliminar_rol'])) {
 
         <h2>GESTIONAR ROLES</h2>
 
-        <!-- Formulario para crear nuevo rol -->
         <form method="POST" style="display: flex; gap: 10px; margin-bottom: 20px;">
             <input type="text" name="nombreRol" placeholder="Nombre del nuevo rol..."
                 style="flex:1; padding: 10px 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 16px;"
@@ -390,7 +381,6 @@ if (isset($_POST['eliminar_rol'])) {
                 style="background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold;" />
         </form>
 
-        <!-- Tabla de roles -->
         <div class="table-container">
             <table style="width:100%; border-collapse: collapse;">
                 <thead>
