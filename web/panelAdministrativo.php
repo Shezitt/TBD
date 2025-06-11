@@ -135,8 +135,7 @@
         </div>
 
         <div class="admin-info">
-            <p><strong>Nombre administrador:</strong> Carlos la Fuente</p>
-            <p><strong>Correo:</strong> carloslafuente12@gmail.com</p>
+            <p><strong>Administrador:</strong> <?php echo $_SESSION['username']; ?></p>
         </div>
 
         <?php if (in_array("dashboard_gestion", $_SESSION['permisos'])): ?>
