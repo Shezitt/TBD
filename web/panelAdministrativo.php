@@ -171,7 +171,7 @@
             <a href="admin/auditoria/auditoria_usuario.php">Usuario</a>
         </div>
 
-        <a href="../" class="logout-button">Volver al panel principal</a>
+        <a href="index.php" class="logout-button">Volver al panel principal</a>
     </div>
 </body>
 </html>
