@@ -74,6 +74,8 @@ BEGIN
 		Material.nombre AS tipo_material,
         SUM(Registro_Reciclaje.cantidad) AS total_reciclado_kg,
         SUM(Registro_Reciclaje.impactoCO2) AS total_co2_reducido,
+        SUM(Registro_Reciclaje.impactoAgua) AS total_agua_reducido,
+        SUM(Registro_Reciclaje.impactoEnergia) AS total_energia_reducido,
         ROUND(
             (SUM(Registro_Reciclaje.cantidad) /
              (SELECT SUM(RR2.cantidad)
@@ -354,7 +356,9 @@ BEGIN
     SELECT 
         Material.nombre AS tipo_material,
         SUM(Registro_Reciclaje.cantidad) AS total_reciclado_kg,
-        SUM(Registro_Reciclaje.impactoCO2) AS total_co2_reducido
+        SUM(Registro_Reciclaje.impactoCO2) AS total_co2_reducido,
+        SUM(Registro_Reciclaje.impactoAgua) AS total_agua_reducido,
+        SUM(Registro_Reciclaje.impactoEnergia) AS total_energia_reducido
     FROM Registro_Reciclaje
     JOIN Material ON Registro_Reciclaje.idMaterial = Material.idMaterial
     GROUP BY Material.nombre ORDER BY total_reciclado_kg DESC;

@@ -107,6 +107,8 @@
             <th>Material</th>
             <th>Total reciclado (kg)</th>
             <th>Total CO2 reducido (kg)</th>
+            <th>Total ahorro de agua (L)</th>
+            <th>Total ahorro de energía (kWh)</th>
           </tr>
         </thead>
         <tbody>
@@ -123,6 +125,8 @@
               echo "<td>" . $fila['tipo_material'] . "</td>";
               echo "<td>" . $fila['total_reciclado_kg'] . "</td>";
               echo "<td>" . $fila['total_co2_reducido'] . "</td>";
+              echo "<td>" . $fila['total_agua_reducido'] . "</td>";
+              echo "<td>" . $fila['total_energia_reducido'] . "</td>";
               echo "</tr>";
             }
           ?>
@@ -137,6 +141,8 @@
             <th>Material</th>
             <th>Total reciclado (kg)</th>
             <th>Total CO2 reducido (kg)</th>
+            <th>Total ahorro de agua (L)</th>
+            <th>Total ahorro de energía (kWh)</th>
             <th>Tu impacto respecto al total</th>
           </tr>
         </thead>
@@ -155,6 +161,8 @@
               echo "<td>" . $fila['tipo_material'] . "</td>";
               echo "<td>" . $fila['total_reciclado_kg'] . "</td>";
               echo "<td>" . $fila['total_co2_reducido'] . "</td>";
+              echo "<td>" . $fila['total_agua_reducido'] . "</td>";
+              echo "<td>" . $fila['total_energia_reducido'] . "</td>";
               echo "<td>" . $fila['porcentaje_usuario'] . " %</td>";
               echo "</tr>";
             }
