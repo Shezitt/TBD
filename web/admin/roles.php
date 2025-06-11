@@ -8,7 +8,7 @@ if (!in_array("dashboard", $_SESSION['permisos']) or !in_array("dashboard_gestio
 
 require_once("../conexion.php");
 
-$stmt_roles = $conn->prepare("SELECT * FROM Rol;");
+$stmt_roles = $conn->prepare("SELECT * FROM Rol WHERE activo = 1;");
 $stmt_roles->execute();
 $resultado_roles = $stmt_roles->get_result();
 $roles = [];
@@ -100,6 +100,18 @@ if (isset($_GET['idRolGestionado'])) {
         $permisos_rol_actual[] = $fila['Permiso_idPermiso'];
     }
     $stmt_actuales->close();
+}
+
+// Eliminar rol
+if (isset($_POST['eliminar_rol'])) {
+    $idRolEliminar = $_POST['idRolEliminar'];
+
+    $stmt = $conn->prepare("UPDATE Rol SET activo = 0 WHERE idRol = ?;");
+    $stmt->bind_param("i", $idRolEliminar);
+    $stmt->execute();
+    $stmt->close();
+
+    echo "<script>window.location.href = window.location.pathname;</script>";
 }
 
 ?>
@@ -380,26 +392,27 @@ if (isset($_GET['idRolGestionado'])) {
 
         <!-- Tabla de roles -->
         <div class="table-container">
-            <table>
+            <table style="width:100%; border-collapse: collapse;">
                 <thead>
                     <tr>
-                        <th>ID Rol</th>
-                        <th>Nombre Rol</th>
+                        <th style="text-align:left; padding:8px;">ID</th>
+                        <th style="text-align:left; padding:8px;">Nombre</th>
+                        <th style="text-align:left; padding:8px;">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    if (!empty($roles)) {
-                        foreach ($roles as $id => $nombreRol) {
-                            echo "<tr>";
-                            echo "<td>" . htmlspecialchars($id) . "</td>";
-                            echo "<td>" . htmlspecialchars($nombreRol) . "</td>";
-                            echo "</tr>";
-                        }
-                    } else {
-                        echo '<tr><td colspan="2">No hay roles registrados.</td></tr>';
-                    }
-                    ?>
+                    <?php foreach ($roles as $id => $nombre): ?>
+                        <tr>
+                            <td style="padding:8px;"><?php echo $id; ?></td>
+                            <td style="padding:8px;"><?php echo htmlspecialchars($nombre); ?></td>
+                            <td style="padding:8px;">
+                                <form method="POST" onsubmit="return confirm('¿Seguro que deseas eliminar este rol?');" style="display:inline-block;">
+                                    <input type="hidden" name="idRolEliminar" value="<?php echo $id; ?>">
+                                    <input type="submit" name="eliminar_rol" value="Eliminar Rol" style="background-color: #dc3545; color: white; padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer;">
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
