@@ -1,8 +1,9 @@
 <?php
 session_start();
 
-if (!(isset($_SESSION['rol']) && $_SESSION['rol'] == 2)) {
-    header("Location: ../../index.php");
+if (!in_array("dashboard", $_SESSION['permisos']) or !in_array("dashboard_reportes", $_SESSION['permisos'])) {
+    header("Location: index.php");
+    exit();
 }
 
 require_once("../../conexion.php");

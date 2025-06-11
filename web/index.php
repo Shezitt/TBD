@@ -277,11 +277,9 @@ $datosUsuario = $datosUsuario->fetch_assoc();
                     <h2 class="titulo-botones">MENU</h2>
                     <ul>
 
-                        <?php
-                        if ($_SESSION['rol'] == 2) {
-                            echo '<li><a class="boton-link" href="panelAdministrativo.php">Ingresar a panel administrativo</a></li>';
-                        }
-                        ?>
+                        <?php if (in_array("dashboard", $_SESSION['permisos'])): ?>
+                            <li><a class="boton-link" href="panelAdministrativo.php">Ingresar a panel administrativo</a></li>
+                        <?php endif; ?>
 
                         <li>
                             <a class="boton-link" href="verPuntosReciclaje.php">Ver puntos de reciclaje</a>

@@ -1,5 +1,9 @@
 <?php
 require_once("../conexion.php");
+if (!in_array("dashboard", $_SESSION['permisos']) or !in_array("dashboard_gestion", $_SESSION['permisos'])) {
+    header("Location: index.php");
+    exit();
+}
 $stmt = $conn->prepare("CALL sp_getCanjesPendientes();");
 $stmt->execute();
 $resultado = $stmt->get_result();

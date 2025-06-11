@@ -113,6 +113,25 @@
 </html>
 
 <?php
+
+    function obtenerPermisosPorRol($idRol, $conexion) {
+        $query = "SELECT p.nombrePermiso 
+              FROM Permiso p
+              JOIN rol_has_permiso rp ON p.idPermiso = rp.Permiso_idPermiso
+              WHERE rp.Rol_idRol = ?";
+    
+        $stmt = $conexion->prepare($query);
+        $stmt->bind_param("i", $idRol);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $permisos = [];
+        while ($row = $result->fetch_assoc()) {
+            $permisos[] = $row['nombrePermiso'];
+        }
+        return $permisos;
+    }
+
     if (isset($_POST['iniciarSesion']) && $_POST['iniciarSesion']) {
         $username = $_POST['username'];
         $password = $_POST['password'];
@@ -128,6 +147,8 @@
             $fila = $resultado->fetch_assoc();
             $_SESSION['idUsuario'] = $fila['idUsuario'];
             $_SESSION['rol'] = $fila['idRol'];
+            // Para los permisos
+            $_SESSION['permisos'] = obtenerPermisosPorRol($_SESSION['rol'], $conn);
 
             $stmt = $conn->prepare("SELECT nivel FROM Nivel WHERE idNivel=?;");
             $stmt->bind_param("i", $fila['idNivel']);
@@ -138,6 +159,7 @@
             
             $_SESSION['nivel'] = $fila['nivel'];
             header("Location: index.php");
+            exit();
         } else {
             echo "<script>alert('Credenciales incorrectas');</script>";
         }

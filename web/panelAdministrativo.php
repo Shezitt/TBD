@@ -1,7 +1,8 @@
 <?php
     session_start();
-    if ($_SESSION['rol'] != 2) {
+    if (!in_array("dashboard", $_SESSION['permisos'])) {
         header("Location: index.php");
+        exit();
     }
 ?>
 <!DOCTYPE html>
@@ -138,6 +139,8 @@
             <p><strong>Correo:</strong> carloslafuente12@gmail.com</p>
         </div>
 
+        <?php if (in_array("dashboard_gestion", $_SESSION['permisos'])): ?>
+
         <h2>Gestión</h2>
         <div class="button-grid">
             <a href="admin/materiales.php">Gestionar Materiales</a>
@@ -149,12 +152,20 @@
             <a href="admin/roles.php">Gestionar Roles</a>
         </div>
 
+        <?php endif; ?>
+
+        <?php if (in_array("dashboard_reportes", $_SESSION['permisos'])): ?>
+
         <h2>Reportes e Impacto Ambiental</h2>
         <div class="button-grid">
             <a href="admin/reportes/reporte_usuarios.php">Reporte Usuarios</a>
             <a href="admin/reportes/impacto_ambiental.php">Impacto Ambiental</a>
             <a href="admin/reportes/reporte_canjes.php">Reporte de Canjes</a>
         </div>
+
+        <?php endif; ?>
+
+        <?php if (in_array("dashboard_historial", $_SESSION['permisos'])): ?>
 
         <h2>Historial y Auditoría</h2>
         <div class="button-grid">
@@ -170,6 +181,8 @@
             <a href="admin/auditoria/auditoria_registro_reciclaje.php">Registro Reciclaje</a>
             <a href="admin/auditoria/auditoria_usuario.php">Usuario</a>
         </div>
+
+        <?php endif; ?>
 
         <a href="index.php" class="logout-button">Volver al panel principal</a>
     </div>

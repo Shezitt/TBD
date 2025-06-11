@@ -1,5 +1,9 @@
 <?php
-require_once("../conexion.php");
+require_once("../conexio.php");
+if (!in_array("dashboard", $_SESSION['permisos']) or !in_array("dashboard_gestion", $_SESSION['permisos'])) {
+    header("Location: index.php");
+    exit();
+}
 $stmt = $conn->prepare("CALL sp_getPuntosReciclaje();");
 if ($stmt) {
     $stmt->execute();
