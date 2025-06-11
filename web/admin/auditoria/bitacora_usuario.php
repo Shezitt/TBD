@@ -14,7 +14,6 @@ $reciclajes = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Cuando se envía el formulario de búsqueda por usuario
     if (isset($_POST['buscar_usuario'])) {
         $usuarioBuscado = trim($_POST['usuario']);
 
@@ -41,10 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Cuando se envía el formulario para modificar puntosGanados
+    // Para modificar puntos ganados
     if (isset($_POST['modificar_puntos'])) {
         $idReciclaje = intval($_POST['idReciclaje']);
-        $idAdmin = $_SESSION['idUsuario']; // asumimos que guardas el id del admin en sesión
+        $idAdmin = $_SESSION['idUsuario']; 
         $nuevoPuntos = floatval($_POST['nuevoPuntos']);
         $motivo = trim($_POST['motivo']);
         $usuarioBuscado = trim($_POST['usuarioActual']);
@@ -52,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($motivo === '') {
             $mensaje = "Debes justificar la modificación.";
         } else {
-            // Llamar al procedimiento almacenado
             $stmt = $conn->prepare("CALL ActualizarPuntosGanados(?, ?, ?, ?);");
             $stmt->bind_param("iids", $idReciclaje, $idAdmin, $nuevoPuntos, $motivo);
             if ($stmt->execute()) {
@@ -62,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             $stmt->close();
 
-            // Volver a buscar los reciclajes para mostrar tabla actualizada
+            // para mantener la tabla actualizada
             if ($usuarioBuscado !== '') {
                 $stmt = $conn->prepare("
                     SELECT r.idRegistro, r.fecha, r.puntosGanados, u.username, m.nombre AS nombreMaterial, r.cantidad, p.nombre AS nombrePunto
@@ -316,7 +314,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <tr>
                     <th>ID Registro</th>
                     <th>Nombre Admin</th>
-                    <th>Modifcación</th>
+                    <th>Modificación</th>
                     <th>Motivo</th>
                     <th>Fecha Modificación</th>
                 </tr>
