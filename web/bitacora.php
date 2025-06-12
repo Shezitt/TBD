@@ -4,9 +4,12 @@ require_once("conexion.php");
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
   <title>Bitácora personal</title>
   <style>
     body {
@@ -22,7 +25,7 @@ require_once("conexion.php");
       padding: 30px;
       background: #ffffff;
       border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.08);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
     }
 
     .header {
@@ -47,15 +50,20 @@ require_once("conexion.php");
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 30px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.05);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
     }
 
     thead th {
-      background-color: #27ae60;
-      color: white;
-      padding: 12px;
-      text-align: left;
+      background-color: #90EE90;
+      color: #012030;
+      padding: 14px 20px;
+      margin: 6px 0;
+      text-decoration: none;
+      font-weight: bold;
+      text-align: center;
       font-size: 16px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+
     }
 
     tbody td {
@@ -75,7 +83,7 @@ require_once("conexion.php");
     }
 
     .btn {
-      background-color: #27ae60;
+      background-color: #2c3e50;
       color: white;
       padding: 12px 28px;
       text-decoration: none;
@@ -84,14 +92,16 @@ require_once("conexion.php");
       cursor: pointer;
       font-size: 16px;
       border-radius: 8px;
+      margin-top: 20px;
       transition: background 0.3s;
     }
 
     .btn:hover {
-      background-color: #219150;
+      background-color: #1a252f;
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <div class="header">
@@ -99,7 +109,7 @@ require_once("conexion.php");
     </div>
 
     <div class="cuerpo">
-        <h2>Historial de reciclaje</h2>
+      <h2>Historial de reciclaje</h2>
       <table>
         <thead>
           <tr>
@@ -176,4 +186,5 @@ require_once("conexion.php");
     </div>
   </div>
 </body>
+
 </html>

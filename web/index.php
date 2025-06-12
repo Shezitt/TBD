@@ -134,7 +134,7 @@ $datosUsuario = $datosUsuario->fetch_assoc();
 
         .boton-link {
             display: block;
-            background-color: #90EE90;
+            background-color:rgba(144, 238, 144, 0.87);
             color: #012030;
             padding: 14px 20px;
             margin: 6px 0;
