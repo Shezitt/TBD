@@ -4,10 +4,11 @@ require_once("conexion.php");
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
   <title>Bitácora personal</title>
   <style>
@@ -24,29 +25,19 @@ require_once("conexion.php");
       padding: 30px;
       background: #ffffff;
       border-radius: 12px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.08);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.08);
     }
 
     .header {
-            display: flex;
-            align-items: center;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 25px;
-        }
+      text-align: center;
+      margin-bottom: 30px;
+    }
 
-        .header .icon {
-            font-size: 30px;
-            color: #4CAF50;
-            margin-right: 15px;
-        }
-
-        .header h1 {
-            font-size: 28px;
-            color: #333;
-            margin: 0;
-            flex-grow: 1;
-        }
+    .header h1 {
+      font-size: 32px;
+      color: #2c3e50;
+      margin: 0;
+    }
 
     .cuerpo h2 {
       font-size: 24px;
@@ -59,7 +50,7 @@ require_once("conexion.php");
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 30px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.05);
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
     }
 
     thead th {
@@ -72,9 +63,9 @@ require_once("conexion.php");
       text-align: center;
       font-size: 16px;
       transition: background-color 0.3s ease, transform 0.2s ease;
-      
+
     }
-  
+
     tbody td {
       background-color: #ecf0f1;
       padding: 12px;
@@ -110,15 +101,15 @@ require_once("conexion.php");
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <div class="header">
-      <i class="fas fa-recycle icon"></i> 
       <h1>BITÁCORA PERSONAL</h1>
     </div>
 
     <div class="cuerpo">
-        <h2>Historial de reciclaje</h2>
+      <h2>Historial de reciclaje</h2>
       <table>
         <thead>
           <tr>
@@ -195,4 +186,5 @@ require_once("conexion.php");
     </div>
   </div>
 </body>
+
 </html>
