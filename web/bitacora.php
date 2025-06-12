@@ -7,6 +7,8 @@ require_once("conexion.php");
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
   <title>Bitácora personal</title>
   <style>
     body {
@@ -26,15 +28,25 @@ require_once("conexion.php");
     }
 
     .header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
+            display: flex;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 25px;
+        }
 
-    .header h1 {
-      font-size: 32px;
-      color: #2c3e50;
-      margin: 0;
-    }
+        .header .icon {
+            font-size: 30px;
+            color: #4CAF50;
+            margin-right: 15px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #333;
+            margin: 0;
+            flex-grow: 1;
+        }
 
     .cuerpo h2 {
       font-size: 24px;
@@ -51,13 +63,18 @@ require_once("conexion.php");
     }
 
     thead th {
-      background-color: #27ae60;
-      color: white;
-      padding: 12px;
-      text-align: left;
+      background-color: #90EE90;
+      color: #012030;
+      padding: 14px 20px;
+      margin: 6px 0;
+      text-decoration: none;
+      font-weight: bold;
+      text-align: center;
       font-size: 16px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      
     }
-
+  
     tbody td {
       background-color: #ecf0f1;
       padding: 12px;
@@ -75,7 +92,7 @@ require_once("conexion.php");
     }
 
     .btn {
-      background-color: #27ae60;
+      background-color: #2c3e50;
       color: white;
       padding: 12px 28px;
       text-decoration: none;
@@ -84,17 +101,19 @@ require_once("conexion.php");
       cursor: pointer;
       font-size: 16px;
       border-radius: 8px;
+      margin-top: 20px;
       transition: background 0.3s;
     }
 
     .btn:hover {
-      background-color: #219150;
+      background-color: #1a252f;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
+      <i class="fas fa-recycle icon"></i> 
       <h1>BITÁCORA PERSONAL</h1>
     </div>
 
