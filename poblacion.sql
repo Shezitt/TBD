@@ -9,6 +9,18 @@ VALUES ('usuario');
 INSERT INTO Rol (nombreRol)
 VALUES ('administrador');
 
+-- Permisos
+
+INSERT INTO Permiso (nombrePermiso) VALUES ("dashboard");
+INSERT INTO Permiso (nombrePermiso) VALUES ("dashboard_gestion");
+INSERT INTO Permiso (nombrePermiso) VALUES ("dashboard_reportes");
+INSERT INTO Permiso (nombrePermiso) VALUES ("dashboard_historial");
+
+INSERT INTO rol_has_permiso VALUES (2, 1);
+INSERT INTO rol_has_permiso VALUES (2, 2);
+INSERT INTO rol_has_permiso VALUES (2, 3);
+INSERT INTO rol_has_permiso VALUES (2, 4);
+
 
 -- Usuario
 
