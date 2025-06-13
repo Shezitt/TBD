@@ -70,6 +70,24 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
+-- Table `reciclaje`.`Log_Acceso`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `reciclaje`.`Log_Acceso` (
+  `idLogAcceso` INT(11) NOT NULL AUTO_INCREMENT,
+  `idUsuario` INT(11) NOT NULL,
+  `fechaHora` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idLogAcceso`),
+  INDEX `fk_Log_Acceso_Usuario_idx` (`idUsuario` ASC),
+  INDEX `idx_fecha_hora` (`fechaHora` ASC),
+  INDEX `idx_usuario_fecha` (`idUsuario` ASC, `fechaHora` ASC),
+  CONSTRAINT `fk_Log_Acceso_Usuario`
+    FOREIGN KEY (`idUsuario`)
+    REFERENCES `reciclaje`.`Usuario` (`idUsuario`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;    
+
+-- -----------------------------------------------------
 -- Table `reciclaje`.`Punto_Reciclaje`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `reciclaje`.`Punto_Reciclaje` (
