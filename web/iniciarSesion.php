@@ -19,9 +19,36 @@
             margin: 0;
         }
 
+         .main-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #ffffff;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 12px;
+        overflow: hidden;
+        max-width: 900px;
+        width: 90%;
+    }
+
+    .image-box {
+        flex: 1;
+        background-color: #e8f6f6;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 30px;
+    }
+
+    .image-box img {
+        max-width: 160%;
+        max-height: 420px;
+        border-radius: 10px;
+    }
+
         .container {
-            width: 90%;
-            max-width: 400px;
+            flex: 1;
+            padding: 40px 30px;
             text-align: center;
         }
 
@@ -85,19 +112,24 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>INICIAR SESIÓN</h1>
-        <form method="POST" action="">
-            <div class="input-group">
-                <input type="text" name="username" placeholder="Nombre de usuario" required>
-            </div>
-            <div class="input-group">
-                <input type="password" name="password" id="password" placeholder="Contraseña" required>
-                <img src="https://cdn-icons-png.flaticon.com/512/709/709612.png" id="togglePassword" alt="Ver contraseña">
-            </div>
-            <input type="submit" name="iniciarSesion" value="INICIAR SESIÓN">
-            <a href="registrarse.php">¿No tienes cuenta?</a>
-        </form>
+    <div class="main-content">
+        <div class="image-box">
+            <img src="images/image 7.png" alt="Imagen de inicio de sesión">
+        </div>
+        <div class="container">
+          <h1>INICIAR SESIÓN</h1>
+          <form method="POST" action="">
+                <div class="input-group">
+                    <input type="text" name="username" placeholder="Nombre de usuario" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" name="password" id="password" placeholder="Contraseña" required>
+                    <img src="https://cdn-icons-png.flaticon.com/512/709/709612.png" id="togglePassword" alt="Ver contraseña">
+                </div>
+                <input type="submit" name="iniciarSesion" value="INICIAR SESIÓN">
+                <a href="registrarse.php">¿No tienes cuenta?</a>
+            </form>
+        </div>
     </div>
 
     <script>

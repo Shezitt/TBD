@@ -165,6 +165,14 @@ if (isset($_POST['generar_reporte'])) {
             color: red;
             margin-bottom: 15px;
         }
+
+        canvas {
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  padding: 10px;
+}
+
     </style>
 </head>
 
@@ -244,7 +252,28 @@ if (isset($_POST['generar_reporte'])) {
                         </tr>
                     </tbody>
                 </table>
+                <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+  <div style="flex: 1 1 45%; max-width: 45%; min-height: 300px;">
+    <canvas id="graficoReciclado"></canvas>
+  </div>
+  <div style="flex: 1 1 45%; max-width: 45%; min-height: 300px;">
+    <canvas id="graficoPuntos"></canvas>
+  </div>
+  <!-- Aumenta la altura solo de los gráficos CO2 y Anillo -->
+<div style="flex: 1 1 45%; max-width: 45%; min-height: 400px;">
+  <canvas id="graficoCO2" height="400"></canvas>
+</div>
+<div style="flex: 1 1 45%; max-width: 45%; min-height: 400px;">
+  <canvas id="graficoAnillo" height="400"></canvas>
+</div>
+
+</div>
+
+
             </div>
+
+
+
         <?php elseif (isset($_POST['generar_reporte'])): ?>
             <p>No se encontraron registros para ese rango de fechas.</p>
         <?php endif; ?>
@@ -253,6 +282,245 @@ if (isset($_POST['generar_reporte'])) {
             <a href="../../panelAdministrativo.php" class="back-button">Anterior</a>
         </div>
     </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const filas = document.querySelectorAll("tbody tr");
+  const materiales = [];
+  const reciclado = [];
+  const puntos = [];
+  const co2 = [];
+  const totalAgua = <?php echo $suma_agua; ?>;
+  const totalEnergia = <?php echo $suma_energia; ?>;
+
+  filas.forEach((fila, i) => {
+    if (i < filas.length - 1) {
+      const celdas = fila.querySelectorAll("td");
+      materiales.push(celdas[1].innerText);
+      reciclado.push(parseFloat(celdas[2].innerText));
+      puntos.push(parseFloat(celdas[3].innerText));
+      co2.push(parseFloat(celdas[4].innerText));
+    }
+  });
+
+  // 🎨 Colores personalizados por gráfico
+  const coloresAzules = ['#bbdefb', '#90caf9', '#64b5f6', '#42a5f5', '#2196f3', '#1e88e5'];
+  const coloresLilas = ['#f44336', '#4caf50', '#2196f3', '#ff9800', '#9c27b0', '#00bcd4'];
+  const coloresUnicos = ['#f44336', '#4caf50', '#2196f3', '#ff9800', '#9c27b0', '#00bcd4'];
+const coloresGalaxia = ['#3f51b5', '#673ab7', '#9c27b0', '#1a237e', '#311b92', '#4a148c']; // agua
+const coloresFuego = ['#ff9800', '#f44336', '#ff5722', '#ffc107', '#ff6f00', '#e65100']; // energía
+const coloresAgua = [
+  '#e0f7fa', // azul muy claro
+  '#b2ebf2',
+  '#80deea',
+  '#4dd0e1',
+  '#26c6da',
+  '#00bcd4',
+  '#00acc1',
+  '#0097a7',
+  '#00838f',
+  '#006064'  // azul más intenso
+];
+
+  const opcionesComunes = {
+    responsive: true,
+    maintainAspectRatio: false,
+    layout: { padding: 20 },
+    plugins: {
+      legend: {
+        labels: { color: '#444', font: { size: 14 } }
+      },
+      tooltip: {
+        backgroundColor: '#f9f9f9',
+        titleColor: '#333',
+        bodyColor: '#666',
+        borderColor: '#ccc',
+        borderWidth: 1
+      },
+      title: {
+        display: true,
+        font: { size: 18, weight: 'bold' },
+        color: '#154360',
+        padding: { top: 10, bottom: 20 }
+      }
+    }
+  };
+
+  // 📊 Gráfico de barras - Reciclado
+  new Chart(document.getElementById("graficoReciclado"), {
+    type: 'bar',
+    data: {
+      labels: materiales,
+      datasets: [{
+        label: 'Kg Reciclados',
+        data: reciclado,
+        backgroundColor: coloresAzules.slice(0, materiales.length),
+        borderRadius: 8
+      }]
+    },
+    options: {
+      ...opcionesComunes,
+      plugins: {
+        ...opcionesComunes.plugins,
+        title: {
+          ...opcionesComunes.plugins.title,
+          text: '♻️ Materiales Reciclados (kg)'
+        }
+      }
+    }
+  });
+
+  // 🌱 Gráfico de línea - CO₂
+  new Chart(document.getElementById("graficoCO2"), {
+    type: 'line',
+    data: {
+      labels: materiales,
+      datasets: [{
+        label: 'CO₂ Reducido (kg)',
+        data: co2,
+        borderColor: '#8e24aa',
+        backgroundColor: 'rgba(158, 39, 176, 0.2)',
+        tension: 0.4,
+        fill: true,
+        pointBackgroundColor: coloresLilas.slice(0, materiales.length),
+        pointRadius: 6
+      }]
+    },
+    options: {
+    ...opcionesComunes,
+    plugins: {
+      ...opcionesComunes.plugins,
+      title: {
+        ...opcionesComunes.plugins.title,
+        text: '🌿 CO₂ Reducido por Material'
+      },
+      legend: {
+        display: true,
+        position: 'bottom',
+        labels: {
+          generateLabels: function (chart) {
+            return chart.data.labels.map((material, i) => ({
+              text: material,
+              fillStyle: coloresLilas[i % coloresLilas.length],
+              strokeStyle: '#fff',
+              lineWidth: 2,
+              index: i
+            }));
+          },
+          color: '#333',
+          font: { size: 13 }
+        }
+      }
+    }
+  }
+});
+
+  // 🏆 Gráfico de pastel - Puntos
+  new Chart(document.getElementById("graficoPuntos"), {
+    type: 'pie',
+    data: {
+      labels: materiales,
+      datasets: [{
+        label: 'Puntos',
+        data: puntos,
+        backgroundColor: coloresUnicos.slice(0, materiales.length),
+        borderColor: '#fff',
+        borderWidth: 2
+      }]
+    },
+    options: {
+      ...opcionesComunes,
+      plugins: {
+        ...opcionesComunes.plugins,
+        title: {
+          ...opcionesComunes.plugins.title,
+          text: '🏆 Distribución de Puntos por Material'
+        }
+      }
+    }
+  });
+
+  // 🌀 Gráfico combinado - Agua y Energía Ahorrada por Material
+const aguaPorMaterial = [];
+const energiaPorMaterial = [];
+
+filas.forEach((fila, i) => {
+  if (i < filas.length - 1) {
+    const celdas = fila.querySelectorAll("td");
+    aguaPorMaterial.push(parseFloat(celdas[5].innerText));
+    energiaPorMaterial.push(parseFloat(celdas[6].innerText));
+  }
+});
+
+// 🎨 Nuevos colores y duplicación de etiquetas para leyenda personalizada
+const etiquetasPersonalizadas = materiales.map(m => `💧 Agua - ${m}`).concat(materiales.map(m => `⚡ Energía - ${m}`));
+
+new Chart(document.getElementById("graficoAnillo"), {
+  type: 'doughnut',
+  data: {
+    labels: etiquetasPersonalizadas,
+    datasets: [
+      {
+        label: 'Agua Ahorrada',
+        data: aguaPorMaterial.concat(Array(materiales.length).fill(0)),
+        backgroundColor: coloresAgua.slice(0, materiales.length).concat(Array(materiales.length).fill('transparent')),
+        borderWidth: 1
+      },
+      {
+        label: 'Energía Ahorrada',
+        data: Array(materiales.length).fill(0).concat(energiaPorMaterial),
+        backgroundColor: Array(materiales.length).fill('transparent').concat(coloresFuego.slice(0, materiales.length)),
+        borderWidth: 1
+      }
+    ]
+  },
+  options: {
+    ...opcionesComunes,
+    cutout: '60%',
+    rotation: -90,
+    circumference: 180,
+    plugins: {
+      ...opcionesComunes.plugins,
+      title: {
+        ...opcionesComunes.plugins.title,
+        text: '🌊💡  Agua  | Energía Reducido por Material'
+      },
+      legend: {
+  display: true,
+  position: 'bottom',
+  labels: {
+    generateLabels: function (chart) {
+      const datasets = chart.data.datasets;
+      const labels = chart.data.labels;
+      return labels.map((label, i) => {
+        const datasetIndex = i < materiales.length ? 0 : 1;
+        const color = datasets[datasetIndex].backgroundColor[i];
+        return {
+          text: label,
+          fillStyle: color,
+          strokeStyle: '#fff',
+          lineWidth: 2,
+          hidden: false,
+          index: i
+        };
+      });
+    },
+    color: '#333',
+    font: { size: 11 } // <-- más pequeño que el original (13)
+  }
+}
+    }
+  }
+});
+
+
+
+});
+</script>
+
+
 </body>
 
 </html>
