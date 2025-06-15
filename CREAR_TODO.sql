@@ -1658,7 +1658,10 @@ DELIMITER ;
 -- REPORTE CANJES
 
 DELIMITER $$
-CREATE PROCEDURE IF NOT EXISTS sp_reporteCanjes()
+CREATE PROCEDURE sp_reporteCanjes(
+    IN p_fecha_inicio DATE,
+    IN p_fecha_fin DATE
+)
 BEGIN
     SELECT 
         Recompensa.nombre AS recompensa,
@@ -1668,6 +1671,8 @@ BEGIN
         Canje
     JOIN 
         Recompensa ON Canje.idRecompensa = Recompensa.idRecompensa
+    WHERE
+        Canje.fecha BETWEEN p_fecha_inicio AND p_fecha_fin
     GROUP BY 
         Recompensa.idRecompensa
     ORDER BY 
