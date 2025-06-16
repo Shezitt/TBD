@@ -148,6 +148,13 @@
             $_SESSION['idUsuario'] = $fila['idUsuario'];
             $_SESSION['rol'] = $fila['idRol'];
 
+
+            $stmt = $conn->prepare("INSERT INTO Log_Acceso (idUsuario) VALUES (?);");
+            $stmt->bind_param("i", $_SESSION['idUsuario']);
+            $stmt->execute();
+            $stmt->close();  
+
+            
             $_SESSION['permisos'] = obtenerPermisosPorRol($_SESSION['rol'], $conn);
 
             $stmt = $conn->prepare("SELECT nivel FROM Nivel WHERE idNivel=?;");
