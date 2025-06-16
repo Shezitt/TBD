@@ -164,6 +164,15 @@ if (isset($_POST['generar_reporte'])) {
             color: red;
             margin-bottom: 15px;
         }
+        canvas {
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+
+
     </style>
 </head>
 
@@ -192,7 +201,7 @@ if (isset($_POST['generar_reporte'])) {
 
         <?php if ($reporte_resultado && $reporte_resultado->num_rows > 0): ?>
             <div class="table-container">
-                <table>
+                <table id="tablaCanjes">
                     <thead>
                         <tr>
                             <th>Nº</th>
@@ -226,15 +235,147 @@ if (isset($_POST['generar_reporte'])) {
                         </tr>
                     </tbody>
                 </table>
+
+
             </div>
+
+
+<!-- 📊 Contenedor de gráficos -->
+<div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; margin-top: 30px;">
+  <div style="flex: 1 1 45%; min-height: 300px;">
+    <canvas id="graficoBarras"></canvas>
+  </div>
+  <div style="flex: 1 1 45%; min-height: 300px;">
+    <canvas id="graficoLinea"></canvas>
+  </div>
+  <div style="flex: 1 1 45%; min-height: 300px;">
+    <canvas id="graficoPastel"></canvas>
+  </div>
+</div>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+  console.log(document.querySelectorAll("#tablaCanjes tbody tr"));
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const filas = document.querySelectorAll("#tablaCanjes tbody tr");
+    const recompensas = [];
+    const totalCanjes = [];
+    const completados = [];
+
+    filas.forEach((fila, i) => {
+if (fila.querySelectorAll("td").length >= 4) {
+        const celdas = fila.querySelectorAll("td");
+        recompensas.push(celdas[1].innerText);
+        totalCanjes.push(parseInt(celdas[2].innerText));
+        completados.push(parseInt(celdas[3].innerText));
+      }
+    });
+
+
+    console.log("Recompensas:", recompensas);
+    console.log("Total Canjes:", totalCanjes);
+    console.log("Completados:", completados);
+
+    const colores = ['#42a5f5', '#66bb6a', '#ff7043', '#ab47bc', '#ffa726', '#26c6da'];
+
+    const opciones = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { font: { size: 14 }, color: '#444' } },
+        title: {
+          display: true,
+          font: { size: 18, weight: 'bold' },
+          color: '#1b4f72'
+        }
+      }
+    };
+
+    new Chart(document.getElementById("graficoBarras"), {
+      type: 'bar',
+      data: {
+        labels: recompensas,
+        datasets: [{
+          label: 'Total Canjes',
+          data: totalCanjes,
+          backgroundColor: colores,
+          borderRadius: 6
+        }]
+      },
+      options: {
+        ...opciones,
+        plugins: {
+          ...opciones.plugins,
+          title: { ...opciones.plugins.title, text: '🎁 Total de Canjes por Recompensa' }
+        }
+      }
+    });
+
+    new Chart(document.getElementById("graficoLinea"), {
+      type: 'line',
+      data: {
+        labels: recompensas,
+        datasets: [{
+          label: 'Canjes Completados',
+          data: completados,
+          borderColor: '#8e24aa',
+          backgroundColor: 'rgba(158, 39, 176, 0.2)',
+          fill: true,
+          tension: 0.3,
+          pointBackgroundColor: colores,
+          pointRadius: 6
+        }]
+      },
+      options: {
+        ...opciones,
+        plugins: {
+          ...opciones.plugins,
+          title: { ...opciones.plugins.title, text: '✅ Canjes Completados por Recompensa' }
+        }
+      }
+    });
+
+    new Chart(document.getElementById("graficoPastel"), {
+      type: 'pie',
+      data: {
+        labels: recompensas,
+        datasets: [{
+          label: 'Distribución de Canjes',
+          data: totalCanjes,
+          backgroundColor: colores,
+          borderColor: '#fff',
+          borderWidth: 2
+        }]
+      },
+      options: {
+        ...opciones,
+        plugins: {
+          ...opciones.plugins,
+          title: { ...opciones.plugins.title, text: '📊 Distribución de Canjes (%)' }
+        }
+      }
+    });
+  });
+</script>
+
+
+
+
         <?php elseif (isset($_POST['generar_reporte'])): ?>
             <p>No se encontraron registros para ese rango de fechas.</p>
         <?php endif; ?>
-
         <div class="back-button-container">
             <a href="../../panelAdministrativo.php" class="back-button">Anterior</a>
         </div>
+
+
+        
     </div>
+
 </body>
 
 </html>
