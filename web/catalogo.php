@@ -6,6 +6,15 @@
   $stmt->execute();
   $catalogos = $stmt->get_result();
   $stmt->close();
+  $idUsuario = $_SESSION['idUsuario'];
+  $stmt = $conn->prepare("CALL sp_getDatosUsuario(?)");
+  $stmt->bind_param("i", $idUsuario);
+  $stmt->execute();
+  $resUsuario = $stmt->get_result()->fetch_assoc();
+  $stmt->close();
+
+  $puntos = $resUsuario['puntos'];
+  $nivel = $_SESSION['nivel']; 
 
 ?>
 <!DOCTYPE html>
@@ -116,6 +125,9 @@
         ?>
       </select>
       <input type="submit" value="Seleccionar catálogo" />
+      <div style="margin-top: 10px; font-weight: bold;">
+      Puntos: <?php echo $puntos; ?> &nbsp;&nbsp; | &nbsp;&nbsp; Nivel: <?php echo $nivel; ?>
+  </div>
     </form>
 
     <div class="cuerpo">
