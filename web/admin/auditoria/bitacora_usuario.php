@@ -92,7 +92,7 @@ $stmt->close();
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Gestionar Puntos Ganados - Reciclajes</title>
+    <title>Bitácora de Usuario</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -236,7 +236,7 @@ $stmt->close();
 <body>
     <div class="container">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h1>Gestionar Puntos Ganados - Reciclajes</h1>
+            <h1>Bitácora de Usuario</h1>
             <a href="../../panelAdministrativo.php" style="
                 background-color: #6c757d;
                 color: white;
@@ -255,7 +255,7 @@ $stmt->close();
         <?php endif; ?>
 
         <form method="POST" action="">
-            <label for="usuario">Buscar reciclajes por nombre de usuario:</label>
+            <label for="usuario">Buscar bitácora por nombre de usuario:</label>
             <input type="text" id="usuario" name="usuario" value="<?= htmlspecialchars($usuarioBuscado) ?>" placeholder="Nombre de usuario" required />
             <input type="submit" name="buscar_usuario" value="Buscar" />
         </form>
