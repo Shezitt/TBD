@@ -58,6 +58,11 @@ VALUES ('Tupuraya', -17.373699, -66.142277, '08:00:00', '22:00:00');
 INSERT INTO Punto_Reciclaje (nombre, latitud, longitud, apertura, cierre) 
 VALUES ('Cala Cala', -17.373699, -66.168236, '08:00:00', '22:00:00');
 
+INSERT INTO Punto_Reciclaje (nombre, latitud, longitud, apertura, cierre) 
+VALUES ('Plaza Sucre', -17.392338, -66.147629, '08:00:00', '22:00:00');
+
+INSERT INTO Punto_Reciclaje (nombre, latitud, longitud, apertura, cierre) 
+VALUES ('Plaza 14 de Septiembre', -17.394230, -66.156777, '08:00:00', '23:30:00');
 
 -- Punto_Reciclaje_Materiales
 
