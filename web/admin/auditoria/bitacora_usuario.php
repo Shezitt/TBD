@@ -14,6 +14,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $usuarioBuscado = trim($_POST['usuario']);
 
         if ($usuarioBuscado !== '') {
+
+            $stmt = $conn->prepare("SELECT idUsuario FROM Usuario WHERE username = ?");
+$stmt->bind_param("s", $usuarioBuscado);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+$idUsuarioBuscado = $row ? $row['idUsuario'] : null;
+$stmt->close();
+
             $stmt = $conn->prepare("
                 SELECT r.idRegistro, r.fecha, r.puntosGanados, u.username, m.nombre AS nombreMaterial, r.cantidad, p.nombre AS nombrePunto
                 FROM Registro_Reciclaje r
@@ -316,6 +325,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $sql->bind_param('s', $usuarioBuscado);  
                     $sql->execute();
                     $result = $sql->get_result();
+                    $sql->close();
+$conn->next_result(); // Muy importante para liberar el resultado pendiente del CALL
+
                     if ($result && $result->num_rows > 0) {
                         while ($rec = $result->fetch_assoc()) {
                             $idr = $rec['idReciclaje'];
@@ -339,6 +351,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </tbody>
         </table>
         <?php endif; ?>
+
+        <?php if (isset($idUsuarioBuscado) && $idUsuarioBuscado): ?>
+    <h2 style="color: #4caf50; margin-top: 40px;">Historial de Accesos del Usuario</h2>
+    <table class="tabla-accesos">
+        <thead>
+            <tr>
+                <th>ID Log</th>
+                <th>Usuario</th>
+                <th>Fecha y Hora de Acceso</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+                $stmt = $conn->prepare("
+                    SELECT l.idLogAcceso, u.username, l.fechaHora
+                    FROM Log_Acceso l
+                    JOIN Usuario u ON l.idUsuario = u.idUsuario
+                    WHERE l.idUsuario = ?
+                    ORDER BY l.fechaHora DESC
+                ");
+                $stmt->bind_param("i", $idUsuarioBuscado);
+                $stmt->execute();
+                $resultadoLogs = $stmt->get_result();
+
+                if ($resultadoLogs->num_rows > 0) {
+                    while ($log = $resultadoLogs->fetch_assoc()) {
+                        echo "<tr>";
+                        echo "<td>" . $log['idLogAcceso'] . "</td>";
+                        echo "<td>" . htmlspecialchars($log['username']) . "</td>";
+                        echo "<td>" . $log['fechaHora'] . "</td>";
+                        echo "</tr>";
+                    }
+                } else {
+                    echo '<tr><td colspan="3" style="text-align:center; color:#999;">No hay accesos registrados para este usuario.</td></tr>';
+                }
+
+                $stmt->close();
+            ?>
+        </tbody>
+    </table>
+<?php endif; ?>
 
     </div>
 </body>
