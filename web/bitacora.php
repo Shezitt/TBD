@@ -166,6 +166,8 @@ require_once("conexion.php");
           $stmt->bind_param("i", $_SESSION["idUsuario"]);
           $stmt->execute();
           $resultado = $stmt->get_result();
+          $stmt->close();
+
 
           while ($fila = $resultado->fetch_assoc()) {
             echo "<tr>";
@@ -179,6 +181,37 @@ require_once("conexion.php");
           ?>
         </tbody>
       </table>
+<h2>Historial de accesos</h2>
+<table>
+  <thead>
+    <tr>
+      <th>ID de Acceso</th>
+      <th>Fecha y Hora</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php
+    $sql = "SELECT idLogAcceso, fechaHora FROM Log_Acceso WHERE idUsuario = ? ORDER BY fechaHora DESC";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $_SESSION["idUsuario"]);
+    $stmt->execute();
+    $resultado = $stmt->get_result();
+    $stmt->close();
+
+    if ($resultado->num_rows > 0) {
+      while ($fila = $resultado->fetch_assoc()) {
+        echo "<tr>";
+        echo "<td>" . $fila['idLogAcceso'] . "</td>";
+        echo "<td>" . $fila['fechaHora'] . "</td>";
+        echo "</tr>";
+      }
+    } else {
+      echo '<tr><td colspan="2" style="text-align:center; color:#999;">Sin accesos registrados.</td></tr>';
+    }
+    ?>
+  </tbody>
+</table>
+
     </div>
 
     <div class="button-container">
