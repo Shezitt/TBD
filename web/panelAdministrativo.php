@@ -169,7 +169,7 @@
         <h2>Historial y Auditoría</h2>
         <div class="button-grid">
             <a href="admin/auditoria/historial_reciclaje.php">Historial Reciclaje</a>
-            <a href="admin/auditoria/bitacora_usuario.php">Bitácora Usuario - Reciclaje</a>
+            <a href="admin/auditoria/bitacora_usuario.php">Bitácora de Usuario</a>
             <a href="admin/auditoria/auditoria_canje.php">Canje</a>
             <a href="admin/auditoria/auditoria_catalogo.php">Catálogo</a>
             <a href="admin/auditoria/auditoria_material.php">Material</a>
