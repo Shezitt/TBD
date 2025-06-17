@@ -77,7 +77,9 @@
             flex: 1 1 400px;
         }
         #map {
-            width: 100%;
+            weight: 100%;
+            max-width: 500px;
+            margin: auto;
             height: 400px;
             border-radius: 10px;
         }
