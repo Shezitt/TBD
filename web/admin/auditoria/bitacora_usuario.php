@@ -16,12 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($usuarioBuscado !== '') {
 
             $stmt = $conn->prepare("SELECT idUsuario FROM Usuario WHERE username = ?");
-$stmt->bind_param("s", $usuarioBuscado);
-$stmt->execute();
-$result = $stmt->get_result();
-$row = $result->fetch_assoc();
-$idUsuarioBuscado = $row ? $row['idUsuario'] : null;
-$stmt->close();
+            $stmt->bind_param("s", $usuarioBuscado);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            $idUsuarioBuscado = $row ? $row['idUsuario'] : null;
+            $stmt->close();
 
             $stmt = $conn->prepare("
                 SELECT r.idRegistro, r.fecha, r.puntosGanados, u.username, m.nombre AS nombreMaterial, r.cantidad, p.nombre AS nombrePunto
