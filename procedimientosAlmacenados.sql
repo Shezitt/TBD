@@ -180,7 +180,8 @@ CREATE PROCEDURE IF NOT EXISTS sp_registrarReciclaje (
     OUT p_puntos_ganados DECIMAL(10,2),
     OUT p_impacto_co2 DECIMAL (10,2),
     OUT p_impacto_agua DECIMAL (10,2),
-    OUT p_impacto_energia DECIMAL (10,2)
+    OUT p_impacto_energia DECIMAL (10,2),
+    OUT p_nivel_nuevo INT
 )
 BEGIN
 	DECLARE v_coef_puntos DECIMAL(10,2);
@@ -222,6 +223,13 @@ BEGIN
 	
 	INSERT INTO Registro_Reciclaje(idUsuario, idMaterial, idPunto, cantidad, fecha, puntosGanados, impactoCO2, impactoAgua, impactoEnergia)
     VALUES (p_usuario_id, p_material_id, p_punto_reciclaje_id, p_cantidad_kg, NOW(), p_puntos_ganados, v_impacto_co2, v_impacto_agua, v_impacto_energia); 
+
+    SET p_nivel_nuevo = (
+        SELECT idNivel
+        FROM Nivel
+        WHERE puntosTotalesNecesarios <= (SELECT puntosTotal FROM Usuario WHERE idUsuario = p_usuario_id)
+        ORDER BY nivel DESC LIMIT 1
+    );
     
 END;
 $$
