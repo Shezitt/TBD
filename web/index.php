@@ -302,8 +302,7 @@ $datosUsuario = $datosUsuario->fetch_assoc();
                 <h2>Promociones</h2>
                 <?php
 
-                $stmt = $conn->prepare('CALL sp_getPromocionesUsuario(?);');
-                $stmt->bind_param("i", $idUsuario);
+                $stmt = $conn->prepare('SELECT * FROM Promocion;');
                 $stmt->execute();
                 $resultado = $stmt->get_result();
                 $stmt->close();
