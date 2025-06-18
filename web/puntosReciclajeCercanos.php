@@ -240,6 +240,22 @@
                 .bindPopup("<b>" + punto.nombre + "</b><br>Apertura: " + punto.apertura + "<br>Cierre: " + punto.cierre);
         });
     <?php endif; ?>
+
+    var latInput = document.querySelector('input[name="latitud"]');
+    var lngInput = document.querySelector('input[name="longitud"]');
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            latInput.value = position.coords.latitude.toFixed(6);
+            lngInput.value = position.coords.longitude.toFixed(6);
+        }, function(error) {
+            console.warn("Geolocation error:", error.message);
+        });
+    } else {
+        alert("Geolocation is not supported by your browser.");
+    }
+
+
     </script>
 
 </body>
