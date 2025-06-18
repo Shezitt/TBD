@@ -279,26 +279,11 @@ SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 -- MATERIAL
-SELECT * FROM Material;
 
 ALTER TABLE Material ADD COLUMN coeficienteAgua DECIMAL(10,2) AFTER coeficienteCO2;
 ALTER TABLE Material ADD COLUMN coeficienteEnergia DECIMAL(10,2) AFTER coeficienteAgua;
 
-UPDATE Material SET coeficienteAgua = 2500 WHERE idMaterial=1;
-UPDATE Material SET coeficienteAgua = 25 WHERE idMaterial=2;
-UPDATE Material SET coeficienteAgua = 5 WHERE idMaterial=3;
-UPDATE Material SET coeficienteAgua = 5 WHERE idMaterial=4;
-UPDATE Material SET coeficienteAgua = 50 WHERE idMaterial=5;
-
-UPDATE Material SET coeficienteEnergia = 2.0 WHERE idMaterial=1;
-UPDATE Material SET coeficienteEnergia = 6.0 WHERE idMaterial=2;
-UPDATE Material SET coeficienteEnergia = 0.4 WHERE idMaterial=3;
-UPDATE Material SET coeficienteEnergia = 1.3 WHERE idMaterial=4;
-UPDATE Material SET coeficienteEnergia = 0.2 WHERE idMaterial=5;
-
-
 -- REGISTRO RECICLAJE
-SELECT * FROM Registro_Reciclaje;
 
 ALTER TABLE Registro_Reciclaje ADD COLUMN impactoAgua DECIMAL(10,2) AFTER impactoCO2;
 ALTER TABLE Registro_Reciclaje ADD COLUMN impactoEnergia DECIMAL(10,2) AFTER impactoAgua;
@@ -1899,3 +1884,17 @@ VALUES ('2x1 bebidas', 50.0, 1, 3);
 
 INSERT INTO Promocion (nombre, multiplicador, fechaInicio, fechaFin, nivelRequerido)
 VALUES ("Promo Corpus Christi", 1.5, "2025-06-01", "2026-06-30", 1);
+
+-- Actualizaciones de tablas para agregar coeficiente de agua y energia
+
+UPDATE Material SET coeficienteAgua = 2500 WHERE idMaterial=1;
+UPDATE Material SET coeficienteAgua = 25 WHERE idMaterial=2;
+UPDATE Material SET coeficienteAgua = 5 WHERE idMaterial=3;
+UPDATE Material SET coeficienteAgua = 5 WHERE idMaterial=4;
+UPDATE Material SET coeficienteAgua = 50 WHERE idMaterial=5;
+
+UPDATE Material SET coeficienteEnergia = 2.0 WHERE idMaterial=1;
+UPDATE Material SET coeficienteEnergia = 6.0 WHERE idMaterial=2;
+UPDATE Material SET coeficienteEnergia = 0.4 WHERE idMaterial=3;
+UPDATE Material SET coeficienteEnergia = 1.3 WHERE idMaterial=4;
+UPDATE Material SET coeficienteEnergia = 0.2 WHERE idMaterial=5;
