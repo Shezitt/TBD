@@ -93,51 +93,51 @@ require_once("conexion.php");
     }
 
 
-    .graficos-fila {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-      margin-top: 30px;
-    }
+  .graficos-fila {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 30px;
+  }
 
-    .grafico-grande {
-      flex: 1 1 400px;
-      max-width: 600px;
-    }
+  .grafico-grande {
+    flex: 1 1 400px;
+    max-width: 600px;
+  }
 
-    .grafico-pequeno {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-      flex: 1 1 250px;
-      max-width: 300px;
-      margin-top: 30px;
-    }
+  .grafico-pequeno {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1 1 250px;
+    max-width: 300px;
+    margin-top: 30px;
+  }
 
-    .leyenda {
-      list-style: none;
-      padding-left: 0;
-      font-size: 14px;
-    }
+  .leyenda {
+    list-style: none;
+    padding-left: 0;
+    font-size: 14px;
+  }
 
-    @media screen and (max-width: 900px) {
-      canvas {
-        width: 100% !important;
-        height: auto !important;
-      }
-    }
-
+  @media screen and (max-width: 900px) {
     canvas {
-      background: #fff;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      border-radius: 11px;
-    }
-
-    #graficoAnillo {
       width: 100% !important;
       height: auto !important;
     }
+  }
+
+  canvas {
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 11px;
+  }
+
+  #graficoAnillo {
+    width: 100% !important;
+    height: auto !important;
+  }
   </style>
 </head>
 
@@ -246,6 +246,7 @@ require_once("conexion.php");
             data: {
               labels: materiales,
               datasets: [{
+                label: "Reciclaje (kg)",
                 data: reciclado,
                 backgroundColor: coloresGalaxia,
                 barThickness: 18,
