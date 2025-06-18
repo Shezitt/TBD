@@ -225,7 +225,7 @@ BEGIN
     VALUES (p_usuario_id, p_material_id, p_punto_reciclaje_id, p_cantidad_kg, NOW(), p_puntos_ganados, v_impacto_co2, v_impacto_agua, v_impacto_energia); 
 
     SET p_nivel_nuevo = (
-        SELECT idNivel
+        SELECT nivel
         FROM Nivel
         WHERE puntosTotalesNecesarios <= (SELECT puntosTotal FROM Usuario WHERE idUsuario = p_usuario_id)
         ORDER BY nivel DESC LIMIT 1
